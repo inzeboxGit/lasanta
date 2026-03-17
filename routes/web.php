@@ -289,6 +289,9 @@ Route::prefix('admin')->group(function () {
         Route::get('pool', [\App\Http\Controllers\Admin\PoolController::class, 'index'])->name('admin.pool.index');
         Route::get('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'index'])->name('admin.maintenance.index');
         Route::post('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'update'])->name('admin.maintenance.update');
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class)
+            ->except(['show', 'destroy'])
+            ->names('admin.users');
         Route::get('about', [\App\Http\Controllers\Admin\AboutController::class , 'index'])->name('admin.about.index');
         Route::post('about', [\App\Http\Controllers\Admin\AboutController::class , 'update'])->name('admin.about.update');
         Route::get('hero', [\App\Http\Controllers\Admin\HomeHeroController::class , 'index'])->name('admin.hero.index');

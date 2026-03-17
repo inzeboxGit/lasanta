@@ -18,8 +18,24 @@ class MaintenanceModeGate
             return $next($request);
         }
 
-        if (Auth::check() && (bool) $request->session()->get('admin_authenticated', false)) {
+        if (
+            Auth::check()
+            && (bool) $request->session()->get('admin_authenticated', false)
+            && (!Schema::hasColumn('users', 'is_active') || Auth::user()?->is_active)
+        ) {
             return $next($request);
+        }
+
+        if (
+            Auth::check()
+            && (bool) $request->session()->get('admin_authenticated', false)
+            && Schema::hasColumn('users', 'is_active')
+            && ! Auth::user()?->is_active
+        ) {
+            Auth::logout();
+            $request->session()->forget('admin_authenticated');
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
 
         try {

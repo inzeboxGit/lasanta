@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class AuthController extends Controller
@@ -30,7 +32,23 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+        $authCredentials = $credentials;
+
+        if (Schema::hasColumn('users', 'is_active')) {
+            $authCredentials['is_active'] = true;
+        }
+
+        if (!Auth::attempt($authCredentials, $request->boolean('remember'))) {
+            if (Schema::hasColumn('users', 'is_active')) {
+                $user = User::where('email', $credentials['email'])->first();
+
+                if ($user && ! $user->is_active) {
+                    return back()
+                        ->withErrors(['email' => 'Cet utilisateur est désactivé.'])
+                        ->onlyInput('email');
+                }
+            }
+
             return back()
                 ->withErrors(['email' => 'Identifiants invalides.'])
                 ->onlyInput('email');

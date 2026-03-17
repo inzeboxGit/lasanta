@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Admin') | Residence Bella Vista</title>
 
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="{{ asset('img/apple-touch-icon-57x57-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{{ asset('img/apple-touch-icon-72x72-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{{ asset('img/apple-touch-icon-114x114-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{{ asset('img/apple-touch-icon-144x144-precomposed.png') }}">
+
     <!-- AdminLTE + Bootstrap via CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -63,6 +70,7 @@
             'items' => [
                 ['label' => 'Équipements', 'route' => route('admin.amenities.index'), 'active' => request()->routeIs('admin.amenities.*'), 'icon' => 'bi-stars'],
                 ['label' => 'Maintenance', 'route' => route('admin.maintenance.index'), 'active' => request()->routeIs('admin.maintenance.*'), 'icon' => 'bi-shield-lock'],
+                ['label' => 'Utilisateurs', 'route' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*'), 'icon' => 'bi-people'],
                 ['label' => 'Paramètres', 'route' => route('admin.settings.index'), 'active' => request()->routeIs('admin.settings.*'), 'icon' => 'bi-gear'],
                 ['label' => 'Traductions', 'route' => route('admin.translations.index'), 'active' => request()->routeIs('admin.translations.*'), 'icon' => 'bi-translate'],
                 ['label' => 'Galerie', 'route' => '#0', 'active' => false, 'icon' => 'bi-images'],
@@ -71,7 +79,7 @@
     ];
 @endphp
 
-<body class="admin hold-transition">
+<body class="admin">
     <div class="admin-app">
         <aside class="admin-sidebar">
             <a href="{{ url('/admin') }}" class="admin-brand">

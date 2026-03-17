@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 @php
-$siteSetting = (object) [
-'site_name' => 'Residence Bella Vista',
-'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
-'email' => 'info@residencebellavista.fr',
-'phone_primary' => '04 95 00 00 00',
-'phone_secondary' => '',
-'facebook_url' => '',
-'instagram_url' => '',
-'whatsapp_url' => '',
-'twitter_url' => '',
-];
+    $siteSetting = (object) [
+        'site_name' => 'Residence Bella Vista',
+        'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
+        'email' => 'info@residence-bellavista.com',
+        'phone_primary' => '04 95 00 00 00',
+        'phone_secondary' => '',
+        'facebook_url' => '',
+        'instagram_url' => '',
+        'whatsapp_url' => '',
+        'twitter_url' => '',
+    ];
 
-if (\Illuminate\Support\Facades\Schema::hasTable('site_settings')) {
-$siteSetting = \App\Models\SiteSetting::firstOrCreate(
-['setting_key' => 'general'],
-[
-'site_name' => 'Residence Bella Vista',
-'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
-'email' => 'info@residencebellavista.fr',
-'phone_primary' => '04 95 00 00 00',
-'phone_secondary' => '',
-'facebook_url' => '',
-'instagram_url' => '',
-'whatsapp_url' => '',
-'twitter_url' => '',
-]
-);
-$siteSetting->loadMissing('translations');
-}
+    if (\Illuminate\Support\Facades\Schema::hasTable('site_settings')) {
+        $siteSetting = \App\Models\SiteSetting::firstOrCreate(
+            ['setting_key' => 'general'],
+            [
+                'site_name' => 'Residence Bella Vista',
+                'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
+                'email' => 'info@residence-bellavista.com',
+                'phone_primary' => '04 95 00 00 00',
+                'phone_secondary' => '',
+                'facebook_url' => '',
+                'instagram_url' => '',
+                'whatsapp_url' => '',
+                'twitter_url' => '',
+            ]
+        );
+
+        $siteSetting->loadMissing('translations');
+    }
 @endphp
 @php
     $isHomePage = request()->url() === url('/');
@@ -54,8 +55,12 @@ $siteSetting->loadMissing('translations');
     $heroButtonLink = $heroNavSetting->button_link ?? '/appartements';
     $heroButtonTarget = $heroNavSetting->button_target ?? '_self';
     $today = now()->startOfDay();
-    $promoStartsAt = !empty($promoSetting->start_date ?? null) ? \Illuminate\Support\Carbon::parse($promoSetting->start_date)->startOfDay() : null;
-    $promoEndsAt = !empty($promoSetting->end_date ?? null) ? \Illuminate\Support\Carbon::parse($promoSetting->end_date)->endOfDay() : null;
+    $promoStartsAt = !empty($promoSetting->start_date ?? null)
+        ? \Illuminate\Support\Carbon::parse($promoSetting->start_date)->startOfDay()
+        : null;
+    $promoEndsAt = !empty($promoSetting->end_date ?? null)
+        ? \Illuminate\Support\Carbon::parse($promoSetting->end_date)->endOfDay()
+        : null;
     $promoIsInDateRange = (!$promoStartsAt || $today->greaterThanOrEqualTo($promoStartsAt))
         && (!$promoEndsAt || $today->lessThanOrEqualTo($promoEndsAt));
     $showPromoModal = $isHomePage && isset($promoSetting) && ($promoSetting->is_enabled ?? false) && $promoIsInDateRange;
