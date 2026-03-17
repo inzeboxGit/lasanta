@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\HasContentTranslations;
+use Illuminate\Database\Eloquent\Model;
+
+class News extends Model
+{
+    use HasFactory, HasContentTranslations;
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'author',
+        'published_at',
+        'hero_image',
+        'cover_image',
+        'excerpt',
+        'body',
+        'status',
+    ];
+
+    protected $casts = [
+        'published_at' => 'date',
+    ];
+}

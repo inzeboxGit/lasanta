@@ -1,0 +1,63 @@
+:root {
+  --admin-bg: #f4f6f9;
+  --admin-card: #ffffff;
+  --admin-text: #1f2d3d;
+  --admin-muted: #6c757d;
+}
+
+body.admin {
+  background: var(--admin-bg);
+  color: var(--admin-text);
+}
+
+/* Ensure theme icon fonts load in admin */
+@font-face {
+  font-family: 'hotel icons';
+  src: url('/css/custom-icons/fonts/hotel-icons.eot');
+  src:
+    url('/css/custom-icons/fonts/hotel-icons.eot?#iefix') format('embedded-opentype'),
+    url('/css/custom-icons/fonts/hotel-icons.woff') format('woff'),
+    url('/css/custom-icons/fonts/hotel-icons.ttf') format('truetype'),
+    url('/css/custom-icons/fonts/hotel-icons.svg#hotel-icons') format('svg');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Map icon-hotel font to available hotel-icons files */
+@font-face {
+  font-family: hotel;
+  src: url('/css/custom-icons/fonts/hotel-icons.eot');
+  src:
+    url('/css/custom-icons/fonts/hotel-icons.eot?#iefix') format('embedded-opentype'),
+    url('/css/bs-icon-font/fonts/hotel-icons.woff') format('woff'),
+    url('/css/custom-icons/fonts/hotel-icons.ttf') format('truetype'),
+    url('/css/custom-icons/fonts/hotel-icons.svg#hotel') format('svg');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.admin-navbar {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.admin-card {
+  background: var(--admin-card);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.75rem;
+}
+
+.admin-card .card-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.admin-card .card-label {
+  color: var(--admin-muted);
+}
+
+.admin-footer {
+  color: var(--admin-muted);
+  font-size: 0.9rem;
+}

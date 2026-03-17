@@ -1,0 +1,207 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Amenity;
+use App\Models\AppartmentPageSetting;
+use App\Models\Room;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+
+class RoomController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $rooms = Room::latest()->paginate(10);
+        $appartmentPageSetting = (object) [
+            'title' => 'Our Rooms & Suites',
+            'subtitle' => 'Luxury Hotel Experience',
+            'header_image' => 'img/rooms/4.jpg',
+        ];
+
+        if (Schema::hasTable('appartment_page_settings')) {
+            $appartmentPageSetting = AppartmentPageSetting::firstOrCreate(
+                ['page' => 'appartements'],
+                [
+                    'title' => 'Our Rooms & Suites',
+                    'subtitle' => 'Luxury Hotel Experience',
+                    'header_image' => 'img/rooms/4.jpg',
+                ]
+            );
+        }
+
+        return view('admin.rooms.index', compact('rooms', 'appartmentPageSetting'));
+    }
+
+    public function updatePageSettings(Request $request)
+    {
+        if (!Schema::hasTable('appartment_page_settings')) {
+            return redirect()->route('admin.rooms.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = AppartmentPageSetting::firstOrCreate(
+            ['page' => 'appartements'],
+            [
+                'title' => 'Our Rooms & Suites',
+                'subtitle' => 'Luxury Hotel Experience',
+                'header_image' => 'img/rooms/4.jpg',
+            ]
+        );
+
+        $data = $request->validate([
+            'title' => ['nullable', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'header_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        if ($request->hasFile('header_image')) {
+            if (!empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
+                Storage::disk('public')->delete($setting->header_image);
+            }
+
+            $data['header_image'] = $request->file('header_image')->store('page-headers', 'public');
+        }
+
+        $setting->update([
+            'title' => $data['title'] ?? $setting->title,
+            'subtitle' => $data['subtitle'] ?? $setting->subtitle,
+            'header_image' => $data['header_image'] ?? $setting->header_image,
+        ]);
+
+        return redirect()->route('admin.rooms.index')->with('success', 'En-tête de la page appartements mise à jour.');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $amenities = Amenity::whereIn('scope', ['room', 'both'])
+            ->orderBy('title')
+            ->get();
+        $selectedAmenities = [];
+
+        return view('admin.rooms.create', compact('amenities', 'selectedAmenities'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $data = $this->validatedData($request);
+        $data['slug'] = $data['slug'] ?: Str::slug($data['title']);
+
+        if ($request->hasFile('main_image')) {
+            $data['main_image'] = $request->file('main_image')->store('rooms', 'public');
+        }
+
+        if ($request->hasFile('gallery')) {
+            $data['gallery'] = [];
+            foreach ($request->file('gallery') as $file) {
+                $data['gallery'][] = $file->store('rooms', 'public');
+            }
+        }
+
+        $amenityIds = $data['amenities'] ?? [];
+        unset($data['amenities']);
+
+        $room = Room::create($data);
+        $room->amenities()->sync($amenityIds);
+
+        return redirect()->route('admin.rooms.index')->with('success', 'Chambre créée.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        return redirect()->route('admin.rooms.edit', $id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $room = Room::findOrFail($id);
+        $amenities = Amenity::whereIn('scope', ['room', 'both'])
+            ->orderBy('title')
+            ->get();
+        $selectedAmenities = $room->amenities()->pluck('amenities.id')->all();
+
+        return view('admin.rooms.edit', compact('room', 'amenities', 'selectedAmenities'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $room = Room::findOrFail($id);
+        $data = $this->validatedData($request, $room->id);
+        $data['slug'] = $data['slug'] ?: Str::slug($data['title']);
+
+        if ($request->hasFile('main_image')) {
+            $data['main_image'] = $request->file('main_image')->store('rooms', 'public');
+        }
+
+        if ($request->hasFile('gallery')) {
+            $data['gallery'] = $room->gallery ?? [];
+            foreach ($request->file('gallery') as $file) {
+                $data['gallery'][] = $file->store('rooms', 'public');
+            }
+        }
+
+        $amenityIds = $data['amenities'] ?? [];
+        unset($data['amenities']);
+
+        $room->update($data);
+        $room->amenities()->sync($amenityIds);
+
+        return redirect()->route('admin.rooms.index')->with('success', 'Chambre mise à jour.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $room = Room::findOrFail($id);
+        $room->delete();
+
+        return redirect()->route('admin.rooms.index')->with('success', 'Chambre supprimée.');
+    }
+
+    private function validatedData(Request $request, ?int $ignoreId = null): array
+    {
+        $uniqueSlug = 'unique:rooms,slug';
+        if ($ignoreId) {
+            $uniqueSlug .= ',' . $ignoreId;
+        }
+
+        return $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255', $uniqueSlug],
+            'price_per_night' => ['nullable', 'numeric', 'min:0'],
+            'description' => ['nullable', 'string'],
+            'amenities' => ['nullable', 'array'],
+            'amenities.*' => [
+                'integer',
+                Rule::exists('amenities', 'id')->where(fn ($query) => $query->whereIn('scope', ['room', 'both'])),
+            ],
+            'main_image' => ['nullable', 'image', 'max:5120'],
+            'gallery.*' => ['nullable', 'image', 'max:5120'],
+            'status' => ['required', 'in:draft,published'],
+        ]);
+    }
+}

@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Concerns\HasContentTranslations;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class HomeHeroSetting extends Model
+{
+    use HasFactory, HasContentTranslations;
+
+    protected $fillable = [
+        'section',
+        'show_booking_form',
+        'small_title',
+        'title',
+        'button_link',
+        'button_target',
+        'background_image',
+    ];
+
+    protected $casts = [
+        'show_booking_form' => 'boolean',
+    ];
+}
