@@ -261,21 +261,27 @@ Route::get('/appartements', function () {
 Route::get('/news', [\App\Http\Controllers\NewsController::class , 'index'])->name('news.index');
 
 Route::prefix('admin')->group(function () {
-    Route::get('/', function () {
+    Route::get('login', [\App\Http\Controllers\Admin\AuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('login', [\App\Http\Controllers\Admin\AuthController::class, 'login'])->name('admin.login.attempt');
+
+    Route::middleware(['auth', 'admin.session'])->group(function () {
+        Route::get('/', function () {
             $roomsCount = \App\Models\Room::count();
             $amenitiesCount = \App\Models\Amenity::whereIn('scope', ['room', 'both'])->count();
             $newsCount = \App\Models\News::count();
             $latestRooms = \App\Models\Room::latest()->take(3)->get();
 
             return view('admin.dashboard', compact('roomsCount', 'amenitiesCount', 'newsCount', 'latestRooms'));
-        }
-        );
+        })->name('admin.dashboard');
+        Route::post('logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('admin.logout');
         Route::resource('rooms', \App\Http\Controllers\Admin\RoomController::class)->names('admin.rooms');
         Route::post('rooms/page-settings', [\App\Http\Controllers\Admin\RoomController::class , 'updatePageSettings'])->name('admin.rooms.page-settings.update');
         Route::resource('amenities', \App\Http\Controllers\Admin\AmenityController::class)->names('admin.amenities');
         Route::resource('installations', \App\Http\Controllers\Admin\InstallationController::class)->names('admin.installations');
         Route::post('installations/section-settings', [\App\Http\Controllers\Admin\InstallationController::class , 'updateSectionSettings'])->name('admin.installations.section-settings.update');
         Route::get('pool', [\App\Http\Controllers\Admin\PoolController::class, 'index'])->name('admin.pool.index');
+        Route::get('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'index'])->name('admin.maintenance.index');
+        Route::post('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'update'])->name('admin.maintenance.update');
         Route::get('about', [\App\Http\Controllers\Admin\AboutController::class , 'index'])->name('admin.about.index');
         Route::post('about', [\App\Http\Controllers\Admin\AboutController::class , 'update'])->name('admin.about.update');
         Route::get('hero', [\App\Http\Controllers\Admin\HomeHeroController::class , 'index'])->name('admin.hero.index');
@@ -291,6 +297,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class)->names('admin.testimonials');
         Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->names('admin.news');
     });
+});
 
 Route::get('/rooms/{room:slug}', [\App\Http\Controllers\RoomController::class , 'show'])->name('rooms.show');
 Route::get('/news/{news:slug}', [\App\Http\Controllers\NewsController::class , 'show'])->name('news.show');

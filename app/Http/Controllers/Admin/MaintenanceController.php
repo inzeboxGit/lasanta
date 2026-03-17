@@ -7,7 +7,7 @@ use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
-class SiteSettingController extends Controller
+class MaintenanceController extends Controller
 {
     public function index()
     {
@@ -20,35 +20,25 @@ class SiteSettingController extends Controller
             );
         }
 
-        return view('admin.settings.index', compact('siteSetting'));
+        return view('admin.maintenance.index', compact('siteSetting'));
     }
 
     public function update(Request $request)
     {
         if (!Schema::hasTable('site_settings')) {
-            return redirect()->route('admin.settings.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+            return redirect()->route('admin.maintenance.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
-
-        $data = $request->validate([
-            'site_name' => ['nullable', 'string', 'max:255'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'email', 'max:255'],
-            'phone_primary' => ['nullable', 'string', 'max:255'],
-            'phone_secondary' => ['nullable', 'string', 'max:255'],
-            'facebook_url' => ['nullable', 'string', 'max:255'],
-            'instagram_url' => ['nullable', 'string', 'max:255'],
-            'whatsapp_url' => ['nullable', 'string', 'max:255'],
-            'twitter_url' => ['nullable', 'string', 'max:255'],
-        ]);
 
         $setting = SiteSetting::firstOrCreate(
             ['setting_key' => 'general'],
             $this->defaultSetting()
         );
 
-        $setting->update($data);
+        $setting->update([
+            'maintenance_enabled' => $request->boolean('maintenance_enabled'),
+        ]);
 
-        return redirect()->route('admin.settings.index')->with('success', 'Paramètres mis à jour.');
+        return redirect()->route('admin.maintenance.index')->with('success', 'Maintenance du site mise à jour.');
     }
 
     private function defaultSetting(): array

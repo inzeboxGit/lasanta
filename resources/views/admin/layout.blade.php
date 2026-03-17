@@ -22,8 +22,8 @@
             'items' => [
                 [
                     'label' => 'Dashboard',
-                    'route' => url('/admin'),
-                    'active' => request()->is('admin') && !request()->routeIs('admin.*.*'),
+                    'route' => route('admin.dashboard'),
+                    'active' => request()->routeIs('admin.dashboard'),
                     'icon' => 'bi-grid-1x2-fill',
                 ],
             ],
@@ -62,6 +62,7 @@
             'title' => 'Contenu',
             'items' => [
                 ['label' => 'Équipements', 'route' => route('admin.amenities.index'), 'active' => request()->routeIs('admin.amenities.*'), 'icon' => 'bi-stars'],
+                ['label' => 'Maintenance', 'route' => route('admin.maintenance.index'), 'active' => request()->routeIs('admin.maintenance.*'), 'icon' => 'bi-shield-lock'],
                 ['label' => 'Paramètres', 'route' => route('admin.settings.index'), 'active' => request()->routeIs('admin.settings.*'), 'icon' => 'bi-gear'],
                 ['label' => 'Traductions', 'route' => route('admin.translations.index'), 'active' => request()->routeIs('admin.translations.*'), 'icon' => 'bi-translate'],
                 ['label' => 'Galerie', 'route' => '#0', 'active' => false, 'icon' => 'bi-images'],
@@ -133,6 +134,13 @@
                         <i class="bi bi-box-arrow-up-right"></i>
                         <span>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Residence Bella Vista') }}</span>
                     </a>
+                    <form action="{{ route('admin.logout') }}" method="post" class="admin-topbar__logout">
+                        @csrf
+                        <button type="submit" class="admin-topbar__logout-button">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Déconnexion</span>
+                        </button>
+                    </form>
                 </div>
             </nav>
 

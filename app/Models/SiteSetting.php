@@ -21,5 +21,10 @@ class SiteSetting extends Model
         'instagram_url',
         'whatsapp_url',
         'twitter_url',
+        'maintenance_enabled',
+    ];
+
+    protected $casts = [
+        'maintenance_enabled' => 'boolean',
     ];
 }

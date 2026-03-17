@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             'instagram_url' => '',
             'whatsapp_url' => '',
             'twitter_url' => '',
+            'maintenance_enabled' => false,
         ];
 
         try {
@@ -48,6 +49,7 @@ class AppServiceProvider extends ServiceProvider
                         'instagram_url' => '',
                         'whatsapp_url' => '',
                         'twitter_url' => '',
+                        'maintenance_enabled' => false,
                     ]
                 );
 
