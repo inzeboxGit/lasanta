@@ -17,6 +17,9 @@ class HomeHeroSetting extends Model
         'title',
         'button_link',
         'button_target',
+        'background_type',
+        'background_video',
+        'youtube_video_url',
         'background_image',
     ];
 

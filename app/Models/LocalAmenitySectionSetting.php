@@ -12,6 +12,7 @@ class LocalAmenitySectionSetting extends Model
 
     protected $fillable = [
         'section',
+        'header_image',
         'subtitle',
         'title',
     ];

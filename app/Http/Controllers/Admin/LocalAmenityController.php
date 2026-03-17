@@ -15,16 +15,18 @@ class LocalAmenityController extends Controller
     {
         $comodites = LocalAmenity::orderBy('sort_order')->orderBy('id')->paginate(15);
         $sectionSetting = (object) [
+            'header_image' => 'img/home_2.jpg',
             'subtitle' => 'RÉsidence Bella vista',
-            'title' => 'Local Amenities',
+            'title' => 'Restaurant',
         ];
 
         if (Schema::hasTable('local_amenity_section_settings')) {
             $sectionSetting = LocalAmenitySectionSetting::firstOrCreate(
                 ['section' => 'about_local_amenities'],
                 [
+                    'header_image' => 'img/home_2.jpg',
                     'subtitle' => 'RÉsidence Bella vista',
-                    'title' => 'Local Amenities',
+                    'title' => 'Restaurant',
                 ]
             );
         }
@@ -39,6 +41,7 @@ class LocalAmenityController extends Controller
         }
 
         $data = $request->validate([
+            'header_image' => ['nullable', 'image', 'max:5120'],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
         ]);
@@ -46,17 +49,27 @@ class LocalAmenityController extends Controller
         $setting = LocalAmenitySectionSetting::firstOrCreate(
             ['section' => 'about_local_amenities'],
             [
+                'header_image' => 'img/home_2.jpg',
                 'subtitle' => 'RÉsidence Bella vista',
-                'title' => 'Local Amenities',
+                'title' => 'Restaurant',
             ]
         );
 
+        if ($request->hasFile('header_image')) {
+            if (!empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
+                Storage::disk('public')->delete($setting->header_image);
+            }
+
+            $data['header_image'] = $request->file('header_image')->store('restaurant', 'public');
+        }
+
         $setting->update([
+            'header_image' => $data['header_image'] ?? $setting->header_image,
             'subtitle' => $data['subtitle'] ?? $setting->subtitle,
             'title' => $data['title'] ?? $setting->title,
         ]);
 
-        return redirect()->route('admin.comodites.index')->with('success', 'Titre et sous-titre mis à jour.');
+        return redirect()->route('admin.comodites.index')->with('success', 'Paramètres Restaurant mis à jour.');
     }
 
     public function create()
@@ -76,7 +89,7 @@ class LocalAmenityController extends Controller
 
         LocalAmenity::create($data);
 
-        return redirect()->route('admin.comodites.index')->with('success', 'Commodité créée.');
+        return redirect()->route('admin.comodites.index')->with('success', 'Élément restaurant créé.');
     }
 
     public function show(string $id)
@@ -107,7 +120,7 @@ class LocalAmenityController extends Controller
 
         $comodite->update($data);
 
-        return redirect()->route('admin.comodites.index')->with('success', 'Commodité mise à jour.');
+        return redirect()->route('admin.comodites.index')->with('success', 'Élément restaurant mis à jour.');
     }
 
     public function destroy(string $id)
@@ -120,7 +133,7 @@ class LocalAmenityController extends Controller
 
         $comodite->delete();
 
-        return redirect()->route('admin.comodites.index')->with('success', 'Commodité supprimée.');
+        return redirect()->route('admin.comodites.index')->with('success', 'Élément restaurant supprimé.');
     }
 
     private function validatedData(Request $request): array

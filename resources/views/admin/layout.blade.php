@@ -58,7 +58,10 @@
                         <a class="nav-link" href="{{ route('admin.promo.index') }}">Promo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.comodites.index') }}">Commodités</a>
+                        <a class="nav-link" href="{{ route('admin.comodites.index') }}">Restaurant</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.pool.index') }}">Piscine</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.testimonials.index') }}">Témoignages</a>

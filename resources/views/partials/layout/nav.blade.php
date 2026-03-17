@@ -46,7 +46,7 @@
     @endphp
     <ul>
         <li><a href="{{ url('/appartements') }}" class="animated_link">{{ $t['apartments'] }}</a></li>
-        <li><a href="{{ url('/rooms') }}" class="animated_link">{{ $t['restaurant'] }}</a></li>
+        <li><a href="{{ route('about.index') }}" class="animated_link">{{ $t['restaurant'] }}</a></li>
         <li><a href="{{ url('/news') }}" class="animated_link">{{ $t['pool'] }}</a></li>
         <li><a href="{{ url('/news') }}" class="animated_link">{{ $t['news'] }}</a></li>
         <li><a href="{{ url('/contacts') }}" class="animated_link">{{ $t['contact'] }}</a></li>
@@ -63,6 +63,6 @@
                 </div>
             </details>
         </li>
-        <li><a href="#booking_section" class="btn_1">{{ $t['book'] }}</a></li>
+        <li><a href="{{ $heroButtonLink }}" class="btn_1" target="{{ $heroButtonTarget }}" @if($heroButtonTarget === '_blank') rel="noopener" @endif>{{ $t['book'] }}</a></li>
     </ul>
 </nav>

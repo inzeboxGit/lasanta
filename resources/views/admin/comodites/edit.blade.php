@@ -1,9 +1,9 @@
 @extends('admin.layout')
 
-@section('title', 'Modifier une commodité')
+@section('title', 'Modifier un element restaurant')
 
 @section('content')
-<h1 class="h3 mb-4">Modifier une commodité locale</h1>
+<h1 class="h3 mb-4">Modifier un element restaurant</h1>
 
 @if($errors->any())
     <div class="alert alert-danger">

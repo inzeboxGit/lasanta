@@ -40,6 +40,9 @@ class HomeHeroController extends Controller
             'title' => ['nullable', 'string', 'max:255'],
             'button_link' => ['nullable', 'string', 'max:2048'],
             'button_target' => ['nullable', 'in:_self,_blank'],
+            'background_type' => ['required', 'in:video,image'],
+            'background_video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm,video/ogg,video/quicktime', 'max:51200'],
+            'youtube_video_url' => ['nullable', 'url', 'max:2048'],
             'background_image' => ['nullable', 'image', 'max:5120'],
         ]);
 
@@ -53,12 +56,23 @@ class HomeHeroController extends Controller
             $data['background_image'] = $request->file('background_image')->store('hero', 'public');
         }
 
+        if ($request->hasFile('background_video')) {
+            if (!empty($setting->background_video) && !str_starts_with($setting->background_video, 'video/')) {
+                Storage::disk('public')->delete($setting->background_video);
+            }
+
+            $data['background_video'] = $request->file('background_video')->store('hero/video', 'public');
+        }
+
         $setting->update([
             'show_booking_form' => $data['show_booking_form'],
             'small_title' => $data['small_title'] ?? $setting->small_title,
             'title' => $data['title'] ?? $setting->title,
             'button_link' => $data['button_link'] ?? $setting->button_link,
             'button_target' => $data['button_target'] ?? $setting->button_target,
+            'background_type' => $data['background_type'] ?? ($setting->background_type ?? 'video'),
+            'background_video' => $data['background_video'] ?? ($setting->background_video ?? 'video/sunset.mp4'),
+            'youtube_video_url' => array_key_exists('youtube_video_url', $data) ? $data['youtube_video_url'] : $setting->youtube_video_url,
             'background_image' => $data['background_image'] ?? $setting->background_image,
         ]);
 
@@ -74,6 +88,9 @@ class HomeHeroController extends Controller
             'title' => 'Une expérience unique où séjourner',
             'button_link' => '/appartements',
             'button_target' => '_self',
+            'background_type' => 'video',
+            'background_video' => 'video/sunset.mp4',
+            'youtube_video_url' => null,
             'background_image' => 'img/hero_home_1.jpg',
         ];
     }

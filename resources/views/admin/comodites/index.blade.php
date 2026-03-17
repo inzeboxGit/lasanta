@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'Commodités')
+@section('title', 'Restaurant')
 
 @section('content')
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h1 class="h3 mb-1">Commodités locales</h1>
-        <div class="text-muted">Gérer la section commodités locales de la homepage</div>
+        <h1 class="h3 mb-1">Restaurant</h1>
+        <div class="text-muted">Gerer la page Restaurant et ses elements affiches sur le front</div>
     </div>
     <a href="{{ route('admin.comodites.create') }}" class="btn btn-primary">Ajouter</a>
 </div>
@@ -16,10 +16,25 @@
 @endif
 
 <div class="admin-card p-4 mb-4">
-    <h2 class="h5 mb-3">Paramètres de section (page About)</h2>
-    <form action="{{ route('admin.comodites.section-settings.update') }}" method="post">
+    <h2 class="h5 mb-3">Parametres de la page Restaurant</h2>
+    <form action="{{ route('admin.comodites.section-settings.update') }}" method="post" enctype="multipart/form-data">
         @csrf
+        @php
+            $headerSrc = null;
+            if (!empty($sectionSetting->header_image ?? null)) {
+                $headerSrc = str_starts_with($sectionSetting->header_image, 'img/')
+                    ? asset($sectionSetting->header_image)
+                    : asset('storage/' . $sectionSetting->header_image);
+            }
+        @endphp
         <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Image header</label>
+                <input type="file" name="header_image" id="restaurant_header_image" class="form-control" accept="image/*">
+                <div class="mt-2">
+                    <img id="restaurant_header_preview" src="{{ $headerSrc ?? '' }}" alt="" class="rounded" style="max-height:120px;{{ empty($headerSrc) ? 'display:none;' : '' }}">
+                </div>
+            </div>
             <div class="col-md-6">
                 <label class="form-label">Sous-titre</label>
                 <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $sectionSetting->subtitle ?? '') }}">
@@ -79,7 +94,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">Aucune commodité</td>
+                        <td colspan="5" class="text-center text-muted">Aucun element restaurant</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -90,4 +105,29 @@
 <div class="mt-3">
     {{ $comodites->links() }}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('restaurant_header_image');
+    const preview = document.getElementById('restaurant_header_preview');
+
+    if (!input || !preview) {
+        return;
+    }
+
+    input.addEventListener('change', function (event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
 @endsection

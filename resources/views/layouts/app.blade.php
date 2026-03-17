@@ -32,6 +32,27 @@ $siteSetting->loadMissing('translations');
 @endphp
 @php
     $isHomePage = request()->url() === url('/');
+    $heroNavSetting = $heroSetting ?? null;
+
+    if (!$heroNavSetting && \Illuminate\Support\Facades\Schema::hasTable('home_hero_settings')) {
+        $heroNavSetting = \App\Models\HomeHeroSetting::firstOrCreate(
+            ['section' => 'home_hero'],
+            [
+                'show_booking_form' => true,
+                'small_title' => 'Expérience hôtelière',
+                'title' => 'Une expérience unique où séjourner',
+                'button_link' => '/appartements',
+                'button_target' => '_self',
+                'background_type' => 'video',
+                'background_video' => 'video/sunset.mp4',
+                'youtube_video_url' => null,
+                'background_image' => 'img/hero_home_1.jpg',
+            ]
+        );
+    }
+
+    $heroButtonLink = $heroNavSetting->button_link ?? '/appartements';
+    $heroButtonTarget = $heroNavSetting->button_target ?? '_self';
     $today = now()->startOfDay();
     $promoStartsAt = !empty($promoSetting->start_date ?? null) ? \Illuminate\Support\Carbon::parse($promoSetting->start_date)->startOfDay() : null;
     $promoEndsAt = !empty($promoSetting->end_date ?? null) ? \Illuminate\Support\Carbon::parse($promoSetting->end_date)->endOfDay() : null;
