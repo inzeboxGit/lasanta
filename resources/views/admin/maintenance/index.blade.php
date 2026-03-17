@@ -35,6 +35,22 @@
                     <button type="submit" class="btn btn-primary w-100">Enregistrer</button>
                 </div>
             </div>
+            <div class="col-12">
+                <div class="admin-card p-4">
+                    <label class="form-label fw-semibold" for="maintenance_message">Message affiche sur la page de maintenance</label>
+                    <textarea
+                        class="form-control @error('maintenance_message') is-invalid @enderror"
+                        id="maintenance_message"
+                        name="maintenance_message"
+                        rows="4"
+                        placeholder="Site en maintenance. Merci de revenir plus tard."
+                    >{{ old('maintenance_message', $siteSetting->maintenance_message ?? "Le site est temporairement indisponible pour cause de mise a jour.\nMerci de revenir un peu plus tard.") }}</textarea>
+                    @error('maintenance_message')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    <div class="form-text">Tu peux personnaliser librement le texte visible par les visiteurs pendant la maintenance.</div>
+                </div>
+            </div>
         </div>
     </form>
 </div>

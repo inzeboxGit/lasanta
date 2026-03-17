@@ -22,6 +22,7 @@ class SiteSetting extends Model
         'whatsapp_url',
         'twitter_url',
         'maintenance_enabled',
+        'maintenance_message',
     ];
 
     protected $casts = [

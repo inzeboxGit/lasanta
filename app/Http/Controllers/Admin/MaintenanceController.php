@@ -16,7 +16,7 @@ class MaintenanceController extends Controller
         if (Schema::hasTable('site_settings')) {
             $siteSetting = SiteSetting::firstOrCreate(
                 ['setting_key' => 'general'],
-                $this->defaultSetting()
+                $this->databaseDefaults()
             );
         }
 
@@ -29,14 +29,27 @@ class MaintenanceController extends Controller
             return redirect()->route('admin.maintenance.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
 
+        $supportsMaintenanceMessage = Schema::hasColumn('site_settings', 'maintenance_message');
+
+        $data = $request->validate([
+            'maintenance_enabled' => ['nullable', 'boolean'],
+            'maintenance_message' => ['nullable', 'string'],
+        ]);
+
         $setting = SiteSetting::firstOrCreate(
             ['setting_key' => 'general'],
-            $this->defaultSetting()
+            $this->databaseDefaults()
         );
 
-        $setting->update([
+        $payload = [
             'maintenance_enabled' => $request->boolean('maintenance_enabled'),
-        ]);
+        ];
+
+        if ($supportsMaintenanceMessage) {
+            $payload['maintenance_message'] = $data['maintenance_message'] ?? null;
+        }
+
+        $setting->update($payload);
 
         return redirect()->route('admin.maintenance.index')->with('success', 'Maintenance du site mise à jour.');
     }
@@ -54,6 +67,18 @@ class MaintenanceController extends Controller
             'whatsapp_url' => '',
             'twitter_url' => '',
             'maintenance_enabled' => false,
+            'maintenance_message' => 'Le site est temporairement indisponible pour cause de mise a jour.' . PHP_EOL . 'Merci de revenir un peu plus tard.',
         ];
+    }
+
+    private function databaseDefaults(): array
+    {
+        $defaults = $this->defaultSetting();
+
+        if (! Schema::hasColumn('site_settings', 'maintenance_message')) {
+            unset($defaults['maintenance_message']);
+        }
+
+        return $defaults;
     }
 }

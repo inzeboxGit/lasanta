@@ -16,7 +16,7 @@ class SiteSettingController extends Controller
         if (Schema::hasTable('site_settings')) {
             $siteSetting = SiteSetting::firstOrCreate(
                 ['setting_key' => 'general'],
-                $this->defaultSetting()
+                $this->databaseDefaults()
             );
         }
 
@@ -43,7 +43,7 @@ class SiteSettingController extends Controller
 
         $setting = SiteSetting::firstOrCreate(
             ['setting_key' => 'general'],
-            $this->defaultSetting()
+            $this->databaseDefaults()
         );
 
         $setting->update($data);
@@ -64,6 +64,18 @@ class SiteSettingController extends Controller
             'whatsapp_url' => '',
             'twitter_url' => '',
             'maintenance_enabled' => false,
+            'maintenance_message' => 'Le site est temporairement indisponible pour cause de mise a jour.' . PHP_EOL . 'Merci de revenir un peu plus tard.',
         ];
+    }
+
+    private function databaseDefaults(): array
+    {
+        $defaults = $this->defaultSetting();
+
+        if (! Schema::hasColumn('site_settings', 'maintenance_message')) {
+            unset($defaults['maintenance_message']);
+        }
+
+        return $defaults;
     }
 }

@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        require_once app_path('Support/helpers.php');
     }
 
     /**
@@ -33,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
             'whatsapp_url' => '',
             'twitter_url' => '',
             'maintenance_enabled' => false,
+            'maintenance_message' => 'Le site est temporairement indisponible pour cause de mise a jour.' . PHP_EOL . 'Merci de revenir un peu plus tard.',
         ];
 
         try {

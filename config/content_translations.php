@@ -48,7 +48,7 @@ return [
         'site_settings' => [
             'label' => 'Paramètres site',
             'class' => \App\Models\SiteSetting::class,
-            'fields' => ['site_name', 'address'],
+            'fields' => ['site_name', 'address', 'maintenance_message'],
             'display_field' => 'setting_key',
         ],
         'amenities' => [
