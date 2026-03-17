@@ -15,83 +15,135 @@
     <link rel="stylesheet" href="{{ asset('xyres/admin/css/admin.css') }}">
 </head>
 
-<body class="admin hold-transition">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white admin-navbar">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url('/admin') }}">Admin</a>
-            <div class="ms-auto d-flex align-items-center">
-                <span class="text-muted small">
-                    <!-- cliquable -->
-                    <a href="{{ url('/') }}" target="_blank">
-                        {{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ??
-                        'Residence Bella Vista') }}
-                    </a>
-                </span>
-            </div>
-        </div>
-    </nav>
+@php
+    $adminNavGroups = [
+        [
+            'title' => 'Vue d’ensemble',
+            'items' => [
+                [
+                    'label' => 'Dashboard',
+                    'route' => url('/admin'),
+                    'active' => request()->is('admin') && !request()->routeIs('admin.*.*'),
+                    'icon' => 'bi-grid-1x2-fill',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Page d’accueil',
+            'items' => [
+                [
+                    'label' => 'Page d’accueil',
+                    'icon' => 'bi-house-door',
+                    'active' => request()->routeIs('admin.hero.*')
+                        || request()->routeIs('admin.installations.*')
+                        || request()->routeIs('admin.promo.*')
+                        || request()->routeIs('admin.about.*')
+                        || request()->routeIs('admin.testimonials.*'),
+                    'children' => [
+                        ['label' => 'Hero accueil', 'route' => route('admin.hero.index'), 'active' => request()->routeIs('admin.hero.*'), 'icon' => 'bi-play-circle'],
+                        ['label' => 'Installations', 'route' => route('admin.installations.index'), 'active' => request()->routeIs('admin.installations.*'), 'icon' => 'icon-hotel-reception'],
+                        ['label' => 'À propos', 'route' => route('admin.about.index'), 'active' => request()->routeIs('admin.about.*'), 'icon' => 'bi-info-circle'],
+                        ['label' => 'Promo', 'route' => route('admin.promo.index'), 'active' => request()->routeIs('admin.promo.*'), 'icon' => 'bi-ticket-perforated'],
+                        ['label' => 'Témoignages', 'route' => route('admin.testimonials.index'), 'active' => request()->routeIs('admin.testimonials.*'), 'icon' => 'bi-chat-quote'],
+                    ],
+                ],
+            ],
+        ],
+        [
+            'title' => 'Pages',
+            'items' => [
+                ['label' => 'Chambres', 'route' => route('admin.rooms.index'), 'active' => request()->routeIs('admin.rooms.*'), 'icon' => 'bi-door-open'],
+                ['label' => 'Restaurant', 'route' => route('admin.comodites.index'), 'active' => request()->routeIs('admin.comodites.*'), 'icon' => 'icon-hotel-restaurant'],
+                ['label' => 'Piscine', 'route' => route('admin.pool.index'), 'active' => request()->routeIs('admin.pool.*'), 'icon' => 'icon-hotel-swimming_pool'],
+                ['label' => 'Actualités', 'route' => route('admin.news.index'), 'active' => request()->routeIs('admin.news.*'), 'icon' => 'bi-megaphone'],
+            ],
+        ],
+        [
+            'title' => 'Contenu',
+            'items' => [
+                ['label' => 'Équipements', 'route' => route('admin.amenities.index'), 'active' => request()->routeIs('admin.amenities.*'), 'icon' => 'bi-stars'],
+                ['label' => 'Paramètres', 'route' => route('admin.settings.index'), 'active' => request()->routeIs('admin.settings.*'), 'icon' => 'bi-gear'],
+                ['label' => 'Traductions', 'route' => route('admin.translations.index'), 'active' => request()->routeIs('admin.translations.*'), 'icon' => 'bi-translate'],
+                ['label' => 'Galerie', 'route' => '#0', 'active' => false, 'icon' => 'bi-images'],
+            ],
+        ],
+    ];
+@endphp
 
-    <div class="container-fluid">
-        <div class="row">
-            <aside class="col-lg-2 col-md-3 bg-white border-end min-vh-100 py-4">
-                <div class="fw-semibold text-uppercase small text-muted px-3 mb-3">Navigation</div>
-                <ul class="nav flex-column px-2">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ url('/admin') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.rooms.index') }}">Chambres</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.amenities.index') }}">Équipements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.installations.index') }}">Installations</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.hero.index') }}">Hero accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.about.index') }}">À propos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.promo.index') }}">Promo</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.comodites.index') }}">Restaurant</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.pool.index') }}">Piscine</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.testimonials.index') }}">Témoignages</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.news.index') }}">Actualités</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.settings.index') }}">Paramètres</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.translations.index') }}">Traductions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#0">Galerie</a>
-                    </li>
-                </ul>
-            </aside>
-            <main class="col-lg-10 col-md-9 py-4">
+<body class="admin hold-transition">
+    <div class="admin-app">
+        <aside class="admin-sidebar">
+            <a href="{{ url('/admin') }}" class="admin-brand">
+                <img src="{{ asset('img/logo_sticky.png') }}" alt="Residence Bella Vista">
+                <div class="admin-brand__copy">
+                    <strong>Residence Bella Vista</strong>
+                    <span>Back-office</span>
+                </div>
+            </a>
+
+            <div class="admin-sidebar__inner">
+                @foreach($adminNavGroups as $group)
+                    <div class="admin-nav-group">
+                        <div class="admin-nav-group__title">{{ $group['title'] }}</div>
+                        <ul class="admin-nav">
+                            @foreach($group['items'] as $item)
+                                <li class="admin-nav__item {{ $item['active'] ? 'is-active' : '' }}">
+                                    @if(!empty($item['children']))
+                                        <details class="admin-subnav" {{ $item['active'] ? 'open' : '' }}>
+                                            <summary class="admin-nav__link">
+                                                <span class="admin-nav__icon"><i class="{{ $item['icon'] }}"></i></span>
+                                                <span class="admin-nav__label">{{ $item['label'] }}</span>
+                                                <span class="admin-nav__caret"><i class="bi bi-chevron-down"></i></span>
+                                            </summary>
+                                            <ul class="admin-subnav__list">
+                                                @foreach($item['children'] as $child)
+                                                    <li>
+                                                        <a href="{{ $child['route'] }}" class="admin-subnav__link {{ $child['active'] ? 'is-active' : '' }}">
+                                                            <span class="admin-subnav__icon"><i class="{{ $child['icon'] }}"></i></span>
+                                                            <span>{{ $child['label'] }}</span>
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </details>
+                                    @else
+                                        <a class="admin-nav__link" href="{{ $item['route'] }}">
+                                            <span class="admin-nav__icon"><i class="{{ $item['icon'] }}"></i></span>
+                                            <span class="admin-nav__label">{{ $item['label'] }}</span>
+                                        </a>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endforeach
+            </div>
+        </aside>
+
+        <div class="admin-main">
+            <nav class="admin-topbar">
+                <div class="admin-topbar__left">
+                    <div>
+                        <span class="admin-topbar__eyebrow">Administration</span>
+                        <div class="admin-topbar__title">@yield('title', 'Admin')</div>
+                    </div>
+                </div>
+                <div class="admin-topbar__right">
+                    <a href="{{ url('/') }}" class="admin-topbar__site" target="_blank" rel="noopener">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        <span>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Residence Bella Vista') }}</span>
+                    </a>
+                </div>
+            </nav>
+
+            <main class="admin-content">
                 @yield('content')
             </main>
         </div>
     </div>
 
-    <footer class="container-fluid pb-4 admin-footer">
-        <div class="row">
-            <div class="col-lg-10 offset-lg-2 col-md-9 offset-md-3">
-                © {{ date('Y') }} Residence Bella Vista
-            </div>
-        </div>
+    <footer class="admin-footer">
+        © {{ date('Y') }} Residence Bella Vista
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
