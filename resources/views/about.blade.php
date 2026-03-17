@@ -3,19 +3,12 @@
 @section('content')
 @php
 $restaurantHeaderImage = $localAmenitySectionSetting->header_image ?? 'img/home_2.jpg';
-$restaurantHeaderImageSrc = str_starts_with($restaurantHeaderImage, 'img/')
-? asset($restaurantHeaderImage)
-: asset('storage/' . ltrim($restaurantHeaderImage, '/'));
+$restaurantHeaderImageSrc = media_url($restaurantHeaderImage, 'img/home_2.jpg');
 $aboutMainImage = $aboutSectionSetting->main_image ?? 'img/home_2.jpg';
 $aboutOverlayImage = $aboutSectionSetting->overlay_image ?? 'img/home_1.jpg';
 
-$aboutMainImageSrc = str_starts_with($aboutMainImage, 'img/')
-? asset($aboutMainImage)
-: asset('storage/' . ltrim($aboutMainImage, '/'));
-
-$aboutOverlayImageSrc = str_starts_with($aboutOverlayImage, 'img/')
-? asset($aboutOverlayImage)
-: asset('storage/' . ltrim($aboutOverlayImage, '/'));
+$aboutMainImageSrc = media_url($aboutMainImage, 'img/home_2.jpg');
+$aboutOverlayImageSrc = media_url($aboutOverlayImage, 'img/home_1.jpg');
 @endphp
 
 <main>

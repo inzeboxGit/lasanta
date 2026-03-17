@@ -26,12 +26,7 @@
             <label class="form-label">Image</label>
             <input type="file" name="image" id="comodite_image" class="form-control" accept="image/*">
             @php
-                $existingSrc = null;
-                if (!empty($comodite->image_path ?? null)) {
-                    $existingSrc = str_starts_with($comodite->image_path, 'img/')
-                        ? asset($comodite->image_path)
-                        : asset('storage/' . $comodite->image_path);
-                }
+                $existingSrc = media_url($comodite->image_path ?? null);
             @endphp
             <div class="mt-2">
                 <img id="comodite_image_preview" src="{{ $existingSrc ?? '' }}" alt="" class="rounded" style="max-height:120px;{{ empty($existingSrc) ? 'display:none;' : '' }}">

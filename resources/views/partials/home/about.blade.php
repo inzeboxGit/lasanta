@@ -8,13 +8,8 @@
                         $aboutMainImage = $aboutSectionSetting->main_image ?? 'img/home_2.jpg';
                         $aboutOverlayImage = $aboutSectionSetting->overlay_image ?? 'img/home_1.jpg';
 
-                        $aboutMainImageSrc = str_starts_with($aboutMainImage, 'img/')
-                            ? asset($aboutMainImage)
-                            : asset('storage/' . ltrim($aboutMainImage, '/'));
-
-                        $aboutOverlayImageSrc = str_starts_with($aboutOverlayImage, 'img/')
-                            ? asset($aboutOverlayImage)
-                            : asset('storage/' . ltrim($aboutOverlayImage, '/'));
+                        $aboutMainImageSrc = media_url($aboutMainImage, 'img/home_2.jpg');
+                        $aboutOverlayImageSrc = media_url($aboutOverlayImage, 'img/home_1.jpg');
                     @endphp
                     <img src="{{ $aboutMainImageSrc }}" alt="" class="img-fluid rounded-img">
                     <div data-cue="slideInUp" class="img_over"><span data-jarallax-element="-30"><img src="{{ $aboutOverlayImageSrc }}" alt="" class="rounded-img"></span></div>

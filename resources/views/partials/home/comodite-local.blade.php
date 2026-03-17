@@ -18,14 +18,7 @@
                 $imageColClass = $isEven ? 'col-lg-6 order-lg-2' : 'col-lg-6';
                 $contentColClass = $isEven ? 'col-lg-5 order-lg-1' : 'col-lg-5';
 
-                $imageSrc = null;
-                if (!empty($comodite->image_path)) {
-                    $imageSrc = str_starts_with($comodite->image_path, 'http')
-                        ? $comodite->image_path
-                        : (str_starts_with($comodite->image_path, 'img/')
-                            ? asset($comodite->image_path)
-                            : asset('storage/' . $comodite->image_path));
-                }
+                $imageSrc = media_url($comodite->image_path);
             @endphp
             <div class="{{ $rowClass }}">
                 <div class="{{ $imageColClass }}">

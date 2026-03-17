@@ -20,12 +20,7 @@
     <form action="{{ route('admin.comodites.section-settings.update') }}" method="post" enctype="multipart/form-data">
         @csrf
         @php
-            $headerSrc = null;
-            if (!empty($sectionSetting->header_image ?? null)) {
-                $headerSrc = str_starts_with($sectionSetting->header_image, 'img/')
-                    ? asset($sectionSetting->header_image)
-                    : asset('storage/' . $sectionSetting->header_image);
-            }
+            $headerSrc = media_url($sectionSetting->header_image ?? null);
         @endphp
         <div class="row g-3">
             <div class="col-md-4">
@@ -67,12 +62,7 @@
                     <tr>
                         <td>
                             @php
-                                $src = null;
-                                if (!empty($comodite->image_path)) {
-                                    $src = str_starts_with($comodite->image_path, 'img/')
-                                        ? asset($comodite->image_path)
-                                        : asset('storage/' . $comodite->image_path);
-                                }
+                                $src = media_url($comodite->image_path);
                             @endphp
                             @if($src)
                                 <img src="{{ $src }}" alt="{{ $comodite->title }}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;">

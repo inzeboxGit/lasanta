@@ -73,14 +73,7 @@
                     @for($i = 0; $i < max(3, $amenities->count()); $i++)
                         @php
                             $amenity = $amenities->get($i);
-                            $imageSrc = $fallbackImages[$i] ?? asset('img/home_1.jpg');
-                            if (!empty($amenity?->image_path)) {
-                                $imageSrc = str_starts_with($amenity->image_path, 'http')
-                                    ? $amenity->image_path
-                                    : (str_starts_with($amenity->image_path, 'img/')
-                                        ? asset($amenity->image_path)
-                                        : asset('storage/' . $amenity->image_path));
-                            }
+                            $imageSrc = media_url($amenity?->image_path, $fallbackImages[$i] ?? 'img/home_1.jpg');
                         @endphp
                         <div data-cue="fadeIn" data-delay="500">
                             <figure><img src="{{ $imageSrc }}" alt="{{ ($amenity && method_exists($amenity, 't')) ? $amenity->t('title') : ($amenity->title ?? $ui['fallback_alt']) }}" class="img-fluid rounded-img"></figure>
