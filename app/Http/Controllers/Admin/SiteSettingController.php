@@ -56,7 +56,7 @@ class SiteSettingController extends Controller
         return [
             'site_name' => 'Residence Bella Vista',
             'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
-            'email' => 'info@residencebellavista.fr',
+            'email' => 'info@residence-bellavista.com',
             'phone_primary' => '04 95 00 00 00',
             'phone_secondary' => '',
             'facebook_url' => '',
