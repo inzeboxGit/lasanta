@@ -47,14 +47,20 @@
     ],
     ];
     $t = $labels[$locale] ?? $labels['en'];
+    $isHome = request()->routeIs('home') || request()->is('/');
+    $isApartments = request()->routeIs('appartements.index') || request()->routeIs('rooms.show') || request()->is('appartements') || request()->is('rooms/*');
+    $isRestaurant = request()->routeIs('about.index') || request()->is('restaurant');
+    $isPool = request()->routeIs('pool.index') || request()->is('piscine');
+    $isNews = request()->routeIs('news.index') || request()->routeIs('news.show') || request()->is('news') || request()->is('news/*');
+    $isContact = request()->is('contacts');
     @endphp
     <ul>
-        <li><a href="{{ url('/') }}" class="animated_link">{{ $t['home'] }}</a></li>
-        <li><a href="{{ url('/appartements') }}" class="animated_link">{{ $t['apartments'] }}</a></li>
-        <li><a href="{{ route('about.index') }}" class="animated_link">{{ $t['restaurant'] }}</a></li>
-        <li><a href="{{ route('pool.index') }}" class="animated_link">{{ $t['pool'] }}</a></li>
-        <li><a href="{{ url('/news') }}" class="animated_link">{{ $t['news'] }}</a></li>
-        <li><a href="{{ url('/contacts') }}" class="animated_link">{{ $t['contact'] }}</a></li>
+        <li><a href="{{ url('/') }}" class="animated_link {{ $isHome ? 'active' : '' }}">{{ $t['home'] }}</a></li>
+        <li><a href="{{ url('/appartements') }}" class="animated_link {{ $isApartments ? 'active' : '' }}">{{ $t['apartments'] }}</a></li>
+        <li><a href="{{ route('about.index') }}" class="animated_link {{ $isRestaurant ? 'active' : '' }}">{{ $t['restaurant'] }}</a></li>
+        <li><a href="{{ route('pool.index') }}" class="animated_link {{ $isPool ? 'active' : '' }}">{{ $t['pool'] }}</a></li>
+        <li><a href="{{ url('/news') }}" class="animated_link {{ $isNews ? 'active' : '' }}">{{ $t['news'] }}</a></li>
+        <li><a href="{{ url('/contacts') }}" class="animated_link {{ $isContact ? 'active' : '' }}">{{ $t['contact'] }}</a></li>
         <li>
             <details class="lang-picker">
                 <summary class="lang-picker__summary" aria-label="Choisir la langue">
