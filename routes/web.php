@@ -206,24 +206,24 @@ Route::get('/restaurant', function () {
     }
 
     $aboutSectionSetting = (object)[
-        'small_title' => 'À PROPOS DE NOUS',
-        'title' => 'La Résidence Bella Vista',
-        'lead' => 'Une conception du tourisme...',
-        'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
-        'signature' => 'L’équipe du Bella Vista',
+        'small_title' => 'À PROPOS DU RESTAURANT',
+        'title' => 'Le Restaurant Bella Vista',
+        'lead' => 'Une expérience culinaire face au panorama.',
+        'description' => "Personnalisez ici le texte de présentation du restaurant, son ambiance et ses points forts.",
+        'signature' => 'L’équipe du Restaurant',
         'main_image' => 'img/home_2.jpg',
         'overlay_image' => 'img/home_1.jpg',
     ];
 
     if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
         $aboutSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
-        ['section' => 'home_about'],
+        ['section' => 'restaurant_about'],
         [
-            'small_title' => 'À PROPOS DE NOUS',
-            'title' => 'La Résidence Bella Vista',
-            'lead' => 'Une conception du tourisme...',
-            'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
-            'signature' => 'L’équipe du Bella Vista',
+            'small_title' => 'À PROPOS DU RESTAURANT',
+            'title' => 'Le Restaurant Bella Vista',
+            'lead' => 'Une expérience culinaire face au panorama.',
+            'description' => "Personnalisez ici le texte de présentation du restaurant, son ambiance et ses points forts.",
+            'signature' => 'L’équipe du Restaurant',
             'main_image' => 'img/home_2.jpg',
             'overlay_image' => 'img/home_1.jpg',
         ]
@@ -264,24 +264,24 @@ Route::get('/piscine', function () {
     }
 
     $aboutSectionSetting = (object)[
-        'small_title' => 'À PROPOS DE NOUS',
-        'title' => 'La Résidence Bella Vista',
-        'lead' => 'Une conception du tourisme...',
-        'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
-        'signature' => 'L’équipe du Bella Vista',
+        'small_title' => 'À PROPOS DE LA PISCINE',
+        'title' => 'La Piscine Bella Vista',
+        'lead' => 'Un espace de détente ouvert sur la résidence.',
+        'description' => "Personnalisez ici le texte de présentation de la piscine, son ambiance et ses avantages pour les visiteurs.",
+        'signature' => 'L’équipe de la Piscine',
         'main_image' => 'img/home_2.jpg',
         'overlay_image' => 'img/home_1.jpg',
     ];
 
     if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
         $aboutSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
-        ['section' => 'home_about'],
+        ['section' => 'pool_about'],
         [
-            'small_title' => 'À PROPOS DE NOUS',
-            'title' => 'La Résidence Bella Vista',
-            'lead' => 'Une conception du tourisme...',
-            'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
-            'signature' => 'L’équipe du Bella Vista',
+            'small_title' => 'À PROPOS DE LA PISCINE',
+            'title' => 'La Piscine Bella Vista',
+            'lead' => 'Un espace de détente ouvert sur la résidence.',
+            'description' => "Personnalisez ici le texte de présentation de la piscine, son ambiance et ses avantages pour les visiteurs.",
+            'signature' => 'L’équipe de la Piscine',
             'main_image' => 'img/home_2.jpg',
             'overlay_image' => 'img/home_1.jpg',
         ]
@@ -366,6 +366,7 @@ Route::prefix('admin')->group(function () {
         Route::post('installations/section-settings', [\App\Http\Controllers\Admin\InstallationController::class , 'updateSectionSettings'])->name('admin.installations.section-settings.update');
         Route::resource('pool', \App\Http\Controllers\Admin\PoolAmenityController::class)->names('admin.pool');
         Route::post('pool/section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class , 'updateSectionSettings'])->name('admin.pool.section-settings.update');
+        Route::post('pool/about-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class , 'updateAboutSectionSettings'])->name('admin.pool.about-section-settings.update');
         Route::get('contact', [\App\Http\Controllers\Admin\ContactPageController::class, 'index'])->name('admin.contact.index');
         Route::post('contact', [\App\Http\Controllers\Admin\ContactPageController::class, 'update'])->name('admin.contact.update');
         Route::get('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'index'])->name('admin.maintenance.index');
@@ -382,6 +383,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('comodites', \App\Http\Controllers\Admin\LocalAmenityController::class)->names('admin.comodites');
         Route::resource('restaurant', \App\Http\Controllers\Admin\RestaurantAmenityController::class)->names('admin.restaurant');
         Route::post('restaurant/section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class , 'updateSectionSettings'])->name('admin.restaurant.section-settings.update');
+        Route::post('restaurant/about-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class , 'updateAboutSectionSettings'])->name('admin.restaurant.about-section-settings.update');
         Route::get('settings', [\App\Http\Controllers\Admin\SiteSettingController::class , 'index'])->name('admin.settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SiteSettingController::class , 'update'])->name('admin.settings.update');
         Route::get('translations', [\App\Http\Controllers\Admin\TranslationController::class , 'index'])->name('admin.translations.index');

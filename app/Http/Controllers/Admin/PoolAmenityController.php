@@ -25,4 +25,17 @@ class PoolAmenityController extends AbstractLocalAmenityController
         'hero_text' => 'Une parenthèse de détente à la Résidence Bella Vista.',
         'supports_hero_text' => true,
     ];
+    protected ?array $aboutSectionConfig = [
+        'section' => 'pool_about',
+        'panel_title' => 'Section À propos Piscine',
+        'small_title' => 'À PROPOS DE LA PISCINE',
+        'title' => 'La Piscine Bella Vista',
+        'lead' => 'Un espace de détente ouvert sur la résidence.',
+        'description' => "Personnalisez ici le texte de présentation de la piscine, son ambiance et ses avantages pour les visiteurs.",
+        'signature' => 'L’équipe de la Piscine',
+        'main_image' => 'img/home_2.jpg',
+        'overlay_image' => 'img/home_1.jpg',
+        'image_directory' => 'pool-about',
+        'success_message' => 'Section À propos Piscine mise à jour.',
+    ];
 }

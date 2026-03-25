@@ -53,6 +53,58 @@
     </div>
 @endif
 
+@if($pageMeta['about_section']['enabled'])
+    <div class="admin-card p-4 mb-4">
+        <h2 class="h5 mb-3">{{ $pageMeta['about_section']['title'] }}</h2>
+        <form action="{{ route($pageMeta['about_section']['route']) }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @php
+                $aboutMainSrc = media_url($aboutSectionSetting->main_image ?? null, 'img/home_2.jpg');
+                $aboutOverlaySrc = media_url($aboutSectionSetting->overlay_image ?? null, 'img/home_1.jpg');
+            @endphp
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Petit titre</label>
+                    <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $aboutSectionSetting->small_title ?? '') }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Titre</label>
+                    <input type="text" name="title" class="form-control" value="{{ old('title', $aboutSectionSetting->title ?? '') }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Lead</label>
+                    <input type="text" name="lead" class="form-control" value="{{ old('lead', $aboutSectionSetting->lead ?? '') }}">
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="5">{{ old('description', $aboutSectionSetting->description ?? '') }}</textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Signature</label>
+                    <input type="text" name="signature" class="form-control" value="{{ old('signature', $aboutSectionSetting->signature ?? '') }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Image principale</label>
+                    <input type="file" name="main_image" id="about_main_image" class="form-control" accept="image/*">
+                    <div class="mt-2">
+                        <img id="about_main_preview" src="{{ $aboutMainSrc }}" alt="" class="rounded" style="max-height:100px;">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Image superposée</label>
+                    <input type="file" name="overlay_image" id="about_overlay_image" class="form-control" accept="image/*">
+                    <div class="mt-2">
+                        <img id="about_overlay_preview" src="{{ $aboutOverlaySrc }}" alt="" class="rounded" style="max-height:100px;">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Mettre à jour</button>
+                </div>
+            </div>
+        </form>
+    </div>
+@endif
+
 <div class="admin-card p-3">
     <div class="table-responsive">
         <table class="table align-middle mb-0">
@@ -130,6 +182,32 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         reader.readAsDataURL(file);
     });
+
+    const bindPreview = function (inputId, previewId) {
+        const fileInput = document.getElementById(inputId);
+        const filePreview = document.getElementById(previewId);
+
+        if (!fileInput || !filePreview) {
+            return;
+        }
+
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                filePreview.src = e.target.result;
+                filePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    bindPreview('about_main_image', 'about_main_preview');
+    bindPreview('about_overlay_image', 'about_overlay_preview');
 });
 </script>
 @endsection

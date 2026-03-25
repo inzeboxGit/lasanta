@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AboutSectionSetting;
 use App\Models\LocalAmenity;
 use App\Models\LocalAmenitySectionSetting;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ abstract class AbstractLocalAmenityController extends Controller
     protected ?string $emptyStateLabel = null;
     protected ?string $sectionSettingsSuccessMessage = null;
     protected ?array $sectionSettingConfig = null;
+    protected ?array $aboutSectionConfig = null;
 
     public function index()
     {
@@ -33,6 +35,7 @@ abstract class AbstractLocalAmenityController extends Controller
         return view('admin.comodites.index', $this->viewData([
             'comodites' => $comodites,
             'sectionSetting' => $this->resolveSectionSetting(),
+            'aboutSectionSetting' => $this->resolveAboutSectionSetting(),
         ]));
     }
 
@@ -71,6 +74,56 @@ abstract class AbstractLocalAmenityController extends Controller
 
         return redirect()->route($this->indexRouteName())
             ->with('success', $this->sectionSettingsSuccessMessage ?? "Paramètres {$this->itemLabelSingular} mis à jour.");
+    }
+
+    public function updateAboutSectionSettings(Request $request)
+    {
+        abort_unless($this->hasAboutSectionSettings(), 404);
+
+        if (! Schema::hasTable('about_section_settings')) {
+            return redirect()->route($this->indexRouteName())
+                ->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = $this->resolveAboutSectionSetting();
+        $data = $request->validate([
+            'small_title' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'lead' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'signature' => ['nullable', 'string', 'max:255'],
+            'main_image' => ['nullable', 'image', 'max:5120'],
+            'overlay_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        if ($request->hasFile('main_image')) {
+            if (! empty($setting->main_image) && ! str_starts_with($setting->main_image, 'img/')) {
+                Storage::disk('public')->delete($setting->main_image);
+            }
+
+            $data['main_image'] = $request->file('main_image')->store($this->aboutSectionConfig['image_directory'] ?? 'about', 'public');
+        }
+
+        if ($request->hasFile('overlay_image')) {
+            if (! empty($setting->overlay_image) && ! str_starts_with($setting->overlay_image, 'img/')) {
+                Storage::disk('public')->delete($setting->overlay_image);
+            }
+
+            $data['overlay_image'] = $request->file('overlay_image')->store($this->aboutSectionConfig['image_directory'] ?? 'about', 'public');
+        }
+
+        $setting->update([
+            'small_title' => $data['small_title'] ?? $setting->small_title,
+            'title' => $data['title'] ?? $setting->title,
+            'lead' => $data['lead'] ?? $setting->lead,
+            'description' => $data['description'] ?? $setting->description,
+            'signature' => $data['signature'] ?? $setting->signature,
+            'main_image' => $data['main_image'] ?? $setting->main_image,
+            'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
+        ]);
+
+        return redirect()->route($this->indexRouteName())
+            ->with('success', $this->aboutSectionConfig['success_message'] ?? "Section À propos {$this->itemLabelSingular} mise à jour.");
     }
 
     public function create()
@@ -168,6 +221,11 @@ abstract class AbstractLocalAmenityController extends Controller
                     'title' => $this->sectionSettingConfig['panel_title'] ?? '',
                     'show_hero_text' => $this->supportsHeroText(),
                 ],
+                'about_section' => [
+                    'enabled' => $this->hasAboutSectionSettings(),
+                    'title' => $this->aboutSectionConfig['panel_title'] ?? '',
+                    'route' => $this->aboutSectionSettingsRouteName(),
+                ],
             ],
         ], $extra);
     }
@@ -193,6 +251,42 @@ abstract class AbstractLocalAmenityController extends Controller
     protected function hasSectionSettings(): bool
     {
         return $this->sectionSettingConfig !== null;
+    }
+
+    protected function resolveAboutSectionSetting(): object
+    {
+        if (! $this->hasAboutSectionSettings()) {
+            return (object) [];
+        }
+
+        $defaults = $this->aboutSectionDefaults();
+
+        if (Schema::hasTable('about_section_settings')) {
+            return AboutSectionSetting::firstOrCreate(
+                ['section' => $this->aboutSectionConfig['section']],
+                $defaults
+            );
+        }
+
+        return (object) $defaults;
+    }
+
+    protected function hasAboutSectionSettings(): bool
+    {
+        return $this->aboutSectionConfig !== null;
+    }
+
+    protected function aboutSectionDefaults(): array
+    {
+        return [
+            'small_title' => $this->aboutSectionConfig['small_title'] ?? 'À PROPOS DE NOUS',
+            'title' => $this->aboutSectionConfig['title'] ?? 'La Résidence Bella Vista',
+            'lead' => $this->aboutSectionConfig['lead'] ?? 'Une conception du tourisme...',
+            'description' => $this->aboutSectionConfig['description'] ?? "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
+            'signature' => $this->aboutSectionConfig['signature'] ?? 'L’équipe du Bella Vista',
+            'main_image' => $this->aboutSectionConfig['main_image'] ?? 'img/home_2.jpg',
+            'overlay_image' => $this->aboutSectionConfig['overlay_image'] ?? 'img/home_1.jpg',
+        ];
     }
 
     protected function sectionSettingDefaults(): array
@@ -266,6 +360,13 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         return $this->hasSectionSettings()
             ? "{$this->routePrefix}.section-settings.update"
+            : null;
+    }
+
+    protected function aboutSectionSettingsRouteName(): ?string
+    {
+        return $this->hasAboutSectionSettings()
+            ? "{$this->routePrefix}.about-section-settings.update"
             : null;
     }
 }

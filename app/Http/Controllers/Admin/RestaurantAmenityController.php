@@ -23,4 +23,17 @@ class RestaurantAmenityController extends AbstractLocalAmenityController
         'hero_text' => 'Une conception du tourisme...',
         'supports_hero_text' => true,
     ];
+    protected ?array $aboutSectionConfig = [
+        'section' => 'restaurant_about',
+        'panel_title' => 'Section À propos Restaurant',
+        'small_title' => 'À PROPOS DU RESTAURANT',
+        'title' => 'Le Restaurant Bella Vista',
+        'lead' => 'Une expérience culinaire face au panorama.',
+        'description' => "Personnalisez ici le texte de présentation du restaurant, son ambiance et ses points forts.",
+        'signature' => 'L’équipe du Restaurant',
+        'main_image' => 'img/home_2.jpg',
+        'overlay_image' => 'img/home_1.jpg',
+        'image_directory' => 'restaurant-about',
+        'success_message' => 'Section À propos Restaurant mise à jour.',
+    ];
 }

@@ -53,12 +53,12 @@ $aboutOverlayImageSrc = media_url($aboutOverlayImage, 'img/home_1.jpg');
                 <div class="col-lg-6">
                     <div class="intro">
                         <div class="title mb-3">
-                            <small>{{ method_exists($localAmenitySectionSetting, 't') ?
-                                $localAmenitySectionSetting->t('subtitle')
-                                : ($localAmenitySectionSetting->subtitle ?? 'RÉsidence Bella vista') }}</small>
-                            <h2>{{ method_exists($localAmenitySectionSetting, 't') ?
-                                $localAmenitySectionSetting->t('title') :
-                                ($localAmenitySectionSetting->title ?? 'Restaurant') }}</h2>
+                            <small>{{ method_exists($aboutSectionSetting, 't') ?
+                                $aboutSectionSetting->t('small_title')
+                                : ($aboutSectionSetting->small_title ?? 'À PROPOS DE NOUS') }}</small>
+                            <h2>{{ method_exists($aboutSectionSetting, 't') ?
+                                $aboutSectionSetting->t('title') :
+                                ($aboutSectionSetting->title ?? 'La Résidence Bella Vista') }}</h2>
                         </div>
                         <p class="lead">{{ method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('lead') :
                             ($aboutSectionSetting->lead ?? 'Une conception du tourisme...') }}</p>
