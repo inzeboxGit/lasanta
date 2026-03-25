@@ -33,7 +33,8 @@
     $quickLinks = [
         ['label' => 'Gérer les chambres', 'route' => route('admin.rooms.index')],
         ['label' => 'Modifier le hero', 'route' => route('admin.hero.index')],
-        ['label' => 'Voir le restaurant', 'route' => route('admin.comodites.index')],
+        ['label' => 'Gérer les commodités', 'route' => route('admin.comodites.index')],
+        ['label' => 'Voir le restaurant', 'route' => route('admin.restaurant.index')],
         ['label' => 'Publier une actualité', 'route' => route('admin.news.index')],
     ];
 @endphp

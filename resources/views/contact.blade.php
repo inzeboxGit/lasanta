@@ -40,14 +40,15 @@
         $secondaryPhone = $siteSetting->phone_secondary ?? '';
         $primaryPhoneHref = preg_replace('/\s+/', '', (string) $primaryPhone);
         $secondaryPhoneHref = preg_replace('/\s+/', '', (string) $secondaryPhone);
+        $heroSrc = media_url($contactPageSetting->header_image ?? null, 'img/hero_home_2.jpg');
     @endphp
 
     <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-        <img class="jarallax-img" src="{{ asset('img/hero_home_2.jpg') }}" alt="">
+        <img class="jarallax-img" src="{{ $heroSrc }}" alt="">
         <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
             <div class="container">
-                <small class="slide-animated one">{{ $ui['hero_small'] }}</small>
-                <h1 class="slide-animated two">{{ $ui['hero_title'] }}</h1>
+                <small class="slide-animated one">{{ method_exists($contactPageSetting, 't') ? $contactPageSetting->t('subtitle') : ($contactPageSetting->subtitle ?? $ui['hero_small']) }}</small>
+                <h1 class="slide-animated two">{{ method_exists($contactPageSetting, 't') ? $contactPageSetting->t('title') : ($contactPageSetting->title ?? $ui['hero_title']) }}</h1>
             </div>
         </div>
     </div>
@@ -97,7 +98,7 @@
                     <div class="alert alert-danger">{{ session('error') }}</div>
                 @endif
                 <div id="message-contact"></div>
-                <form method="post" action="{{ route('contact.send') }}" id="contactform" autocomplete="off">
+                <form method="post" action="{{ route('contact.send') }}" id="contact_form_laravel" autocomplete="off">
                     @csrf
                     <div class="row">
                         <div class="col-sm-6">

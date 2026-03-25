@@ -25,8 +25,9 @@ $aboutOverlayImageSrc = media_url($aboutOverlayImage, 'img/home_1.jpg');
                 <h1 class="slide-animated two">{{ method_exists($localAmenitySectionSetting, 't') ?
                     $localAmenitySectionSetting->t('title') : ($localAmenitySectionSetting->title ?? 'Restaurant') }}
                 </h1>
-                <p class="slide-animated three mb-0">{{ method_exists($aboutSectionSetting, 't') ?
-                    $aboutSectionSetting->t('lead') : ($aboutSectionSetting->lead ?? 'Une conception du tourisme...') }}
+                <p class="slide-animated three mb-0">{{ method_exists($localAmenitySectionSetting, 't') ?
+                    $localAmenitySectionSetting->t('hero_text') : ($localAmenitySectionSetting->hero_text ?? (method_exists($aboutSectionSetting, 't') ?
+                    $aboutSectionSetting->t('lead') : ($aboutSectionSetting->lead ?? 'Une conception du tourisme...'))) }}
                 </p>
             </div>
         </div>

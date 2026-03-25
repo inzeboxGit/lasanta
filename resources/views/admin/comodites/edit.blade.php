@@ -1,9 +1,9 @@
 @extends('admin.layout')
 
-@section('title', 'Modifier un element restaurant')
+@section('title', $pageMeta['title'])
 
 @section('content')
-<h1 class="h3 mb-4">Modifier un element restaurant</h1>
+<h1 class="h3 mb-4">Modifier {{ $pageMeta['item_label_singular'] }}</h1>
 
 @if($errors->any())
     <div class="alert alert-danger">
@@ -15,13 +15,13 @@
     </div>
 @endif
 
-<form action="{{ route('admin.comodites.update', $comodite) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route($pageMeta['routes']['update'], $comodite) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     @include('admin.comodites.form')
     <div class="mt-3">
         <button class="btn btn-primary" type="submit">Enregistrer</button>
-        <a href="{{ route('admin.comodites.index') }}" class="btn btn-outline-secondary">Annuler</a>
+        <a href="{{ route($pageMeta['routes']['index']) }}" class="btn btn-outline-secondary">Annuler</a>
     </div>
 </form>
 @endsection

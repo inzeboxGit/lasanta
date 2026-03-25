@@ -45,12 +45,14 @@
                         || request()->routeIs('admin.installations.*')
                         || request()->routeIs('admin.promo.*')
                         || request()->routeIs('admin.about.*')
-                        || request()->routeIs('admin.testimonials.*'),
+                        || request()->routeIs('admin.testimonials.*')
+                        || request()->routeIs('admin.comodites.*'),
                     'children' => [
                         ['label' => 'Hero accueil', 'route' => route('admin.hero.index'), 'active' => request()->routeIs('admin.hero.*'), 'icon' => 'bi-play-circle'],
                         ['label' => 'Installations', 'route' => route('admin.installations.index'), 'active' => request()->routeIs('admin.installations.*'), 'icon' => 'icon-hotel-reception'],
                         ['label' => 'À propos', 'route' => route('admin.about.index'), 'active' => request()->routeIs('admin.about.*'), 'icon' => 'bi-info-circle'],
                         ['label' => 'Promo', 'route' => route('admin.promo.index'), 'active' => request()->routeIs('admin.promo.*'), 'icon' => 'bi-ticket-perforated'],
+                        ['label' => 'Commodités', 'route' => route('admin.comodites.index'), 'active' => request()->routeIs('admin.comodites.*'), 'icon' => 'bi-geo-alt'],
                         ['label' => 'Témoignages', 'route' => route('admin.testimonials.index'), 'active' => request()->routeIs('admin.testimonials.*'), 'icon' => 'bi-chat-quote'],
                     ],
                 ],
@@ -60,8 +62,9 @@
             'title' => 'Pages',
             'items' => [
                 ['label' => 'Chambres', 'route' => route('admin.rooms.index'), 'active' => request()->routeIs('admin.rooms.*'), 'icon' => 'bi-door-open'],
-                ['label' => 'Restaurant', 'route' => route('admin.comodites.index'), 'active' => request()->routeIs('admin.comodites.*'), 'icon' => 'icon-hotel-restaurant'],
+                ['label' => 'Restaurant', 'route' => route('admin.restaurant.index'), 'active' => request()->routeIs('admin.restaurant.*'), 'icon' => 'icon-hotel-restaurant'],
                 ['label' => 'Piscine', 'route' => route('admin.pool.index'), 'active' => request()->routeIs('admin.pool.*'), 'icon' => 'icon-hotel-swimming_pool'],
+                ['label' => 'Contact', 'route' => route('admin.contact.index'), 'active' => request()->routeIs('admin.contact.*'), 'icon' => 'bi-envelope'],
                 ['label' => 'Actualités', 'route' => route('admin.news.index'), 'active' => request()->routeIs('admin.news.*'), 'icon' => 'bi-megaphone'],
             ],
         ],

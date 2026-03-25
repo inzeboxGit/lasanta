@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-6">
             <label class="form-label">Lien (optionnel)</label>
-            <input type="text" name="link_url" class="form-control" value="{{ old('link_url', $comodite->link_url ?? '/restaurant') }}" placeholder="/restaurant">
+            <input type="text" name="link_url" class="form-control" value="{{ old('link_url', $comodite->link_url ?? $pageMeta['link_placeholder']) }}" placeholder="{{ $pageMeta['link_placeholder'] }}">
         </div>
         <div class="col-md-6">
             <label class="form-label">Image</label>

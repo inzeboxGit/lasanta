@@ -27,6 +27,42 @@
                 <input type="email" name="email" class="form-control" value="{{ old('email', $siteSetting->email ?? '') }}">
             </div>
             <div class="col-md-6">
+                <label class="form-label">Langue par défaut du site</label>
+                <select name="default_locale" class="form-select">
+                    @foreach(($locales ?? ['fr' => 'Français']) as $localeKey => $localeLabel)
+                        <option value="{{ $localeKey }}" {{ old('default_locale', $siteSetting->default_locale ?? config('app.locale', 'fr')) === $localeKey ? 'selected' : '' }}>
+                            {{ $localeLabel }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-12">
+                <div class="form-check mt-2">
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value="1"
+                        id="use_site_email_for_contact"
+                        name="use_site_email_for_contact"
+                        {{ old('use_site_email_for_contact', $siteSetting->use_site_email_for_contact ?? true) ? 'checked' : '' }}
+                    >
+                    <label class="form-check-label" for="use_site_email_for_contact">
+                        Utiliser l'email du site comme destinataire des formulaires de contact
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6" id="contact_recipient_email_wrap">
+                <label class="form-label">Email destinataire des contacts</label>
+                <input
+                    type="email"
+                    name="contact_recipient_email"
+                    class="form-control"
+                    value="{{ old('contact_recipient_email', $siteSetting->contact_recipient_email ?? '') }}"
+                    placeholder="contact@example.com"
+                >
+                <div class="form-text">Utilisé seulement si la case ci-dessus est décochée.</div>
+            </div>
+            <div class="col-md-6">
                 <label class="form-label">Téléphone 1</label>
                 <input type="text" name="phone_primary" class="form-control" value="{{ old('phone_primary', $siteSetting->phone_primary ?? '') }}">
             </div>
@@ -60,4 +96,20 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const checkbox = document.getElementById('use_site_email_for_contact');
+    const wrap = document.getElementById('contact_recipient_email_wrap');
+
+    if (!checkbox || !wrap) return;
+
+    const syncVisibility = function () {
+        wrap.style.display = checkbox.checked ? 'none' : '';
+    };
+
+    checkbox.addEventListener('change', syncVisibility);
+    syncVisibility();
+});
+</script>
 @endsection

@@ -25,7 +25,13 @@ class ContactController extends Controller
         $recipient = env('MAIL_CONTACT_TO');
 
         if (empty($recipient) && Schema::hasTable('site_settings')) {
-            $recipient = SiteSetting::where('setting_key', 'general')->value('email');
+            $siteSetting = SiteSetting::where('setting_key', 'general')->first();
+
+            if ($siteSetting) {
+                $recipient = $siteSetting->use_site_email_for_contact
+                    ? $siteSetting->email
+                    : ($siteSetting->contact_recipient_email ?: $siteSetting->email);
+            }
         }
 
         if (empty($recipient)) {

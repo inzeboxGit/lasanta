@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Models\PageHeaderSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class NewsController extends Controller
@@ -15,8 +18,41 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::latest()->paginate(10);
+        $newsPageSetting = $this->resolvePageSetting();
 
-        return view('admin.news.index', compact('news'));
+        return view('admin.news.index', compact('news', 'newsPageSetting'));
+    }
+
+    public function updatePageSettings(Request $request)
+    {
+        if (! Schema::hasTable('page_header_settings')) {
+            return redirect()->route('admin.news.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = $this->resolvePageSetting();
+        $data = $request->validate([
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'hero_text' => ['nullable', 'string'],
+            'header_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        if ($request->hasFile('header_image')) {
+            if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+                Storage::disk('public')->delete($setting->header_image);
+            }
+
+            $data['header_image'] = $request->file('header_image')->store('page-headers', 'public');
+        }
+
+        $setting->update([
+            'subtitle' => $data['subtitle'] ?? $setting->subtitle,
+            'title' => $data['title'] ?? $setting->title,
+            'hero_text' => $data['hero_text'] ?? $setting->hero_text,
+            'header_image' => $data['header_image'] ?? $setting->header_image,
+        ]);
+
+        return redirect()->route('admin.news.index')->with('success', 'En-tête de la page actualités mise à jour.');
     }
 
     /**
@@ -115,5 +151,25 @@ class NewsController extends Controller
             'cover_image' => ['nullable', 'image', 'max:5120'],
             'status' => ['required', 'in:draft,published'],
         ]);
+    }
+
+    private function resolvePageSetting(): object
+    {
+        $defaults = [
+            'page' => 'news',
+            'subtitle' => 'Expérience hôtelière',
+            'title' => 'Actualités et événements',
+            'hero_text' => 'Découvrez les nouvelles, événements et temps forts de la résidence.',
+            'header_image' => 'img/hero_home_2.jpg',
+        ];
+
+        if (! Schema::hasTable('page_header_settings')) {
+            return (object) $defaults;
+        }
+
+        return PageHeaderSetting::firstOrCreate(
+            ['page' => 'news'],
+            $defaults
+        );
     }
 }

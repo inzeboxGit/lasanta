@@ -11,14 +11,16 @@
             'nl' => ['small' => 'Hotelbeleving', 'title' => 'Nieuws en evenementen', 'event' => 'Evenement', 'read_more' => 'Lees meer', 'empty' => 'Geen nieuws.'],
         ];
         $ui = $labels[$locale] ?? $labels['en'];
+        $heroSrc = media_url($newsPageSetting->header_image ?? null, 'img/hero_home_2.jpg');
     @endphp
 
     <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-        <img class="jarallax-img" src="{{ asset('img/hero_home_2.jpg') }}" alt="">
+        <img class="jarallax-img" src="{{ $heroSrc }}" alt="">
         <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero" data-opacity-mask="rgba(0, 0, 0, 0.5)">
             <div class="container">
-                <small class="slide-animated one">{{ $ui['small'] }}</small>
-                <h1 class="slide-animated two">{{ $ui['title'] }}</h1>
+                <small class="slide-animated one">{{ method_exists($newsPageSetting, 't') ? $newsPageSetting->t('subtitle') : ($newsPageSetting->subtitle ?? $ui['small']) }}</small>
+                <h1 class="slide-animated two">{{ method_exists($newsPageSetting, 't') ? $newsPageSetting->t('title') : ($newsPageSetting->title ?? $ui['title']) }}</h1>
+                <p class="slide-animated three mb-0">{{ method_exists($newsPageSetting, 't') ? $newsPageSetting->t('hero_text') : ($newsPageSetting->hero_text ?? '') }}</p>
             </div>
         </div>
     </div>

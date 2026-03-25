@@ -12,7 +12,7 @@ if (! function_exists('media_url')) {
 
             return filter_var($fallback, FILTER_VALIDATE_URL)
                 ? $fallback
-                : asset(ltrim($fallback, '/'));
+                : '/' . ltrim($fallback, '/');
         }
 
         $path = ltrim($path, '/');
@@ -22,14 +22,14 @@ if (! function_exists('media_url')) {
         }
 
         if (str_starts_with($path, 'img/') || str_starts_with($path, 'video/') || str_starts_with($path, 'storage/')) {
-            return asset($path);
+            return '/' . $path;
         }
 
         if (public_storage_is_available()) {
-            return Storage::disk('public')->url($path);
+            return '/storage/' . $path;
         }
 
-        return url('media/' . $path);
+        return '/media/' . $path;
     }
 }
 

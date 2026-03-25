@@ -36,8 +36,14 @@ return [
         'local_amenity_section' => [
             'label' => 'Section Commodités',
             'class' => \App\Models\LocalAmenitySectionSetting::class,
-            'fields' => ['subtitle', 'title'],
+            'fields' => ['subtitle', 'title', 'hero_text'],
             'display_field' => 'section',
+        ],
+        'page_headers' => [
+            'label' => 'En-têtes de page',
+            'class' => \App\Models\PageHeaderSetting::class,
+            'fields' => ['subtitle', 'title', 'hero_text'],
+            'display_field' => 'page',
         ],
         'appartment_page' => [
             'label' => 'Page Appartements',

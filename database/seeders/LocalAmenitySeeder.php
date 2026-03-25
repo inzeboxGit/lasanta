@@ -28,17 +28,22 @@ class LocalAmenitySeeder extends Seeder
             ],
         ];
 
-        foreach ($items as $item) {
-            LocalAmenity::updateOrCreate(
-                ['title' => $item['title']],
-                [
-                    'description' => $item['description'],
-                    'image_path' => $item['image_path'],
-                    'link_url' => $item['link_url'],
-                    'sort_order' => $item['sort_order'],
-                    'is_published' => $item['is_published'],
-                ]
-            );
+        foreach ([LocalAmenity::CONTEXT_HOME, LocalAmenity::CONTEXT_RESTAURANT, LocalAmenity::CONTEXT_POOL] as $context) {
+            foreach ($items as $item) {
+                LocalAmenity::updateOrCreate(
+                    [
+                        'title' => $item['title'],
+                        'display_context' => $context,
+                    ],
+                    [
+                        'description' => $item['description'],
+                        'image_path' => $item['image_path'],
+                        'link_url' => $item['link_url'],
+                        'sort_order' => $item['sort_order'],
+                        'is_published' => $item['is_published'],
+                    ]
+                );
+            }
         }
     }
 }

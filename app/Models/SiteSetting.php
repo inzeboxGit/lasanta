@@ -15,17 +15,21 @@ class SiteSetting extends Model
         'site_name',
         'address',
         'email',
+        'use_site_email_for_contact',
+        'contact_recipient_email',
         'phone_primary',
         'phone_secondary',
         'facebook_url',
         'instagram_url',
         'whatsapp_url',
         'twitter_url',
+        'default_locale',
         'maintenance_enabled',
         'maintenance_message',
     ];
 
     protected $casts = [
+        'use_site_email_for_contact' => 'boolean',
         'maintenance_enabled' => 'boolean',
     ];
 }

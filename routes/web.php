@@ -55,7 +55,8 @@ Route::get('/', function () {
         ->limit(3)
         ->get();
 
-    $localComodites = \App\Models\LocalAmenity::where('is_published', true)
+    $localComodites = \App\Models\LocalAmenity::forDisplayContext(\App\Models\LocalAmenity::CONTEXT_HOME)
+        ->where('is_published', true)
         ->with('translations')
         ->orderBy('sort_order')
         ->orderBy('id')
@@ -141,7 +142,25 @@ Route::get('/', function () {
 });
 
 Route::get('/contacts', function () {
-    return view('contact');
+    $contactPageSetting = (object) [
+        'header_image' => 'img/hero_home_2.jpg',
+        'subtitle' => 'Expérience hôtelière',
+        'title' => 'Contact',
+    ];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
+        $contactPageSetting = \App\Models\PageHeaderSetting::firstOrCreate(
+            ['page' => 'contact'],
+            [
+                'header_image' => 'img/hero_home_2.jpg',
+                'subtitle' => 'Expérience hôtelière',
+                'title' => 'Contact',
+            ]
+        );
+        $contactPageSetting->loadMissing('translations');
+    }
+
+    return view('contact', compact('contactPageSetting'));
 });
 Route::post('/contacts', [\App\Http\Controllers\ContactController::class , 'send'])->name('contact.send');
 
@@ -160,7 +179,8 @@ Route::get('/conditions', function () {
 Route::get('/restaurant', function () {
     $localComodites = collect();
     if (\Illuminate\Support\Facades\Schema::hasTable('local_amenities')) {
-        $localComodites = \App\Models\LocalAmenity::where('is_published', true)
+        $localComodites = \App\Models\LocalAmenity::forDisplayContext(\App\Models\LocalAmenity::CONTEXT_RESTAURANT)
+            ->where('is_published', true)
             ->with('translations')
             ->orderBy('sort_order')
             ->orderBy('id')
@@ -213,6 +233,64 @@ Route::get('/restaurant', function () {
 
     return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting'));
 })->name('about.index');
+
+Route::get('/piscine', function () {
+    $localComodites = collect();
+    if (\Illuminate\Support\Facades\Schema::hasTable('local_amenities')) {
+        $localComodites = \App\Models\LocalAmenity::forDisplayContext(\App\Models\LocalAmenity::CONTEXT_POOL)
+            ->where('is_published', true)
+            ->with('translations')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+    }
+
+    $localAmenitySectionSetting = (object)[
+        'header_image' => 'img/home_2.jpg',
+        'subtitle' => 'RÉsidence Bella vista',
+        'title' => 'Piscine',
+    ];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('local_amenity_section_settings')) {
+        $localAmenitySectionSetting = \App\Models\LocalAmenitySectionSetting::firstOrCreate(
+        ['section' => 'about_pool_amenities'],
+        [
+            'header_image' => 'img/home_2.jpg',
+            'subtitle' => 'RÉsidence Bella vista',
+            'title' => 'Piscine',
+        ]
+        );
+        $localAmenitySectionSetting->loadMissing('translations');
+    }
+
+    $aboutSectionSetting = (object)[
+        'small_title' => 'À PROPOS DE NOUS',
+        'title' => 'La Résidence Bella Vista',
+        'lead' => 'Une conception du tourisme...',
+        'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
+        'signature' => 'L’équipe du Bella Vista',
+        'main_image' => 'img/home_2.jpg',
+        'overlay_image' => 'img/home_1.jpg',
+    ];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
+        $aboutSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
+        ['section' => 'home_about'],
+        [
+            'small_title' => 'À PROPOS DE NOUS',
+            'title' => 'La Résidence Bella Vista',
+            'lead' => 'Une conception du tourisme...',
+            'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
+            'signature' => 'L’équipe du Bella Vista',
+            'main_image' => 'img/home_2.jpg',
+            'overlay_image' => 'img/home_1.jpg',
+        ]
+        );
+        $aboutSectionSetting->loadMissing('translations');
+    }
+
+    return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting'));
+})->name('pool.index');
 
 Route::get('/appartements', function () {
     $rooms = \App\Models\Room::with('amenities.translations', 'translations')
@@ -286,7 +364,10 @@ Route::prefix('admin')->group(function () {
         Route::resource('amenities', \App\Http\Controllers\Admin\AmenityController::class)->names('admin.amenities');
         Route::resource('installations', \App\Http\Controllers\Admin\InstallationController::class)->names('admin.installations');
         Route::post('installations/section-settings', [\App\Http\Controllers\Admin\InstallationController::class , 'updateSectionSettings'])->name('admin.installations.section-settings.update');
-        Route::get('pool', [\App\Http\Controllers\Admin\PoolController::class, 'index'])->name('admin.pool.index');
+        Route::resource('pool', \App\Http\Controllers\Admin\PoolAmenityController::class)->names('admin.pool');
+        Route::post('pool/section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class , 'updateSectionSettings'])->name('admin.pool.section-settings.update');
+        Route::get('contact', [\App\Http\Controllers\Admin\ContactPageController::class, 'index'])->name('admin.contact.index');
+        Route::post('contact', [\App\Http\Controllers\Admin\ContactPageController::class, 'update'])->name('admin.contact.update');
         Route::get('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'index'])->name('admin.maintenance.index');
         Route::post('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'update'])->name('admin.maintenance.update');
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class)
@@ -299,13 +380,15 @@ Route::prefix('admin')->group(function () {
         Route::get('promo', [\App\Http\Controllers\Admin\PromoController::class , 'index'])->name('admin.promo.index');
         Route::post('promo', [\App\Http\Controllers\Admin\PromoController::class , 'update'])->name('admin.promo.update');
         Route::resource('comodites', \App\Http\Controllers\Admin\LocalAmenityController::class)->names('admin.comodites');
-        Route::post('comodites/section-settings', [\App\Http\Controllers\Admin\LocalAmenityController::class , 'updateSectionSettings'])->name('admin.comodites.section-settings.update');
+        Route::resource('restaurant', \App\Http\Controllers\Admin\RestaurantAmenityController::class)->names('admin.restaurant');
+        Route::post('restaurant/section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class , 'updateSectionSettings'])->name('admin.restaurant.section-settings.update');
         Route::get('settings', [\App\Http\Controllers\Admin\SiteSettingController::class , 'index'])->name('admin.settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SiteSettingController::class , 'update'])->name('admin.settings.update');
         Route::get('translations', [\App\Http\Controllers\Admin\TranslationController::class , 'index'])->name('admin.translations.index');
         Route::post('translations', [\App\Http\Controllers\Admin\TranslationController::class , 'update'])->name('admin.translations.update');
         Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class)->names('admin.testimonials');
         Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->names('admin.news');
+        Route::post('news/page-settings', [\App\Http\Controllers\Admin\NewsController::class, 'updatePageSettings'])->name('admin.news.page-settings.update');
     });
 });
 
