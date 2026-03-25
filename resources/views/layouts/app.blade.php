@@ -70,6 +70,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="">
     <meta name="author" content="residencebellavista.fr">
     <title>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Residence
@@ -153,7 +154,7 @@
     <script src="{{ asset('js/common_functions.js') }}"></script>
     <script src="{{ asset('js/datepicker_search.js') }}"></script>
     <script src="{{ asset('js/datepicker_inline.js') }}"></script>
-    <script src="{{ asset('phpmailer/validate.js') }}"></script>
+    <script src="{{ asset('phpmailer/validate.js') }}?v={{ filemtime(public_path('phpmailer/validate.js')) }}"></script>
     @if($showPromoModal)
         <script src="{{ asset('js/modal_popup.js') }}"></script>
     @endif

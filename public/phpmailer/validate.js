@@ -1,5 +1,15 @@
 /* <![CDATA[ */
 
+var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+if (csrfToken) {
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': csrfToken
+		}
+	});
+}
+
 /// Jquery validate newsletter
 $('#newsletter_form').submit(function () {
 
@@ -77,7 +87,8 @@ $('#contactform').submit(function () {
 				email_contact: $('#email_contact').val(),
 				phone_contact: $('#phone_contact').val(),
 				message_contact: $('#message_contact').val(),
-				verify_contact: $('#verify_contact').val()
+				verify_contact: $('#verify_contact').val(),
+				_token: csrfToken
 			},
 			function (data) {
 				document.getElementById('message-contact').innerHTML = data;
