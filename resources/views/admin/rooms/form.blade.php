@@ -2,6 +2,48 @@
     $isEdit = isset($room);
 @endphp
 
+@push('css')
+<style>
+    .custom-file-upload {
+        position: relative;
+    }
+    .file-upload-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        border: 2px dashed #d1d5db;
+        border-radius: 0.75rem;
+        background-color: #f9fafb;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+        margin-bottom: 0;
+    }
+    .file-upload-label:hover {
+        border-color: #3b82f6;
+        background-color: #eff6ff;
+    }
+    .file-upload-label i {
+        font-size: 1.75rem;
+        color: #9ca3af;
+        margin-bottom: 0.5rem;
+    }
+    .file-upload-label span {
+        font-weight: 500;
+        color: #374151;
+        font-size: 0.95rem;
+    }
+    .file-upload-label small {
+        display: block;
+        margin-top: 0.25rem;
+        color: #6b7280;
+        font-size: 0.8rem;
+    }
+</style>
+@endpush
+
 <div class="admin-card p-4">
     <div class="row g-3">
         <div class="col-md-8">
@@ -49,10 +91,17 @@
         </div>
         <div class="col-md-6">
             <label class="form-label">Image principale</label>
-            <input type="file" name="main_image" class="form-control">
+            <div class="custom-file-upload">
+                <label for="main_image" class="file-upload-label">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                    <span>{{ !empty($room->main_image) ? 'Changer l\'image principale' : 'Choisir une image...' }}</span>
+                    <small>PNG, JPG up to 5MB</small>
+                </label>
+                <input type="file" name="main_image" id="main_image" class="d-none custom-file-input">
+            </div>
             @if(!empty($room->main_image))
                 <div class="mt-2">
-                    <img src="{{ asset('storage/' . $room->main_image) }}" alt="" style="max-height:120px;" class="rounded">
+                    <img src="{{ asset('storage/' . $room->main_image) }}" alt="" style="max-height:120px;" class="rounded shadow-sm">
                 </div>
             @endif
         </div>
@@ -64,9 +113,9 @@
                 <div id="gallery-sortable" class="d-flex flex-wrap gap-2 mb-3">
                     @foreach($room->gallery as $img)
                         <div class="gallery-item position-relative" data-path="{{ $img }}">
-                            <img src="{{ asset('storage/' . $img) }}" alt="" class="rounded" style="height:100px;width:auto;object-fit:cover;cursor:grab;">
+                            <img src="{{ asset('storage/' . $img) }}" alt="" class="rounded shadow-sm" style="height:100px;width:auto;object-fit:cover;cursor:grab;">
                             <input type="hidden" name="gallery_order[]" value="{{ $img }}">
-                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 gallery-remove-btn"
+                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 gallery-remove-btn shadow-sm"
                                     style="width:24px;height:24px;padding:0;line-height:24px;font-size:14px;border-radius:50%;"
                                     title="Supprimer">&times;</button>
                         </div>
@@ -75,8 +124,15 @@
             @endif
 
             {{-- Upload new images --}}
-            <input type="file" name="gallery[]" class="form-control" multiple>
-            <small class="text-muted">Glissez les images existantes pour réordonner. Cliquez ✕ pour supprimer.</small>
+            <div class="custom-file-upload">
+                <label for="gallery" class="file-upload-label">
+                    <i class="bi bi-images"></i>
+                    <span>Ajouter des photos à la galerie...</span>
+                    <small>Glissez-déposez ou cliquez pour sélectionner plusieurs fichiers</small>
+                </label>
+                <input type="file" name="gallery[]" id="gallery" class="d-none custom-file-input" multiple>
+            </div>
+            <small class="text-muted mt-2 d-block">Glissez les images existantes pour réordonner. Cliquez ✕ pour supprimer.</small>
         </div>
         <div class="col-md-4">
             <label class="form-label">Statut</label>
@@ -87,3 +143,23 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.custom-file-input').forEach(input => {
+        input.addEventListener('change', function (e) {
+            const label = this.parentElement.querySelector('.file-upload-label span');
+            const files = e.target.files;
+            if (files.length === 1) {
+                label.textContent = files[0].name;
+            } else if (files.length > 1) {
+                label.textContent = files.length + ' fichiers sélectionnés';
+            } else {
+                label.textContent = this.id === 'gallery' ? 'Ajouter des photos à la galerie...' : 'Choisir une image...';
+            }
+        });
+    });
+});
+</script>
+@endpush

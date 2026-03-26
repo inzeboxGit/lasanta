@@ -20,6 +20,7 @@
 
     <!-- Admin custom assets -->
     <link rel="stylesheet" href="{{ asset('xyres/admin/css/admin.css') }}">
+    @stack('css')
 </head>
 
 @php
