@@ -24,3 +24,22 @@
     </div>
 </form>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const container = document.getElementById('gallery-sortable');
+    if (container && typeof Sortable !== 'undefined') {
+        Sortable.create(container, {
+            animation: 200,
+            ghostClass: 'opacity-50',
+        });
+    }
+    document.querySelectorAll('.gallery-remove-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            this.closest('.gallery-item').remove();
+        });
+    });
+});
+</script>
+@endpush

@@ -360,6 +360,7 @@ Route::prefix('admin')->group(function () {
         })->name('admin.dashboard');
         Route::post('logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('admin.logout');
         Route::resource('rooms', \App\Http\Controllers\Admin\RoomController::class)->names('admin.rooms');
+        Route::post('rooms/{room}/gallery/delete', [\App\Http\Controllers\Admin\RoomController::class, 'deleteGalleryImage'])->name('admin.rooms.gallery.delete');
         Route::post('rooms/page-settings', [\App\Http\Controllers\Admin\RoomController::class , 'updatePageSettings'])->name('admin.rooms.page-settings.update');
         Route::resource('amenities', \App\Http\Controllers\Admin\AmenityController::class)->names('admin.amenities');
         Route::resource('installations', \App\Http\Controllers\Admin\InstallationController::class)->names('admin.installations');

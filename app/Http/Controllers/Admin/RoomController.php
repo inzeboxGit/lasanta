@@ -103,11 +103,18 @@ class RoomController extends Controller
             $data['main_image'] = $request->file('main_image')->store('rooms', 'public');
         }
 
+        // gallery_order contains existing images (empty on create), new uploads appended
+        $gallery = $data['gallery_order'] ?? [];
+        unset($data['gallery_order']);
+
         if ($request->hasFile('gallery')) {
-            $data['gallery'] = [];
             foreach ($request->file('gallery') as $file) {
-                $data['gallery'][] = $file->store('rooms', 'public');
+                $gallery[] = $file->store('rooms', 'public');
             }
+        }
+
+        if (!empty($gallery)) {
+            $data['gallery'] = $gallery;
         }
 
         $amenityIds = $data['amenities'] ?? [];
@@ -154,12 +161,25 @@ class RoomController extends Controller
             $data['main_image'] = $request->file('main_image')->store('rooms', 'public');
         }
 
+        // gallery_order = ordered list of kept images (from hidden inputs)
+        $keptGallery = $data['gallery_order'] ?? [];
+        unset($data['gallery_order']);
+
+        // Delete images that were removed by the user
+        $oldGallery = $room->gallery ?? [];
+        $removed = array_diff($oldGallery, $keptGallery);
+        foreach ($removed as $path) {
+            Storage::disk('public')->delete($path);
+        }
+
+        // Append newly uploaded images
         if ($request->hasFile('gallery')) {
-            $data['gallery'] = $room->gallery ?? [];
             foreach ($request->file('gallery') as $file) {
-                $data['gallery'][] = $file->store('rooms', 'public');
+                $keptGallery[] = $file->store('rooms', 'public');
             }
         }
+
+        $data['gallery'] = !empty($keptGallery) ? array_values($keptGallery) : null;
 
         $amenityIds = $data['amenities'] ?? [];
         unset($data['amenities']);
@@ -179,6 +199,24 @@ class RoomController extends Controller
         $room->delete();
 
         return redirect()->route('admin.rooms.index')->with('success', 'Chambre supprimée.');
+    }
+
+    /**
+     * Delete a single gallery image immediately via AJAX.
+     */
+    public function deleteGalleryImage(Request $request, Room $room)
+    {
+        $path = $request->input('path');
+        $gallery = $room->gallery ?? [];
+
+        if (($key = array_search($path, $gallery)) !== false) {
+            unset($gallery[$key]);
+            $room->update(['gallery' => array_values($gallery)]);
+            Storage::disk('public')->delete($path);
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Image non trouvée.'], 404);
     }
 
     private function validatedData(Request $request, ?int $ignoreId = null): array
@@ -201,6 +239,8 @@ class RoomController extends Controller
             ],
             'main_image' => ['nullable', 'image', 'max:5120'],
             'gallery.*' => ['nullable', 'image', 'max:5120'],
+            'gallery_order' => ['nullable', 'array'],
+            'gallery_order.*' => ['string'],
             'status' => ['required', 'in:draft,published'],
         ]);
     }

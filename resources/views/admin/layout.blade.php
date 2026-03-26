@@ -166,7 +166,9 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
     <script src="{{ asset('xyres/admin/js/admin.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>

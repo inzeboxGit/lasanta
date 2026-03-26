@@ -56,16 +56,27 @@
                 </div>
             @endif
         </div>
-        <div class="col-md-6">
+        <div class="col-12">
             <label class="form-label">Galerie (plusieurs images)</label>
-            <input type="file" name="gallery[]" class="form-control" multiple>
+
+            {{-- Existing gallery: sortable + deletable --}}
             @if(!empty($room->gallery))
-                <div class="mt-2 d-flex flex-wrap gap-2">
+                <div id="gallery-sortable" class="d-flex flex-wrap gap-2 mb-3">
                     @foreach($room->gallery as $img)
-                        <img src="{{ asset('storage/' . $img) }}" alt="" style="max-height:80px;" class="rounded">
+                        <div class="gallery-item position-relative" data-path="{{ $img }}">
+                            <img src="{{ asset('storage/' . $img) }}" alt="" class="rounded" style="height:100px;width:auto;object-fit:cover;cursor:grab;">
+                            <input type="hidden" name="gallery_order[]" value="{{ $img }}">
+                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 gallery-remove-btn"
+                                    style="width:24px;height:24px;padding:0;line-height:24px;font-size:14px;border-radius:50%;"
+                                    title="Supprimer">&times;</button>
+                        </div>
                     @endforeach
                 </div>
             @endif
+
+            {{-- Upload new images --}}
+            <input type="file" name="gallery[]" class="form-control" multiple>
+            <small class="text-muted">Glissez les images existantes pour réordonner. Cliquez ✕ pour supprimer.</small>
         </div>
         <div class="col-md-4">
             <label class="form-label">Statut</label>
