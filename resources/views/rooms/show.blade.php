@@ -9,65 +9,21 @@
                 'hero_small' => 'Expérience hôtelière',
                 'section_small' => 'Expérience premium',
                 'gallery' => 'Galerie plein écran',
-                'f1' => 'Lit King Size',
-                'f2' => 'Coffre-fort',
-                'f3' => 'Balcon',
-                'f4' => 'TV 32 pouces',
-                'f5' => 'Accès PMR',
-                'f6' => 'Animaux acceptés',
-                'f7' => 'Bouteille d\'accueil',
-                'f8' => 'Wifi / Netflix',
-                'f9' => 'Sèche-cheveux',
-                'f10' => 'Climatisation',
-                'f11' => 'Service de blanchisserie',
             ],
             'en' => [
                 'hero_small' => 'Hotel Experience',
                 'section_small' => 'Luxury Experience',
                 'gallery' => 'Full screen gallery',
-                'f1' => 'King Size Bed',
-                'f2' => 'Safety Box',
-                'f3' => 'Balcony',
-                'f4' => '32 Inch TV',
-                'f5' => 'Disabled Access',
-                'f6' => 'Pet Allowed',
-                'f7' => 'Welcome Bottle',
-                'f8' => 'Wifi / Netflix access',
-                'f9' => 'Hair Dryer',
-                'f10' => 'Air Conditioning',
-                'f11' => 'Laundry Service',
             ],
             'de' => [
                 'hero_small' => 'Hotelerlebnis',
                 'section_small' => 'Luxuserlebnis',
                 'gallery' => 'Vollbild-Galerie',
-                'f1' => 'Kingsize-Bett',
-                'f2' => 'Safe',
-                'f3' => 'Balkon',
-                'f4' => '32-Zoll-TV',
-                'f5' => 'Barrierefreier Zugang',
-                'f6' => 'Haustiere erlaubt',
-                'f7' => 'Willkommensflasche',
-                'f8' => 'WLAN / Netflix-Zugang',
-                'f9' => 'Haartrockner',
-                'f10' => 'Klimaanlage',
-                'f11' => 'Wäscheservice',
             ],
             'nl' => [
                 'hero_small' => 'Hotelbeleving',
                 'section_small' => 'Luxe beleving',
                 'gallery' => 'Volledig scherm galerij',
-                'f1' => 'Kingsize bed',
-                'f2' => 'Kluis',
-                'f3' => 'Balkon',
-                'f4' => '32 inch tv',
-                'f5' => 'Toegang voor mindervaliden',
-                'f6' => 'Huisdieren toegestaan',
-                'f7' => 'Welkomstfles',
-                'f8' => 'Wifi / Netflix toegang',
-                'f9' => 'Haardroger',
-                'f10' => 'Airconditioning',
-                'f11' => 'Wasservice',
             ],
         ];
         $ui = $labels[$locale] ?? $labels['en'];
@@ -112,17 +68,16 @@
                 <div class="col-lg-6">
                         <div class="room_facilities_list">
                             <ul data-cues="slideInLeft" data-disabled="true">
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-double_bed_2"></i> {{ $ui['f1'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 180ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-safety_box"></i> {{ $ui['f2'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-patio"></i>{{ $ui['f3'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 180ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-tv"></i> {{ $ui['f4'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-disable"></i> {{ $ui['f5'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 180ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-dog"></i> {{ $ui['f6'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-bottle"></i> {{ $ui['f7'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 180ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-wifi"></i> {{ $ui['f8'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-hairdryer"></i> {{ $ui['f9'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 180ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-condition"></i> {{ $ui['f10'] }}</li>
-                                <li data-cue="slideInLeft" data-show="true" style="animation-name: slideInLeft; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;"><i class="icon-hotel-loundry"></i>{{ $ui['f11'] }}</li>
+                                @foreach($room->amenities as $amenity)
+                                    <li data-cue="slideInLeft">
+                                        @if($amenity->image_path)
+                                            <img src="{{ asset($amenity->image_path) }}" alt="" style="width: 25px; height: 25px; margin-right: 10px; object-fit: contain;">
+                                        @elseif($amenity->icon)
+                                            <i class="{{ $amenity->icon }}"></i>
+                                        @endif
+                                        {{ method_exists($amenity, 't') ? $amenity->t('title') : $amenity->title }}
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
