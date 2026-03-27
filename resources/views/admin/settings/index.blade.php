@@ -91,6 +91,11 @@
                 <input type="text" name="twitter_url" class="form-control" value="{{ old('twitter_url', $siteSetting->twitter_url ?? '') }}" placeholder="https://x.com/...">
             </div>
             <div class="col-12">
+                <label class="form-label">Scripts personnalisés (Head)</label>
+                <textarea name="custom_head_scripts" class="form-control" rows="5" placeholder="&lt;script&gt;...&lt;/script&gt;">{{ old('custom_head_scripts', $siteSetting->custom_head_scripts ?? '') }}</textarea>
+                <div class="form-text">Ces scripts seront ajoutés dans la balise &lt;head&gt; de toutes les pages (Google Analytics, Facebook Pixel, etc.).</div>
+            </div>
+            <div class="col-12">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
         </div>

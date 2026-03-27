@@ -100,6 +100,8 @@
 
     <!-- YOUR CUSTOM CSS -->
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+
+    {!! $siteSetting->custom_head_scripts ?? '' !!}
 </head>
 
 <body>

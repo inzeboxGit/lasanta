@@ -42,6 +42,7 @@ class SiteSettingController extends Controller
             'whatsapp_url' => ['nullable', 'string', 'max:255'],
             'twitter_url' => ['nullable', 'string', 'max:255'],
             'default_locale' => ['nullable', 'string', 'max:10'],
+            'custom_head_scripts' => ['nullable', 'string'],
         ]);
 
         $locales = array_keys(config('content_translations.locales', ['fr' => 'Français']));
@@ -84,6 +85,7 @@ class SiteSettingController extends Controller
             'default_locale' => config('app.locale', 'fr'),
             'maintenance_enabled' => false,
             'maintenance_message' => 'Le site est temporairement indisponible pour cause de mise a jour.' . PHP_EOL . 'Merci de revenir un peu plus tard.',
+            'custom_head_scripts' => '',
         ];
     }
 
@@ -105,6 +107,10 @@ class SiteSettingController extends Controller
 
         if (! Schema::hasColumn('site_settings', 'default_locale')) {
             unset($defaults['default_locale']);
+        }
+
+        if (! Schema::hasColumn('site_settings', 'custom_head_scripts')) {
+            unset($defaults['custom_head_scripts']);
         }
 
         return $defaults;

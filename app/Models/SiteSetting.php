@@ -26,6 +26,7 @@ class SiteSetting extends Model
         'default_locale',
         'maintenance_enabled',
         'maintenance_message',
+        'custom_head_scripts',
     ];
 
     protected $casts = [
