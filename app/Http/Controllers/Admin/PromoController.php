@@ -76,11 +76,11 @@ class PromoController extends Controller
             'is_enabled' => true,
             'start_date' => null,
             'end_date' => null,
-            'subtitle' => 'Offre speciale',
-            'title' => 'Profitez de votre sejour a Bella Vista',
-            'text' => 'Decouvrez nos meilleures offres et disponibilites en quelques clics.',
-            'button_link' => url('/appartements'),
-            'image' => 'img/home_2.jpg',
+            'subtitle' => '',
+            'title' => '',
+            'text' => '',
+            'button_link' => '',
+            'image' => '',
         ];
     }
 }

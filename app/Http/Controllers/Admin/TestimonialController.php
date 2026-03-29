@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PageHeaderSetting;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class TestimonialController extends Controller
@@ -12,8 +14,39 @@ class TestimonialController extends Controller
     public function index()
     {
         $testimonials = Testimonial::orderBy('sort_order')->orderBy('id')->paginate(15);
+        $testimonialSectionSetting = $this->resolveSectionSetting();
 
-        return view('admin.testimonials.index', compact('testimonials'));
+        return view('admin.testimonials.index', compact('testimonials', 'testimonialSectionSetting'));
+    }
+
+    public function updateSectionSettings(Request $request)
+    {
+        if (! Schema::hasTable('page_header_settings')) {
+            return redirect()->route('admin.testimonials.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = $this->resolveSectionSetting();
+        $data = $request->validate([
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'header_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        if ($request->hasFile('header_image')) {
+            if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+                Storage::disk('public')->delete($setting->header_image);
+            }
+
+            $data['header_image'] = $request->file('header_image')->store('page-headers', 'public');
+        }
+
+        $setting->update([
+            'subtitle' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
+            'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
+            'header_image' => $data['header_image'] ?? $setting->header_image,
+        ]);
+
+        return redirect()->route('admin.testimonials.index')->with('success', 'Image de fond des témoignages mise à jour.');
     }
 
     public function create()
@@ -96,5 +129,25 @@ class TestimonialController extends Controller
         $data['is_published'] = $request->boolean('is_published');
 
         return $data;
+    }
+
+    private function resolveSectionSetting(): object
+    {
+        $defaults = [
+            'page' => 'testimonials',
+            'header_image' => 'img/hero_home_1.jpg',
+            'subtitle' => 'TÉMOIGNAGES',
+            'title' => 'Ce que les clients disent',
+            'hero_text' => '',
+        ];
+
+        if (! Schema::hasTable('page_header_settings')) {
+            return (object) $defaults;
+        }
+
+        return PageHeaderSetting::firstOrCreate(
+            ['page' => 'testimonials'],
+            $defaults
+        );
     }
 }

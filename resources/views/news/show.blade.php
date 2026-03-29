@@ -9,7 +9,7 @@
             'fr' => ['by' => 'par', 'next' => 'Actualité suivante'],
             'en' => ['by' => 'by', 'next' => 'Next news'],
             'de' => ['by' => 'von', 'next' => 'Nächste Neuigkeit'],
-            'nl' => ['by' => 'door', 'next' => 'Volgend nieuws'],
+            'it' => ['by' => 'di', 'next' => 'Notizia successiva'],
         ];
         $ui = $labels[$locale] ?? $labels['en'];
 

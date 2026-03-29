@@ -5,7 +5,7 @@
     'fr' => '🇫🇷',
     'en' => '🇬🇧',
     'de' => '🇩🇪',
-    'nl' => '🇳🇱',
+    'it' => '🇮🇹',
     ];
     $activeFlag = $flags[$locale] ?? '🌐';
     $labels = [
@@ -36,14 +36,14 @@
     'contact' => 'Kontakt',
     'book' => 'Buchen',
     ],
-    'nl' => [
+    'it' => [
     'home' => 'Home',
-    'apartments' => 'Appartementen',
-    'restaurant' => 'Restaurant',
-    'pool' => 'Zwembad',
-    'news' => 'Nieuws',
-    'contact' => 'Contact',
-    'book' => 'Boeken',
+    'apartments' => 'Appartamenti',
+    'restaurant' => 'Ristorante',
+    'pool' => 'Piscina',
+    'news' => 'News',
+    'contact' => 'Contatti',
+    'book' => 'Prenota',
     ],
     ];
     $t = $labels[$locale] ?? $labels['en'];
@@ -73,8 +73,8 @@
                         aria-label="English"><span class="lang-picker__flag">🇬🇧</span></a>
                     <a href="{{ request()->fullUrlWithQuery(['lang' => 'de']) }}" class="lang-picker__item"
                         aria-label="Deutsch"><span class="lang-picker__flag">🇩🇪</span></a>
-                    <a href="{{ request()->fullUrlWithQuery(['lang' => 'nl']) }}" class="lang-picker__item"
-                        aria-label="Nederlands"><span class="lang-picker__flag">🇳🇱</span></a>
+                    <a href="{{ request()->fullUrlWithQuery(['lang' => 'it']) }}" class="lang-picker__item"
+                        aria-label="Italiano"><span class="lang-picker__flag">🇮🇹</span></a>
                 </div>
             </details>
         </li>

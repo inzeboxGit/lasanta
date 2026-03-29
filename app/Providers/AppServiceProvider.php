@@ -37,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
             'default_locale' => config('app.locale', 'fr'),
             'maintenance_enabled' => false,
             'maintenance_message' => 'Le site est temporairement indisponible pour cause de mise a jour.' . PHP_EOL . 'Merci de revenir un peu plus tard.',
+            'footer_background_image' => '',
         ];
 
         try {
@@ -55,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
                     'twitter_url' => '',
                     'default_locale' => config('app.locale', 'fr'),
                     'maintenance_enabled' => false,
+                    'footer_background_image' => '',
                 ];
 
                 if (! Schema::hasColumn('site_settings', 'use_site_email_for_contact')) {
@@ -67,6 +69,10 @@ class AppServiceProvider extends ServiceProvider
 
                 if (! Schema::hasColumn('site_settings', 'default_locale')) {
                     unset($defaults['default_locale']);
+                }
+
+                if (! Schema::hasColumn('site_settings', 'footer_background_image')) {
+                    unset($defaults['footer_background_image']);
                 }
 
                 $siteSetting = SiteSetting::firstOrCreate(

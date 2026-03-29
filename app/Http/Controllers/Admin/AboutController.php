@@ -77,13 +77,13 @@ class AboutController extends Controller
     private function defaultSetting(): array
     {
         return [
-            'small_title' => 'À PROPOS DE NOUS',
-            'title' => 'La Résidence Bella Vista',
-            'lead' => 'Une conception du tourisme...',
-            'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
-            'signature' => 'L’équipe du Bella Vista',
-            'main_image' => 'img/home_2.jpg',
-            'overlay_image' => 'img/home_1.jpg',
+            'small_title' => '',
+            'title' => '',
+            'lead' => '',
+            'description' => "",
+            'signature' => '',
+            'main_image' => '',
+            'overlay_image' => '',
         ];
     }
 }

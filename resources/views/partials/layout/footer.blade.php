@@ -1,7 +1,10 @@
+@php
+    $footerBackgroundSrc = media_url($siteSetting->footer_background_image ?? null, 'img/rooms/3.jpg');
+@endphp
 <footer class="revealed">
     <div class="footer_bg">
         <div class="gradient_over"></div>
-        <div class="background-image" data-background="url({{ asset('img/rooms/3.jpg') }})"></div>
+        <div class="background-image" data-background="url({{ $footerBackgroundSrc }})"></div>
     </div>
     <div class="container">
         <div class="row move_content">
@@ -42,16 +45,16 @@
                 'terms' => 'AGB',
                 'privacy' => 'Datenschutzerklärung',
                 ],
-                'nl' => [
+                'it' => [
                 'contact' => 'Contact',
-                'explore' => 'Verkennen',
+                'explore' => 'Esplora',
                 'home' => 'Home',
-                'about' => 'Over ons',
-                'rooms' => 'Kamers & Suites',
-                'news' => 'Nieuws & Evenementen',
+                'about' => 'Chi siamo',
+                'rooms' => 'Camere & Suite',
+                'news' => 'News & Eventi',
                 'contact_link' => 'Contact',
-                'terms' => 'Gebruiksvoorwaarden',
-                'privacy' => 'Privacybeleid',
+                'terms' => 'Termini di utilizzo',
+                'privacy' => 'Privacy Policy',
                 ],
                 ];
                 $extra = [
@@ -60,25 +63,25 @@
                 'newsletter_placeholder' => 'Votre email',
                 'newsletter_text' => 'Recevez les dernières offres et promotions sans spam. Vous pouvez annuler à tout
                 moment.',
-                'copy' => 'Copyright ' . date('Y') . ' Residence Bella Vista',
+                'copy' => 'Copyright ' . date('Y'),
                 ],
                 'en' => [
                 'newsletter' => 'Newsletter',
                 'newsletter_placeholder' => 'Your email',
                 'newsletter_text' => 'Get the latest offers and promotions without spam. You can unsubscribe anytime.',
-                'copy' => 'Developed by',
+                'copy' => 'Copyright ' . date('Y'),
                 ],
                 'de' => [
                 'newsletter' => 'Newsletter',
                 'newsletter_placeholder' => 'Ihre E-Mail',
                 'newsletter_text' => 'Erhalten Sie die neuesten Angebote ohne Spam. Abmeldung jederzeit möglich.',
-                'copy' => 'Entwickelt von',
+                'copy' => 'Copyright ' . date('Y'),
                 ],
-                'nl' => [
-                'newsletter' => 'Nieuwsbrief',
-                'newsletter_placeholder' => 'Je e-mail',
-                'newsletter_text' => 'Ontvang onze laatste aanbiedingen zonder spam. Uitschrijven kan altijd.',
-                'copy' => 'Ontwikkeld door',
+                'it' => [
+                'newsletter' => 'Newsletter',
+                'newsletter_placeholder' => 'La tua email',
+                'newsletter_text' => 'Ricevi le nostre ultime offerte e promozioni senza spam. Puoi annullare l’iscrizione in qualsiasi momento.',
+                'copy' => 'Copyright ' . date('Y'),
                 ],
                 ];
                 $t = $labels[$locale] ?? $labels['en'];

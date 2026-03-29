@@ -68,6 +68,50 @@ Route::get('/', function () {
         ->orderBy('id')
         ->get();
 
+    $homeVideoSetting = (object) [
+        'header_image' => 'img/video-background.png',
+        'subtitle' => 'Expérience hôtelière',
+        'title' => 'Profiter d un moment de détente',
+    ];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
+        $homeVideoSetting = \App\Models\PageHeaderSetting::firstOrCreate(
+            ['page' => 'home_video'],
+            [
+                'header_image' => 'img/video-background.png',
+                'subtitle' => 'Expérience hôtelière',
+                'title' => 'Profiter d un moment de détente',
+                'hero_text' => '',
+            ]
+        );
+        $homeVideoSetting->loadMissing('translations');
+    }
+
+    $testimonialSectionSetting = (object) [
+        'header_image' => 'img/hero_home_1.jpg',
+        'subtitle' => 'TÉMOIGNAGES',
+        'title' => 'Ce que les clients disent',
+    ];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
+        $testimonialSectionSetting = \App\Models\PageHeaderSetting::firstOrCreate(
+            ['page' => 'testimonials'],
+            [
+                'header_image' => 'img/hero_home_1.jpg',
+                'subtitle' => 'TÉMOIGNAGES',
+                'title' => 'Ce que les clients disent',
+                'hero_text' => '',
+            ]
+        );
+        $testimonialSectionSetting->loadMissing('translations');
+    }
+
+    $homeRooms = \App\Models\Room::with('translations')
+        ->where('status', 'published')
+        ->latest()
+        ->limit(3)
+        ->get();
+
     $aboutSectionSetting = (object)[
         'small_title' => 'À PROPOS DE NOUS',
         'title' => 'La Résidence Bella Vista',
@@ -138,14 +182,22 @@ Route::get('/', function () {
         $promoSetting->loadMissing('translations');
     }
 
-    return view('home', compact('heroSetting', 'installations', 'homeNews', 'localComodites', 'homeTestimonials', 'installationSectionSetting', 'aboutSectionSetting', 'promoSetting'));
+    return view('home', compact('heroSetting', 'installations', 'homeNews', 'localComodites', 'homeTestimonials', 'homeVideoSetting', 'testimonialSectionSetting', 'installationSectionSetting', 'aboutSectionSetting', 'promoSetting', 'homeRooms'));
 });
 
 Route::get('/contacts', function () {
+    $rooms = \App\Models\Room::with('translations')
+        ->where('status', 'published')
+        ->latest()
+        ->get();
+
     $contactPageSetting = (object) [
         'header_image' => 'img/hero_home_2.jpg',
         'subtitle' => 'Expérience hôtelière',
         'title' => 'Contact',
+        'availability_small' => 'Residence Bella Vista',
+        'availability_title' => 'Disponibilité',
+        'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
     ];
 
     if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
@@ -155,12 +207,15 @@ Route::get('/contacts', function () {
                 'header_image' => 'img/hero_home_2.jpg',
                 'subtitle' => 'Expérience hôtelière',
                 'title' => 'Contact',
+                'availability_small' => 'Residence Bella Vista',
+                'availability_title' => 'Disponibilité',
+                'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
             ]
         );
         $contactPageSetting->loadMissing('translations');
     }
 
-    return view('contact', compact('contactPageSetting'));
+    return view('contact', compact('contactPageSetting', 'rooms'));
 });
 Route::post('/contacts', [\App\Http\Controllers\ContactController::class , 'send'])->name('contact.send');
 
@@ -189,8 +244,9 @@ Route::get('/restaurant', function () {
 
     $localAmenitySectionSetting = (object)[
         'header_image' => 'img/home_2.jpg',
-        'subtitle' => 'RÉsidence Bella vista',
-        'title' => 'Restaurant',
+        'subtitle' => '',
+        'title' => '',
+        'hero_text' => '',
     ];
 
     if (\Illuminate\Support\Facades\Schema::hasTable('local_amenity_section_settings')) {
@@ -198,19 +254,20 @@ Route::get('/restaurant', function () {
         ['section' => 'about_local_amenities'],
         [
             'header_image' => 'img/home_2.jpg',
-            'subtitle' => 'RÉsidence Bella vista',
-            'title' => 'Restaurant',
+            'subtitle' => '',
+            'title' => '',
+            'hero_text' => '',
         ]
         );
         $localAmenitySectionSetting->loadMissing('translations');
     }
 
     $aboutSectionSetting = (object)[
-        'small_title' => 'À PROPOS DU RESTAURANT',
-        'title' => 'Le Restaurant Bella Vista',
-        'lead' => 'Une expérience culinaire face au panorama.',
-        'description' => "Personnalisez ici le texte de présentation du restaurant, son ambiance et ses points forts.",
-        'signature' => 'L’équipe du Restaurant',
+        'small_title' => '',
+        'title' => '',
+        'lead' => '',
+        'description' => '',
+        'signature' => '',
         'main_image' => 'img/home_2.jpg',
         'overlay_image' => 'img/home_1.jpg',
     ];
@@ -219,11 +276,11 @@ Route::get('/restaurant', function () {
         $aboutSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
         ['section' => 'restaurant_about'],
         [
-            'small_title' => 'À PROPOS DU RESTAURANT',
-            'title' => 'Le Restaurant Bella Vista',
-            'lead' => 'Une expérience culinaire face au panorama.',
-            'description' => "Personnalisez ici le texte de présentation du restaurant, son ambiance et ses points forts.",
-            'signature' => 'L’équipe du Restaurant',
+            'small_title' => '',
+            'title' => '',
+            'lead' => '',
+            'description' => '',
+            'signature' => '',
             'main_image' => 'img/home_2.jpg',
             'overlay_image' => 'img/home_1.jpg',
         ]
@@ -379,6 +436,7 @@ Route::prefix('admin')->group(function () {
         Route::post('about', [\App\Http\Controllers\Admin\AboutController::class , 'update'])->name('admin.about.update');
         Route::get('hero', [\App\Http\Controllers\Admin\HomeHeroController::class , 'index'])->name('admin.hero.index');
         Route::post('hero', [\App\Http\Controllers\Admin\HomeHeroController::class , 'update'])->name('admin.hero.update');
+        Route::post('hero/video-section', [\App\Http\Controllers\Admin\HomeHeroController::class , 'updateVideoSection'])->name('admin.hero.video-section.update');
         Route::get('promo', [\App\Http\Controllers\Admin\PromoController::class , 'index'])->name('admin.promo.index');
         Route::post('promo', [\App\Http\Controllers\Admin\PromoController::class , 'update'])->name('admin.promo.update');
         Route::resource('comodites', \App\Http\Controllers\Admin\LocalAmenityController::class)->names('admin.comodites');
@@ -390,6 +448,7 @@ Route::prefix('admin')->group(function () {
         Route::get('translations', [\App\Http\Controllers\Admin\TranslationController::class , 'index'])->name('admin.translations.index');
         Route::post('translations', [\App\Http\Controllers\Admin\TranslationController::class , 'update'])->name('admin.translations.update');
         Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class)->names('admin.testimonials');
+        Route::post('testimonials/section-settings', [\App\Http\Controllers\Admin\TestimonialController::class, 'updateSectionSettings'])->name('admin.testimonials.section-settings.update');
         Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->names('admin.news');
         Route::post('news/page-settings', [\App\Http\Controllers\Admin\NewsController::class, 'updatePageSettings'])->name('admin.news.page-settings.update');
     });

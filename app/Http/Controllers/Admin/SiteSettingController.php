@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class SiteSettingController extends Controller
 {
@@ -13,6 +14,8 @@ class SiteSettingController extends Controller
     {
         $siteSetting = $this->defaultSetting();
         $locales = config('content_translations.locales', ['fr' => 'Français']);
+        $supportsFooterBackgroundImage = Schema::hasTable('site_settings')
+            && Schema::hasColumn('site_settings', 'footer_background_image');
 
         if (Schema::hasTable('site_settings')) {
             $siteSetting = SiteSetting::firstOrCreate(
@@ -21,7 +24,7 @@ class SiteSettingController extends Controller
             );
         }
 
-        return view('admin.settings.index', compact('siteSetting', 'locales'));
+        return view('admin.settings.index', compact('siteSetting', 'locales', 'supportsFooterBackgroundImage'));
     }
 
     public function update(Request $request)
@@ -30,7 +33,9 @@ class SiteSettingController extends Controller
             return redirect()->route('admin.settings.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
 
-        $data = $request->validate([
+        $supportsFooterBackgroundImage = Schema::hasColumn('site_settings', 'footer_background_image');
+
+        $rules = [
             'site_name' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255'],
@@ -43,7 +48,13 @@ class SiteSettingController extends Controller
             'twitter_url' => ['nullable', 'string', 'max:255'],
             'default_locale' => ['nullable', 'string', 'max:10'],
             'custom_head_scripts' => ['nullable', 'string'],
-        ]);
+        ];
+
+        if ($supportsFooterBackgroundImage) {
+            $rules['footer_background_image'] = ['nullable', 'image', 'max:5120'];
+        }
+
+        $data = $request->validate($rules);
 
         $locales = array_keys(config('content_translations.locales', ['fr' => 'Français']));
         $data['use_site_email_for_contact'] = $request->boolean('use_site_email_for_contact');
@@ -63,6 +74,14 @@ class SiteSettingController extends Controller
             $this->databaseDefaults()
         );
 
+        if ($supportsFooterBackgroundImage && $request->hasFile('footer_background_image')) {
+            if (! empty($setting->footer_background_image) && ! str_starts_with($setting->footer_background_image, 'img/')) {
+                Storage::disk('public')->delete($setting->footer_background_image);
+            }
+
+            $data['footer_background_image'] = $request->file('footer_background_image')->store('site-settings', 'public');
+        }
+
         $setting->update($data);
 
         return redirect()->route('admin.settings.index')->with('success', 'Paramètres mis à jour.');
@@ -71,12 +90,12 @@ class SiteSettingController extends Controller
     private function defaultSetting(): array
     {
         return [
-            'site_name' => 'Residence Bella Vista',
-            'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
-            'email' => 'info@residence-bellavista.com',
+            'site_name' => '',
+            'address' => '',
+            'email' => '',
             'use_site_email_for_contact' => true,
             'contact_recipient_email' => null,
-            'phone_primary' => '04 95 00 00 00',
+            'phone_primary' => '',
             'phone_secondary' => '',
             'facebook_url' => '',
             'instagram_url' => '',
@@ -84,8 +103,9 @@ class SiteSettingController extends Controller
             'twitter_url' => '',
             'default_locale' => config('app.locale', 'fr'),
             'maintenance_enabled' => false,
-            'maintenance_message' => 'Le site est temporairement indisponible pour cause de mise a jour.' . PHP_EOL . 'Merci de revenir un peu plus tard.',
+            'maintenance_message' => '',
             'custom_head_scripts' => '',
+            'footer_background_image' => '',
         ];
     }
 
@@ -111,6 +131,10 @@ class SiteSettingController extends Controller
 
         if (! Schema::hasColumn('site_settings', 'custom_head_scripts')) {
             unset($defaults['custom_head_scripts']);
+        }
+
+        if (! Schema::hasColumn('site_settings', 'footer_background_image')) {
+            unset($defaults['footer_background_image']);
         }
 
         return $defaults;

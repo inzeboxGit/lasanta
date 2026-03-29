@@ -15,6 +15,7 @@ class LocalAmenity extends Model
     public const CONTEXT_POOL = 'pool';
 
     protected $fillable = [
+        'small_title',
         'title',
         'description',
         'image_path',

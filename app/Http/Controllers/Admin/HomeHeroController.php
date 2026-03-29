@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HomeHeroSetting;
+use App\Models\PageHeaderSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +14,7 @@ class HomeHeroController extends Controller
     public function index()
     {
         $heroSetting = (object) $this->defaultSetting();
+        $homeVideoSetting = $this->defaultVideoSettingObject();
 
         if (Schema::hasTable('home_hero_settings')) {
             $heroSetting = HomeHeroSetting::firstOrCreate(
@@ -21,7 +23,14 @@ class HomeHeroController extends Controller
             );
         }
 
-        return view('admin.hero.index', compact('heroSetting'));
+        if (Schema::hasTable('page_header_settings')) {
+            $homeVideoSetting = PageHeaderSetting::firstOrCreate(
+                ['page' => 'home_video'],
+                $this->defaultVideoSetting()
+            );
+        }
+
+        return view('admin.hero.index', compact('heroSetting', 'homeVideoSetting'));
     }
 
     public function update(Request $request)
@@ -79,19 +88,69 @@ class HomeHeroController extends Controller
         return redirect()->route('admin.hero.index')->with('success', 'Section Hero accueil mise à jour.');
     }
 
+    public function updateVideoSection(Request $request)
+    {
+        if (! Schema::hasTable('page_header_settings')) {
+            return redirect()->route('admin.hero.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = PageHeaderSetting::firstOrCreate(
+            ['page' => 'home_video'],
+            $this->defaultVideoSetting()
+        );
+
+        $data = $request->validate([
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'header_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        if ($request->hasFile('header_image')) {
+            if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+                Storage::disk('public')->delete($setting->header_image);
+            }
+
+            $data['header_image'] = $request->file('header_image')->store('home-video', 'public');
+        }
+
+        $setting->update([
+            'subtitle' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
+            'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
+            'header_image' => $data['header_image'] ?? $setting->header_image,
+        ]);
+
+        return redirect()->route('admin.hero.index')->with('success', 'Section image accueil mise à jour.');
+    }
+
     private function defaultSetting(): array
     {
         return [
             'section' => 'home_hero',
             'show_booking_form' => true,
-            'small_title' => 'Expérience hôtelière',
-            'title' => 'Une expérience unique où séjourner',
-            'button_link' => '/appartements',
+            'small_title' => '',
+            'title' => '',
+            'button_link' => '',
             'button_target' => '_self',
             'background_type' => 'video',
-            'background_video' => 'video/sunset.mp4',
+            'background_video' => '',
             'youtube_video_url' => null,
-            'background_image' => 'img/hero_home_1.jpg',
+            'background_image' => '',
         ];
+    }
+
+    private function defaultVideoSetting(): array
+    {
+        return [
+            'page' => 'home_video',
+            'header_image' => 'img/video-background.png',
+            'subtitle' => 'Expérience hôtelière',
+            'title' => 'Profiter d un moment de détente',
+            'hero_text' => '',
+        ];
+    }
+
+    private function defaultVideoSettingObject(): object
+    {
+        return (object) $this->defaultVideoSetting();
     }
 }

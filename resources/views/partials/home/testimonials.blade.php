@@ -1,13 +1,23 @@
+@php
+    $testimonialsBackgroundSrc = media_url($testimonialSectionSetting->header_image ?? null, 'img/hero_home_1.jpg');
+    $hasTestimonialSectionTranslations = isset($testimonialSectionSetting) && method_exists($testimonialSectionSetting, 't');
+    $testimonialsSubtitle = $hasTestimonialSectionTranslations
+        ? $testimonialSectionSetting->t('subtitle')
+        : ($testimonialSectionSetting->subtitle ?? 'TÉMOIGNAGES');
+    $testimonialsTitle = $hasTestimonialSectionTranslations
+        ? $testimonialSectionSetting->t('title')
+        : ($testimonialSectionSetting->title ?? 'Ce que les clients disent');
+@endphp
 <!-- TÉMOIGNAGES -->
-<div class="parallax_section_1 jarallax" data-jarallax data-speed="0.2">
-    <img class="jarallax-img kenburns-2" src="{{ asset('img/hero_home_1.jpg') }}" alt="">
+<div class="parallax_section_1 jarallax" data-jarallax data-speed="0.2" id="testimonials">
+    <img class="jarallax-img kenburns-2" src="{{ $testimonialsBackgroundSrc }}" alt="">
     <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="title white">
-                        <small class="mb-1">TÉMOIGNAGES</small>
-                        <h2>Ce que les clients disent</h2>
+                        <small class="mb-1">{{ $testimonialsSubtitle }}</small>
+                        <h2>{{ $testimonialsTitle }}</h2>
                     </div>
                     <div class="carousel_testimonials owl-carousel owl-theme nav-dots-orizontal">
                         @forelse(($homeTestimonials ?? collect()) as $testimonial)

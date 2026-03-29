@@ -1,6 +1,10 @@
 <div class="admin-card p-4">
     <div class="row g-3">
         <div class="col-md-6">
+            <label class="form-label">Petit titre</label>
+            <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $comodite->small_title ?? '') }}">
+        </div>
+        <div class="col-md-6">
             <label class="form-label">Titre</label>
             <input type="text" name="title" class="form-control" value="{{ old('title', $comodite->title ?? '') }}" required>
         </div>

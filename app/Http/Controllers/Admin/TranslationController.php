@@ -25,9 +25,24 @@ class TranslationController extends Controller
 
         if ($typeConfig) {
             $modelClass = $typeConfig['class'];
-            $records = $modelClass::query()->orderByDesc('id')->limit(200)->get();
+            $query = $modelClass::query();
+
+            foreach (($typeConfig['where'] ?? []) as $field => $value) {
+                $query->where($field, $value);
+            }
+
+            $records = $query->orderByDesc('id')->limit(200)->get();
             $selectedId = $request->query('id', $records->first()?->id);
             $record = $selectedId ? $modelClass::with('translations')->find($selectedId) : null;
+
+            if ($record && ! empty($typeConfig['where'])) {
+                foreach ($typeConfig['where'] as $field => $value) {
+                    if (($record->{$field} ?? null) !== $value) {
+                        $record = null;
+                        break;
+                    }
+                }
+            }
         }
 
         $selectedLocale = $request->query('locale', 'en');

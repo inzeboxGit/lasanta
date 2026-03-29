@@ -1,31 +1,38 @@
 <!DOCTYPE html>
 @php
     $siteSetting = (object) [
-        'site_name' => 'Residence Bella Vista',
-        'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
-        'email' => 'info@residence-bellavista.com',
-        'phone_primary' => '04 95 00 00 00',
+        'site_name' => '',
+        'address' => '',
+        'email' => '',
+        'phone_primary' => '',
         'phone_secondary' => '',
         'facebook_url' => '',
         'instagram_url' => '',
         'whatsapp_url' => '',
         'twitter_url' => '',
+        'footer_background_image' => '',
     ];
 
     if (\Illuminate\Support\Facades\Schema::hasTable('site_settings')) {
+        $siteSettingDefaults = [
+            'site_name' => '',
+            'address' => '',
+            'email' => '',
+            'phone_primary' => '',
+            'phone_secondary' => '',
+            'facebook_url' => '',
+            'instagram_url' => '',
+            'whatsapp_url' => '',
+            'twitter_url' => '',
+        ];
+
+        if (\Illuminate\Support\Facades\Schema::hasColumn('site_settings', 'footer_background_image')) {
+            $siteSettingDefaults['footer_background_image'] = '';
+        }
+
         $siteSetting = \App\Models\SiteSetting::firstOrCreate(
             ['setting_key' => 'general'],
-            [
-                'site_name' => 'Residence Bella Vista',
-                'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
-                'email' => 'info@residence-bellavista.com',
-                'phone_primary' => '04 95 00 00 00',
-                'phone_secondary' => '',
-                'facebook_url' => '',
-                'instagram_url' => '',
-                'whatsapp_url' => '',
-                'twitter_url' => '',
-            ]
+            $siteSettingDefaults
         );
 
         $siteSetting->loadMissing('translations');
@@ -40,19 +47,19 @@
             ['section' => 'home_hero'],
             [
                 'show_booking_form' => true,
-                'small_title' => 'Expérience hôtelière',
-                'title' => 'Une expérience unique où séjourner',
-                'button_link' => '/appartements',
+                'small_title' => '',
+                'title' => '',
+                'button_link' => '',
                 'button_target' => '_self',
                 'background_type' => 'video',
-                'background_video' => 'video/sunset.mp4',
+                'background_video' => '',
                 'youtube_video_url' => null,
-                'background_image' => 'img/hero_home_1.jpg',
+                'background_image' => '',
             ]
         );
     }
 
-    $heroButtonLink = $heroNavSetting->button_link ?? '/appartements';
+    $heroButtonLink = $heroNavSetting->button_link ?? '';
     $heroButtonTarget = $heroNavSetting->button_target ?? '_self';
     $today = now()->startOfDay();
     $promoStartsAt = !empty($promoSetting->start_date ?? null)
@@ -73,8 +80,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="">
     <meta name="author" content="residencebellavista.fr">
-    <title>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Residence
-        Bella Vista') }}</title>
+    <title>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? '') }}</title>
 
     <!-- Favicons-->
     <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">

@@ -2,26 +2,26 @@
 @php
 $locale = app()->getLocale();
 $labels = [
-'fr' => ['small' => 'Expérience hôtelière', 'title' => 'Une expérience unique où séjourner', 'dates' => 'Arrivée /
-Départ', 'adults' => 'Adultes', 'children' => 'Enfants', 'search' => 'Rechercher'],
-'en' => ['small' => 'Hotel Experience', 'title' => 'A unique place to stay', 'dates' => 'Check in / Check out', 'adults'
-=> 'Adults', 'children' => 'Children', 'search' => 'Search'],
-'de' => ['small' => 'Hotelerlebnis', 'title' => 'Ein einzigartiger Ort zum Übernachten', 'dates' => 'Check-in /
-Check-out', 'adults' => 'Erwachsene', 'children' => 'Kinder', 'search' => 'Suchen'],
-'nl' => ['small' => 'Hotelbeleving', 'title' => 'Een unieke plek om te verblijven', 'dates' => 'Inchecken / Uitchecken',
-'adults' => 'Volwassenen', 'children' => 'Kinderen', 'search' => 'Zoeken'],
+'fr' => ['small' => '', 'title' => '', 'dates' => 'Arrivée / Départ', 'adults' => 'Adultes', 'children' => 'Enfants',
+'search' => 'Rechercher'],
+'en' => ['small' => '', 'title' => '', 'dates' => 'Check in / Check out', 'adults' => 'Adults', 'children' =>
+'Children', 'search' => 'Search'],
+'de' => ['small' => '', 'title' => '', 'dates' => 'Check-in / Check-out', 'adults' => 'Erwachsene', 'children' =>
+'Kinder', 'search' => 'Suchen'],
+'it' => ['small' => '', 'title' => '', 'dates' => 'Check-in / Check-out', 'adults' => 'Adulti', 'children' =>
+'Bambini', 'search' => 'Cerca'],
 ];
 $ui = $labels[$locale] ?? $labels['en'];
 $heroBackgroundType = $heroSetting->background_type ?? 'video';
-$defaultHeroVideo = 'video/sunset.mp4';
-$heroBackground = $heroSetting->background_image ?? 'img/hero_home_1.jpg';
+$defaultHeroVideo = '';
+$heroBackground = $heroSetting->background_image ?? '';
 $heroBackgroundSrc = str_starts_with($heroBackground, 'img/')
 ? asset($heroBackground)
 : asset('storage/' . $heroBackground);
-$heroVideo = $heroSetting->background_video ?? $defaultHeroVideo;
-$heroVideoSrc = str_starts_with($heroVideo, 'video/')
+$heroVideo = $heroSetting->background_video ?? '';
+$heroVideoSrc = !empty($heroVideo) ? (str_starts_with($heroVideo, 'video/')
 ? asset($heroVideo)
-: asset('storage/' . $heroVideo);
+: asset('storage/' . $heroVideo)) : '';
 $heroYoutubeUrl = $heroSetting->youtube_video_url ?? null;
 $heroYoutubeId = null;
 
@@ -38,7 +38,7 @@ $reserveLabels = [
 'fr' => 'RESERVER',
 'en' => 'BOOK NOW',
 'de' => 'JETZT BUCHEN',
-'nl' => 'BOEK NU',
+'it' => 'PRENOTA ORA',
 ];
 $reserveLabel = $reserveLabels[$locale] ?? $reserveLabels['en'];
 @endphp
@@ -58,7 +58,8 @@ $reserveLabel = $reserveLabels[$locale] ?? $reserveLabels['en'];
         alt="{{ method_exists($heroSetting, 't') ? $heroSetting->t('title') : ($heroSetting->title ?? $ui['title']) }}">
     @endif
     <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero"
-        data-opacity-mask="rgba(0, 0, 0, 0.5)">
+        data-opacity-mask="rgba(0, 0, 0, 0)">
+        <!-- 0.5 -->
         <div class="container">
             <small class="slide-animated one">{{ strtoupper(method_exists($heroSetting, 't') ?
                 $heroSetting->t('small_title') : ($heroSetting->small_title ?? $ui['small'])) }}</small>

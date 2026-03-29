@@ -3906,8 +3906,8 @@ a.box_contents:hover img {
   }
 }
 .parallax_wrapper .img_over {
-  left: -25%;
-  bottom: 28%;
+  left: -33%;
+  bottom: 10%; /*16*/
   position: absolute;
   z-index: 99;
 }
@@ -3922,11 +3922,22 @@ a.box_contents:hover img {
   height: auto;
   box-shadow: 10px 10px 26px 0px rgba(0, 0, 0, 0.21);
 }
+
+.parallax_wrapper.about-main-media .img_over {
+  left: auto;
+  right: -29%;
+  text-align: right;
+}
 @media (max-width: 991px) {
-  .parallax_wrapper.inverted {
-    padding-left: inherit;
-    padding-right: 25%;
+  .parallax_wrapper.about-main-media .img_over {
+    left: auto;
+    right: 0;
   }
+}
+
+.parallax_wrapper.inverted {
+  padding-left: inherit;
+  padding-right: 25%;
 }
 .parallax_wrapper.inverted .img_over {
   text-align: right;
@@ -3934,6 +3945,10 @@ a.box_contents:hover img {
   right: -25%;
 }
 @media (max-width: 991px) {
+  .parallax_wrapper.inverted {
+    padding-left: inherit;
+    padding-right: 0;
+  }
   .parallax_wrapper.inverted .img_over {
     left: inherit;
     right: 0;

@@ -6,7 +6,7 @@
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
         <h1 class="h3 mb-1">Traductions du site</h1>
-        <div class="text-muted">Gérer FR / EN / DE / NL pour les contenus</div>
+        <div class="text-muted">Gérer FR / EN / DE / IT pour les contenus</div>
     </div>
 </div>
 
@@ -68,7 +68,7 @@
                             ? ($record->{$field} ?? '')
                             : ($record->t($field, $selectedLocale) ?? '');
                         $frValue = $record->{$field} ?? '';
-                        $isLong = in_array($field, ['description', 'body', 'content', 'excerpt'], true);
+                        $isLong = in_array($field, ['description', 'body', 'content', 'excerpt', 'hero_text', 'availability_text'], true);
                     @endphp
                     <div class="col-12">
                         <label class="form-label text-capitalize">{{ str_replace('_', ' ', $field) }}</label>

@@ -5,7 +5,7 @@
         'fr' => ['small' => 'Expérience hôtelière', 'title' => 'Actualités et événements', 'event' => 'Événement', 'read_more' => 'Lire plus', 'empty' => 'Aucune actualité pour le moment.', 'view_all' => 'Voir toutes les actualités'],
         'en' => ['small' => 'Hotel Experience', 'title' => 'News and Events', 'event' => 'Event', 'read_more' => 'Read more', 'empty' => 'No news at the moment.', 'view_all' => 'View all news'],
         'de' => ['small' => 'Hotelerlebnis', 'title' => 'Neuigkeiten und Events', 'event' => 'Event', 'read_more' => 'Mehr lesen', 'empty' => 'Derzeit keine Neuigkeiten.', 'view_all' => 'Alle Neuigkeiten anzeigen'],
-        'nl' => ['small' => 'Hotelbeleving', 'title' => 'Nieuws en evenementen', 'event' => 'Evenement', 'read_more' => 'Lees meer', 'empty' => 'Momenteel geen nieuws.', 'view_all' => 'Bekijk al het nieuws'],
+        'it' => ['small' => 'Esperienza hoteliera', 'title' => 'News ed eventi', 'event' => 'Evento', 'read_more' => 'Scopri di più', 'empty' => 'Al momento nessuna notizia.', 'view_all' => 'Vedi tutte le news'],
     ];
     $ui = $labels[$locale] ?? $labels['en'];
 @endphp

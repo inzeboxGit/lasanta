@@ -5,7 +5,7 @@ return [
         'fr' => 'Français',
         'en' => 'English',
         'de' => 'Deutsch',
-        'nl' => 'Nederlands',
+        'it' => 'Italiano',
     ],
 
     'types' => [
@@ -42,8 +42,17 @@ return [
         'page_headers' => [
             'label' => 'En-têtes de page',
             'class' => \App\Models\PageHeaderSetting::class,
-            'fields' => ['subtitle', 'title', 'hero_text'],
+            'fields' => ['subtitle', 'title', 'hero_text', 'availability_small', 'availability_title', 'availability_text'],
             'display_field' => 'page',
+        ],
+        'contact_page' => [
+            'label' => 'Page Contact',
+            'class' => \App\Models\PageHeaderSetting::class,
+            'fields' => ['subtitle', 'title', 'availability_small', 'availability_title', 'availability_text'],
+            'display_field' => 'page',
+            'where' => [
+                'page' => 'contact',
+            ],
         ],
         'appartment_page' => [
             'label' => 'Page Appartements',
@@ -66,7 +75,7 @@ return [
         'local_amenities' => [
             'label' => 'Commodités locales',
             'class' => \App\Models\LocalAmenity::class,
-            'fields' => ['title', 'description'],
+            'fields' => ['small_title', 'title', 'description'],
             'display_field' => 'title',
         ],
         'rooms' => [

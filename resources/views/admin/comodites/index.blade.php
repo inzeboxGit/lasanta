@@ -111,6 +111,7 @@
             <thead>
                 <tr>
                     <th>Image</th>
+                    <th>Petit titre</th>
                     <th>Titre</th>
                     <th>Ordre</th>
                     <th>Publiée</th>
@@ -130,6 +131,7 @@
                                 <span class="text-muted">-</span>
                             @endif
                         </td>
+                        <td>{{ $comodite->small_title ?: '-' }}</td>
                         <td>{{ $comodite->title }}</td>
                         <td>{{ $comodite->sort_order }}</td>
                         <td>{{ $comodite->is_published ? 'Oui' : 'Non' }}</td>
@@ -144,7 +146,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">{{ $pageMeta['empty_label'] }}</td>
+                        <td colspan="6" class="text-center text-muted">{{ $pageMeta['empty_label'] }}</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -5,20 +5,20 @@
         'fr' => 'Aucune installation publiée pour le moment.',
         'en' => 'No installation published at the moment.',
         'de' => 'Derzeit keine Installation veröffentlicht.',
-        'nl' => 'Momenteel geen installatie gepubliceerd.',
+        'it' => 'Nessuna installazione pubblicata al momento.',
     ];
     $emptyText = $emptyLabels[$locale] ?? $emptyLabels['en'];
     $fallbackSubtitle = [
         'fr' => 'Résidence Bella Vista',
         'en' => 'Residence Bella Vista',
         'de' => 'Residence Bella Vista',
-        'nl' => 'Residence Bella Vista',
+        'it' => 'Residence Bella Vista',
     ];
     $fallbackTitle = [
         'fr' => 'Installations principales',
         'en' => 'Main facilities',
         'de' => 'Hauptausstattungen',
-        'nl' => 'Belangrijkste faciliteiten',
+        'it' => 'Servizi principali',
     ];
 @endphp
 <div class="title text-center mb-5">

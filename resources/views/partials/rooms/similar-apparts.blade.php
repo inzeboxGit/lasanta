@@ -4,7 +4,7 @@
         'fr' => ['small' => 'Résidence Bella Vista', 'title' => 'Appartements similaires', 'from' => 'À partir de', 'per_night' => '€/nuit', 'on_request' => 'Tarif sur demande', 'empty' => 'Aucun appartement similaire pour le moment.'],
         'en' => ['small' => 'Residence Bella Vista', 'title' => 'Similar apartments', 'from' => 'From', 'per_night' => 'EUR/night', 'on_request' => 'Price on request', 'empty' => 'No similar apartment at the moment.'],
         'de' => ['small' => 'Residence Bella Vista', 'title' => 'Ähnliche Apartments', 'from' => 'Ab', 'per_night' => 'EUR/Nacht', 'on_request' => 'Preis auf Anfrage', 'empty' => 'Derzeit keine ähnlichen Apartments.'],
-        'nl' => ['small' => 'Residence Bella Vista', 'title' => 'Vergelijkbare appartementen', 'from' => 'Vanaf', 'per_night' => 'EUR/nacht', 'on_request' => 'Prijs op aanvraag', 'empty' => 'Momenteel geen vergelijkbaar appartement.'],
+        'it' => ['small' => 'Residence Bella Vista', 'title' => 'Appartamenti simili', 'from' => 'Da', 'per_night' => 'EUR/notte', 'on_request' => 'Prezzo su richiesta', 'empty' => 'Al momento nessun appartamento simile.'],
     ];
     $ui = $labels[$locale] ?? $labels['en'];
 @endphp

@@ -27,6 +27,7 @@ class SiteSetting extends Model
         'maintenance_enabled',
         'maintenance_message',
         'custom_head_scripts',
+        'footer_background_image',
     ];
 
     protected $casts = [

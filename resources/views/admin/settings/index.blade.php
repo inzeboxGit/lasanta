@@ -15,8 +15,11 @@
 @endif
 
 <div class="admin-card p-4">
-    <form action="{{ route('admin.settings.update') }}" method="post">
+    <form action="{{ route('admin.settings.update') }}" method="post" enctype="multipart/form-data">
         @csrf
+        @php
+            $footerBackgroundSrc = media_url($siteSetting->footer_background_image ?? null, 'img/rooms/3.jpg');
+        @endphp
         <div class="row g-3">
             <div class="col-md-6">
                 <label class="form-label">Nom du site</label>
@@ -95,6 +98,16 @@
                 <textarea name="custom_head_scripts" class="form-control" rows="5" placeholder="&lt;script&gt;...&lt;/script&gt;">{{ old('custom_head_scripts', $siteSetting->custom_head_scripts ?? '') }}</textarea>
                 <div class="form-text">Ces scripts seront ajoutés dans la balise &lt;head&gt; de toutes les pages (Google Analytics, Facebook Pixel, etc.).</div>
             </div>
+            @if($supportsFooterBackgroundImage ?? false)
+                <div class="col-12">
+                    <label class="form-label">Image de fond du footer</label>
+                    <input type="file" name="footer_background_image" id="footer_background_image" class="form-control" accept="image/*">
+                    <div class="form-text">Image affichée derrière le footer. Taille max 5 Mo.</div>
+                    <div class="mt-2">
+                        <img id="footer_background_image_preview" src="{{ $footerBackgroundSrc }}" alt="" class="rounded" style="max-height:120px;">
+                    </div>
+                </div>
+            @endif
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
@@ -106,6 +119,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const checkbox = document.getElementById('use_site_email_for_contact');
     const wrap = document.getElementById('contact_recipient_email_wrap');
+    const footerBackgroundInput = document.getElementById('footer_background_image');
+    const footerBackgroundPreview = document.getElementById('footer_background_image_preview');
 
     if (!checkbox || !wrap) return;
 
@@ -115,6 +130,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     checkbox.addEventListener('change', syncVisibility);
     syncVisibility();
+
+    if (!footerBackgroundInput || !footerBackgroundPreview) return;
+
+    footerBackgroundInput.addEventListener('change', function (event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            footerBackgroundPreview.src = e.target.result;
+            footerBackgroundPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
 });
 </script>
 @endsection

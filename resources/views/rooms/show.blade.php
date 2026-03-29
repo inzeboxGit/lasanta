@@ -20,10 +20,10 @@
                 'section_small' => 'Luxuserlebnis',
                 'gallery' => 'Vollbild-Galerie',
             ],
-            'nl' => [
-                'hero_small' => 'Hotelbeleving',
-                'section_small' => 'Luxe beleving',
-                'gallery' => 'Volledig scherm galerij',
+            'it' => [
+                'hero_small' => 'Esperienza hoteliera',
+                'section_small' => 'Esperienza di lusso',
+                'gallery' => 'Galleria a schermo intero',
             ],
         ];
         $ui = $labels[$locale] ?? $labels['en'];

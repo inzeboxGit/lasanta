@@ -16,5 +16,10 @@ class PageHeaderSetting extends Model
         'subtitle',
         'title',
         'hero_text',
+        'availability_small',
+        'availability_title',
+        'availability_text',
+        'map_latitude',
+        'map_longitude',
     ];
 }

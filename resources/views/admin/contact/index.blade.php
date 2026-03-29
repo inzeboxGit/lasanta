@@ -6,7 +6,7 @@
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
         <h1 class="h3 mb-1">Contact</h1>
-        <div class="text-muted">Gérer l'en-tête de la page contact</div>
+        <div class="text-muted">Gérer l'en-tête et la section disponibilité de la page contact</div>
     </div>
     <a href="{{ url('/contacts') }}" class="btn btn-outline-secondary" target="_blank" rel="noopener">Voir la page</a>
 </div>
@@ -30,6 +30,26 @@
             <div class="col-md-4">
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $contactPageSetting->title ?? '') }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Petit titre disponibilité</label>
+                <input type="text" name="availability_small" class="form-control" value="{{ old('availability_small', $contactPageSetting->availability_small ?? '') }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Titre disponibilité</label>
+                <input type="text" name="availability_title" class="form-control" value="{{ old('availability_title', $contactPageSetting->availability_title ?? '') }}">
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Texte disponibilité</label>
+                <textarea name="availability_text" class="form-control" rows="3">{{ old('availability_text', $contactPageSetting->availability_text ?? '') }}</textarea>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Latitude GPS</label>
+                <input type="number" step="0.0000001" name="map_latitude" class="form-control" value="{{ old('map_latitude', $contactPageSetting->map_latitude ?? '42.6043096') }}" placeholder="42.6043096">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Longitude GPS</label>
+                <input type="number" step="0.0000001" name="map_longitude" class="form-control" value="{{ old('map_longitude', $contactPageSetting->map_longitude ?? '8.9295210') }}" placeholder="8.9295210">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Image header</label>

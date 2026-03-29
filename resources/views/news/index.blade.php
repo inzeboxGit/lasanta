@@ -8,7 +8,7 @@
             'fr' => ['small' => 'Expérience hôtelière', 'title' => 'Actualités et événements', 'event' => 'Événement', 'read_more' => 'Lire plus', 'empty' => 'Aucune actualité.'],
             'en' => ['small' => 'Hotel Experience', 'title' => 'News and Events', 'event' => 'Event', 'read_more' => 'Read more', 'empty' => 'No news.'],
             'de' => ['small' => 'Hotelerlebnis', 'title' => 'Neuigkeiten und Events', 'event' => 'Event', 'read_more' => 'Mehr lesen', 'empty' => 'Keine Neuigkeiten.'],
-            'nl' => ['small' => 'Hotelbeleving', 'title' => 'Nieuws en evenementen', 'event' => 'Evenement', 'read_more' => 'Lees meer', 'empty' => 'Geen nieuws.'],
+            'it' => ['small' => 'Esperienza hoteliera', 'title' => 'News ed eventi', 'event' => 'Evento', 'read_more' => 'Scopri di più', 'empty' => 'Nessuna notizia.'],
         ];
         $ui = $labels[$locale] ?? $labels['en'];
         $heroSrc = media_url($newsPageSetting->header_image ?? null, 'img/hero_home_2.jpg');

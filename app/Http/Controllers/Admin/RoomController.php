@@ -123,7 +123,7 @@ class RoomController extends Controller
         $room = Room::create($data);
         $room->amenities()->sync($amenityIds);
 
-        return redirect()->route('admin.rooms.index')->with('success', 'Chambre créée.');
+        return redirect()->route('admin.rooms.edit', $room)->with('success', 'Chambre créée.');
     }
 
     /**
@@ -187,7 +187,7 @@ class RoomController extends Controller
         $room->update($data);
         $room->amenities()->sync($amenityIds);
 
-        return redirect()->route('admin.rooms.index')->with('success', 'Chambre mise à jour.');
+        return redirect()->route('admin.rooms.edit', $room)->with('success', 'Chambre mise à jour.');
     }
 
     /**

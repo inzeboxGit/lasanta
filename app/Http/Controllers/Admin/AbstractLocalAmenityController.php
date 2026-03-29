@@ -67,9 +67,11 @@ abstract class AbstractLocalAmenityController extends Controller
 
         $setting->update([
             'header_image' => $data['header_image'] ?? $setting->header_image,
-            'subtitle' => $data['subtitle'] ?? $setting->subtitle,
-            'title' => $data['title'] ?? $setting->title,
-            'hero_text' => $this->supportsHeroText() ? ($data['hero_text'] ?? $setting->hero_text) : ($setting->hero_text ?? null),
+            'subtitle' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
+            'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
+            'hero_text' => $this->supportsHeroText()
+                ? (array_key_exists('hero_text', $data) ? $data['hero_text'] : $setting->hero_text)
+                : ($setting->hero_text ?? null),
         ]);
 
         return redirect()->route($this->indexRouteName())
@@ -113,11 +115,11 @@ abstract class AbstractLocalAmenityController extends Controller
         }
 
         $setting->update([
-            'small_title' => $data['small_title'] ?? $setting->small_title,
-            'title' => $data['title'] ?? $setting->title,
-            'lead' => $data['lead'] ?? $setting->lead,
-            'description' => $data['description'] ?? $setting->description,
-            'signature' => $data['signature'] ?? $setting->signature,
+            'small_title' => array_key_exists('small_title', $data) ? $data['small_title'] : $setting->small_title,
+            'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
+            'lead' => array_key_exists('lead', $data) ? $data['lead'] : $setting->lead,
+            'description' => array_key_exists('description', $data) ? $data['description'] : $setting->description,
+            'signature' => array_key_exists('signature', $data) ? $data['signature'] : $setting->signature,
             'main_image' => $data['main_image'] ?? $setting->main_image,
             'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
         ]);
@@ -307,6 +309,7 @@ abstract class AbstractLocalAmenityController extends Controller
     protected function validatedData(Request $request): array
     {
         $data = $request->validate([
+            'small_title' => ['nullable', 'string', 'max:255'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:5120'],
