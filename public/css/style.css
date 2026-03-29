@@ -690,6 +690,7 @@ header.fixed_header nav ul li a.animated_link:before {
   background-color: #fff;
 }
 header.fixed_header.sticky {
+  padding: 4px 0;
   transition: all 0.3s ease-in-out;
   border-bottom: 1px solid #d9e1e6;
   background-color: #fff;
@@ -699,6 +700,10 @@ header.fixed_header.sticky .logo_normal {
 }
 header.fixed_header.sticky .logo_sticky {
   display: inline-block;
+}
+header.fixed_header.sticky .logo_sticky img {
+  width: 110px;
+  height: auto;
 }
 header.fixed_header.sticky nav ul li a {
   color: #333;

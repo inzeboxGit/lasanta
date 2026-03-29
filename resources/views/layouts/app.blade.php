@@ -117,7 +117,7 @@
         <div data-loader="circle-side"></div>
     </div><!-- /Page Preload -->
 
-    <header class="menu_v4 no_sticky_header">
+    <header class="menu_v4 fixed_header">
         <div class="layer"></div>
         <div class="container">
             <div class="row align-items-center">
