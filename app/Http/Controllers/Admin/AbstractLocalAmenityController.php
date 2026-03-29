@@ -24,6 +24,7 @@ abstract class AbstractLocalAmenityController extends Controller
     protected ?string $sectionSettingsSuccessMessage = null;
     protected ?array $sectionSettingConfig = null;
     protected ?array $aboutSectionConfig = null;
+    protected ?array $extraTextSectionConfig = null;
 
     public function index()
     {
@@ -36,6 +37,7 @@ abstract class AbstractLocalAmenityController extends Controller
             'comodites' => $comodites,
             'sectionSetting' => $this->resolveSectionSetting(),
             'aboutSectionSetting' => $this->resolveAboutSectionSetting(),
+            'extraTextSectionSetting' => $this->resolveExtraTextSectionSetting(),
         ]));
     }
 
@@ -126,6 +128,32 @@ abstract class AbstractLocalAmenityController extends Controller
 
         return redirect()->route($this->indexRouteName())
             ->with('success', $this->aboutSectionConfig['success_message'] ?? "Section À propos {$this->itemLabelSingular} mise à jour.");
+    }
+
+    public function updateExtraTextSectionSettings(Request $request)
+    {
+        abort_unless($this->hasExtraTextSectionSettings(), 404);
+
+        if (! Schema::hasTable('about_section_settings')) {
+            return redirect()->route($this->indexRouteName())
+                ->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = $this->resolveExtraTextSectionSetting();
+        $data = $request->validate([
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ]);
+
+        $setting->update([
+            'small_title' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->small_title,
+            'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
+            'description' => array_key_exists('description', $data) ? $data['description'] : $setting->description,
+        ]);
+
+        return redirect()->route($this->indexRouteName())
+            ->with('success', $this->extraTextSectionConfig['success_message'] ?? "Section texte {$this->itemLabelSingular} mise à jour.");
     }
 
     public function create()
@@ -228,6 +256,11 @@ abstract class AbstractLocalAmenityController extends Controller
                     'title' => $this->aboutSectionConfig['panel_title'] ?? '',
                     'route' => $this->aboutSectionSettingsRouteName(),
                 ],
+                'extra_text_section' => [
+                    'enabled' => $this->hasExtraTextSectionSettings(),
+                    'title' => $this->extraTextSectionConfig['panel_title'] ?? '',
+                    'route' => $this->extraTextSectionSettingsRouteName(),
+                ],
             ],
         ], $extra);
     }
@@ -278,6 +311,29 @@ abstract class AbstractLocalAmenityController extends Controller
         return $this->aboutSectionConfig !== null;
     }
 
+    protected function resolveExtraTextSectionSetting(): object
+    {
+        if (! $this->hasExtraTextSectionSettings()) {
+            return (object) [];
+        }
+
+        $defaults = $this->extraTextSectionDefaults();
+
+        if (Schema::hasTable('about_section_settings')) {
+            return AboutSectionSetting::firstOrCreate(
+                ['section' => $this->extraTextSectionConfig['section']],
+                $defaults
+            );
+        }
+
+        return (object) $defaults;
+    }
+
+    protected function hasExtraTextSectionSettings(): bool
+    {
+        return $this->extraTextSectionConfig !== null;
+    }
+
     protected function aboutSectionDefaults(): array
     {
         return [
@@ -288,6 +344,19 @@ abstract class AbstractLocalAmenityController extends Controller
             'signature' => $this->aboutSectionConfig['signature'] ?? 'L’équipe du Bella Vista',
             'main_image' => $this->aboutSectionConfig['main_image'] ?? 'img/home_2.jpg',
             'overlay_image' => $this->aboutSectionConfig['overlay_image'] ?? 'img/home_1.jpg',
+        ];
+    }
+
+    protected function extraTextSectionDefaults(): array
+    {
+        return [
+            'small_title' => $this->extraTextSectionConfig['subtitle'] ?? '',
+            'title' => $this->extraTextSectionConfig['title'] ?? '',
+            'lead' => '',
+            'description' => $this->extraTextSectionConfig['description'] ?? '',
+            'signature' => '',
+            'main_image' => '',
+            'overlay_image' => '',
         ];
     }
 
@@ -370,6 +439,13 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         return $this->hasAboutSectionSettings()
             ? "{$this->routePrefix}.about-section-settings.update"
+            : null;
+    }
+
+    protected function extraTextSectionSettingsRouteName(): ?string
+    {
+        return $this->hasExtraTextSectionSettings()
+            ? "{$this->routePrefix}.extra-text-section-settings.update"
             : null;
     }
 }

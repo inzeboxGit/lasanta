@@ -80,7 +80,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="">
     <meta name="author" content="residencebellavista.fr">
-    <title>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? '') }}</title>
+    <title>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? '') }}
+    </title>
 
     <!-- Favicons-->
     <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
@@ -116,15 +117,15 @@
         <div data-loader="circle-side"></div>
     </div><!-- /Page Preload -->
 
-    <header class="fixed_header menu_v4">
-        <div class="layer"></div><!-- Opacity Mask -->
+    <header class="menu_v4 no_sticky_header">
+        <div class="layer"></div>
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-4">
                     <a href="{{ url('/') }}" class="logo_normal"><img src="{{ asset('img/logo.png') }}" width="135"
                             alt=""></a>
-                    <a href="{{ url('/') }}" class="logo_sticky"><img src="{{ asset('img/logo_sticky.png') }}"
-                            width="155" alt=""></a>
+                    <a href="{{ url('/') }}" class="logo_sticky"><img src="{{ asset('img/logo_sticky.png') }}" width="155"
+                            alt=""></a>
                 </div>
                 <div class="col-8">
                     <div class="main-menu">
@@ -139,8 +140,8 @@
                     </div>
                 </div>
             </div>
-        </div><!-- container -->
-    </header><!-- End Header -->
+        </div>
+    </header>
 
     @yield('content')
 
@@ -166,6 +167,20 @@
     @if($showPromoModal)
         <script src="{{ asset('js/modal_popup.js') }}"></script>
     @endif
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const header = document.querySelector('header.no_sticky_header');
+
+        if (!header) return;
+
+        const syncHeaderState = function () {
+            header.classList.toggle('is-scrolled', window.scrollY > 10);
+        };
+
+        window.addEventListener('scroll', syncHeaderState, { passive: true });
+        syncHeaderState();
+    });
+    </script>
     @stack('scripts')
 
 </body>

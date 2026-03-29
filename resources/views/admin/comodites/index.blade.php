@@ -105,6 +105,32 @@
     </div>
 @endif
 
+@if($pageMeta['extra_text_section']['enabled'])
+    <div class="admin-card p-4 mb-4">
+        <h2 class="h5 mb-3">{{ $pageMeta['extra_text_section']['title'] }}</h2>
+        <form action="{{ route($pageMeta['extra_text_section']['route']) }}" method="post">
+            @csrf
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Sous-titre</label>
+                    <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $extraTextSectionSetting->small_title ?? '') }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Titre</label>
+                    <input type="text" name="title" class="form-control" value="{{ old('title', $extraTextSectionSetting->title ?? '') }}">
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control" rows="4">{{ old('description', $extraTextSectionSetting->description ?? '') }}</textarea>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Mettre à jour</button>
+                </div>
+            </div>
+        </form>
+    </div>
+@endif
+
 <div class="admin-card p-3">
     <div class="table-responsive">
         <table class="table align-middle mb-0">

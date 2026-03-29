@@ -714,6 +714,53 @@ header.fixed_header.sticky .hamburger__inner::before,
 header.fixed_header.sticky .hamburger__inner::after {
   background-color: #333;
 }
+header.no_sticky_header {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0);
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease-in-out;
+}
+header.no_sticky_header .logo_normal {
+  display: block;
+}
+header.no_sticky_header .logo_sticky {
+  display: none;
+}
+header.no_sticky_header nav ul li a {
+  color: #fff;
+}
+header.no_sticky_header nav ul li a.animated_link:before {
+  background-color: #fff;
+}
+header.no_sticky_header .hamburger__inner,
+header.no_sticky_header .hamburger__inner::before,
+header.no_sticky_header .hamburger__inner::after {
+  background-color: #fff;
+}
+header.no_sticky_header.is-scrolled {
+  background-color: #fff;
+  border-bottom-color: #d9e1e6;
+}
+header.no_sticky_header.is-scrolled .logo_normal {
+  display: none;
+}
+header.no_sticky_header.is-scrolled .logo_sticky {
+  display: inline-block;
+}
+header.no_sticky_header.is-scrolled nav ul li a {
+  color: #333;
+}
+header.no_sticky_header.is-scrolled nav ul li a.animated_link:before {
+  background-color: #333;
+}
+header.no_sticky_header.is-scrolled .hamburger__inner,
+header.no_sticky_header.is-scrolled .hamburger__inner::before,
+header.no_sticky_header.is-scrolled .hamburger__inner::after {
+  background-color: #333;
+}
 
 .hamburger_2 {
   position: relative;

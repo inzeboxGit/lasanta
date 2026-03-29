@@ -288,7 +288,28 @@ Route::get('/restaurant', function () {
         $aboutSectionSetting->loadMissing('translations');
     }
 
-    return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting'));
+    $restaurantExtraTextSectionSetting = (object)[
+        'small_title' => '',
+        'description' => '',
+    ];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
+        $restaurantExtraTextSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
+        ['section' => 'restaurant_after_about'],
+        [
+            'small_title' => '',
+            'title' => '',
+            'lead' => '',
+            'description' => '',
+            'signature' => '',
+            'main_image' => '',
+            'overlay_image' => '',
+        ]
+        );
+        $restaurantExtraTextSectionSetting->loadMissing('translations');
+    }
+
+    return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting', 'restaurantExtraTextSectionSetting'));
 })->name('about.index');
 
 Route::get('/piscine', function () {
@@ -346,7 +367,12 @@ Route::get('/piscine', function () {
         $aboutSectionSetting->loadMissing('translations');
     }
 
-    return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting'));
+    $restaurantExtraTextSectionSetting = (object)[
+        'small_title' => '',
+        'description' => '',
+    ];
+
+    return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting', 'restaurantExtraTextSectionSetting'));
 })->name('pool.index');
 
 Route::get('/appartements', function () {
@@ -443,6 +469,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('restaurant', \App\Http\Controllers\Admin\RestaurantAmenityController::class)->names('admin.restaurant');
         Route::post('restaurant/section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class , 'updateSectionSettings'])->name('admin.restaurant.section-settings.update');
         Route::post('restaurant/about-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class , 'updateAboutSectionSettings'])->name('admin.restaurant.about-section-settings.update');
+        Route::post('restaurant/extra-text-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class , 'updateExtraTextSectionSettings'])->name('admin.restaurant.extra-text-section-settings.update');
         Route::get('settings', [\App\Http\Controllers\Admin\SiteSettingController::class , 'index'])->name('admin.settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SiteSettingController::class , 'update'])->name('admin.settings.update');
         Route::get('translations', [\App\Http\Controllers\Admin\TranslationController::class , 'index'])->name('admin.translations.index');

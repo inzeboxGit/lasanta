@@ -36,4 +36,12 @@ class RestaurantAmenityController extends AbstractLocalAmenityController
         'image_directory' => 'restaurant-about',
         'success_message' => 'Section À propos Restaurant mise à jour.',
     ];
+    protected ?array $extraTextSectionConfig = [
+        'section' => 'restaurant_after_about',
+        'panel_title' => 'Section après À propos Restaurant',
+        'subtitle' => '',
+        'title' => '',
+        'description' => '',
+        'success_message' => 'Section après À propos Restaurant mise à jour.',
+    ];
 }
