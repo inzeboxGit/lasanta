@@ -101,12 +101,12 @@
         rel="stylesheet">
 
     <!-- BASE CSS -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/vendors.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.min.css') }}?v={{ time() }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}?v={{ time() }}" rel="stylesheet">
+    <link href="{{ asset('css/vendors.min.css') }}?v={{ time() }}" rel="stylesheet">
 
     <!-- YOUR CUSTOM CSS -->
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}?v={{ time() }}" rel="stylesheet">
 
     {!! $siteSetting->custom_head_scripts ?? '' !!}
 </head>
@@ -159,10 +159,10 @@
     <!-- /back to top -->
 
     <!-- COMMON SCRIPTS -->
-    <script src="{{ asset('js/common_scripts.js') }}"></script>
-    <script src="{{ asset('js/common_functions.js') }}"></script>
-    <script src="{{ asset('js/datepicker_search.js') }}"></script>
-    <script src="{{ asset('js/datepicker_inline.js') }}"></script>
+    <script src="{{ asset('js/common_scripts.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/common_functions.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/datepicker_search.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/datepicker_inline.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('phpmailer/validate.js') }}?v={{ filemtime(public_path('phpmailer/validate.js')) }}"></script>
     @if($showPromoModal)
         <script src="{{ asset('js/modal_popup.js') }}"></script>
