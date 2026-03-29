@@ -93,7 +93,7 @@ class AboutController extends Controller
         $path = $file->store($directory, 'public');
         $absolutePath = Storage::disk('public')->path($path);
 
-        $this->cropImageToSize($absolutePath, 600, 830);
+        $this->cropImageToSize($absolutePath, 600, 750);
 
         return $path;
     }

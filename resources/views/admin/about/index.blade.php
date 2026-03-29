@@ -122,7 +122,7 @@
                 <div class="col-md-6">
                     <label class="form-label">Image principale</label>
                     <input type="file" name="main_image" id="about_main_image" class="form-control" accept="image/*">
-                    <div class="form-text">L'image sera recadrée automatiquement en 600x830 exact.</div>
+                    <div class="form-text">L'image sera recadrée automatiquement en 600x750 exact.</div>
                     <div class="mt-2">
                         <img id="about_main_preview" src="{{ $mainSrc ?? '' }}" alt="" class="rounded"
                             style="max-height:100px;{{ empty($mainSrc) ? 'display:none;' : '' }}">
@@ -131,7 +131,7 @@
                 <div class="col-md-6">
                     <label class="form-label">Image superposée</label>
                     <input type="file" name="overlay_image" id="about_overlay_image" class="form-control" accept="image/*">
-                    <div class="form-text">Même règle : recadrage automatique en 600x830 exact.</div>
+                    <div class="form-text">Même règle : recadrage automatique en 600x750 exact.</div>
                     <div class="mt-2">
                         <img id="about_overlay_preview" src="{{ $overlaySrc ?? '' }}" alt="" class="rounded"
                             style="max-height:100px;{{ empty($overlaySrc) ? 'display:none;' : '' }}">
