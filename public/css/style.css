@@ -3907,7 +3907,7 @@ a.box_contents:hover img {
 }
 .parallax_wrapper .img_over {
   left: -33%;
-  bottom: 10%; /*16*/
+  bottom: 5%; /*16*/
   position: absolute;
   z-index: 99;
 }
