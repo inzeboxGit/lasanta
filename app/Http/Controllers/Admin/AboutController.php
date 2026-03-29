@@ -90,6 +90,7 @@ class AboutController extends Controller
 
     private function storeResizedImage(UploadedFile $file, string $directory): string
     {
+        // upload 600, 750
         $path = $file->store($directory, 'public');
         $absolutePath = Storage::disk('public')->path($path);
 
@@ -100,7 +101,7 @@ class AboutController extends Controller
 
     private function cropImageToSize(string $path, int $targetWidth, int $targetHeight): void
     {
-        if (! file_exists($path)) {
+        if (!file_exists($path)) {
             return;
         }
 
