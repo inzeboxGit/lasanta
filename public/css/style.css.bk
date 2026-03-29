@@ -185,17 +185,12 @@ a:hover, a:focus {
   font-size: 12px;
   font-size: 0.75rem;
 }
-
-.installation p{
-  font-size: 13px;
-}
-
 .title h2,
 .title h3 {
   font-weight: 700;
   font-size: 38px;
   font-size: 2.375rem;
-  margin-bottom: 1px;
+  margin-bottom: 15px;
 }
 .title h3 {
   font-size: 31px;
@@ -612,7 +607,7 @@ a.animated_link.active::before {
 /*-------- 1.4 Structure --------*/
 /* Header */
 header {
-  padding: 7px 0;
+  padding: 20px 0;
   width: 100%;
   z-index: 999;
   position: fixed;
@@ -1635,32 +1630,6 @@ img.jarallax-img.kenburns-2 {
 /* Hero new datepicker */
 .hero.home-search {
   overflow: visible;
-}
-.hero.hero-with-video {
-  position: relative;
-  z-index: 0;
-}
-.hero.hero-with-video .hero-background-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-}
-.hero.hero-with-video .hero-background-embed {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 177.7777777778vh;
-  min-width: 100%;
-  height: 56.25vw;
-  min-height: 100%;
-  border: 0;
-  transform: translate(-50%, -50%) scale(1.25);
-  pointer-events: none;
-  z-index: -1;
 }
 @media (max-width: 991px) {
   .hero.home-search {
@@ -2990,7 +2959,7 @@ a.box_contents h2 {
   font-size: 24px;
   font-size: 1.5rem;
   font-weight: 600;
-  /* margin-bottom: 30px; edited */
+  margin-bottom: 30px;
 }
 a.box_contents em {
   font-style: normal;
@@ -3906,8 +3875,8 @@ a.box_contents:hover img {
   }
 }
 .parallax_wrapper .img_over {
-  left: -33%;
-  bottom: 5%; /*16*/
+  left: -25%;
+  bottom: 10%;
   position: absolute;
   z-index: 99;
 }
@@ -3922,22 +3891,11 @@ a.box_contents:hover img {
   height: auto;
   box-shadow: 10px 10px 26px 0px rgba(0, 0, 0, 0.21);
 }
-
-.parallax_wrapper.about-main-media .img_over {
-  left: auto;
-  right: -29%;
-  text-align: right;
-}
 @media (max-width: 991px) {
-  .parallax_wrapper.about-main-media .img_over {
-    left: auto;
-    right: 0;
+  .parallax_wrapper.inverted {
+    padding-left: inherit;
+    padding-right: 25%;
   }
-}
-
-.parallax_wrapper.inverted {
-  padding-left: inherit;
-  padding-right: 25%;
 }
 .parallax_wrapper.inverted .img_over {
   text-align: right;
@@ -3945,10 +3903,6 @@ a.box_contents:hover img {
   right: -25%;
 }
 @media (max-width: 991px) {
-  .parallax_wrapper.inverted {
-    padding-left: inherit;
-    padding-right: 0;
-  }
   .parallax_wrapper.inverted .img_over {
     left: inherit;
     right: 0;
