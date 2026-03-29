@@ -7,6 +7,7 @@ use App\Models\AboutSectionSetting;
 use App\Models\LocalAmenity;
 use App\Models\LocalAmenitySectionSetting;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
@@ -105,7 +106,7 @@ abstract class AbstractLocalAmenityController extends Controller
                 Storage::disk('public')->delete($setting->main_image);
             }
 
-            $data['main_image'] = $request->file('main_image')->store($this->aboutSectionConfig['image_directory'] ?? 'about', 'public');
+            $data['main_image'] = $this->storeResizedImage($request->file('main_image'), $this->aboutSectionConfig['image_directory'] ?? 'about', 600, 730);
         }
 
         if ($request->hasFile('overlay_image')) {
@@ -113,7 +114,7 @@ abstract class AbstractLocalAmenityController extends Controller
                 Storage::disk('public')->delete($setting->overlay_image);
             }
 
-            $data['overlay_image'] = $request->file('overlay_image')->store($this->aboutSectionConfig['image_directory'] ?? 'about', 'public');
+            $data['overlay_image'] = $this->storeResizedImage($request->file('overlay_image'), $this->aboutSectionConfig['image_directory'] ?? 'about', 600, 830);
         }
 
         $setting->update([
@@ -447,5 +448,86 @@ abstract class AbstractLocalAmenityController extends Controller
         return $this->hasExtraTextSectionSettings()
             ? "{$this->routePrefix}.extra-text-section-settings.update"
             : null;
+    }
+
+    protected function storeResizedImage(UploadedFile $file, string $directory, int $width, int $height): string
+    {
+        $path = $file->store($directory, 'public');
+        $absolutePath = Storage::disk('public')->path($path);
+
+        $this->cropImageToSize($absolutePath, $width, $height);
+
+        return $path;
+    }
+
+    protected function cropImageToSize(string $path, int $targetWidth, int $targetHeight): void
+    {
+        if (! file_exists($path)) {
+            return;
+        }
+
+        $imageInfo = @getimagesize($path);
+
+        if ($imageInfo === false) {
+            return;
+        }
+
+        [$originalWidth, $originalHeight] = $imageInfo;
+        $mime = $imageInfo['mime'] ?? null;
+
+        if ($originalWidth <= 0 || $originalHeight <= 0 || $mime === null) {
+            return;
+        }
+
+        $source = match ($mime) {
+            'image/jpeg', 'image/jpg' => @imagecreatefromjpeg($path),
+            'image/png' => @imagecreatefrompng($path),
+            'image/gif' => @imagecreatefromgif($path),
+            'image/webp' => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($path) : false,
+            default => false,
+        };
+
+        if ($source === false) {
+            return;
+        }
+
+        $scale = max($targetWidth / $originalWidth, $targetHeight / $originalHeight);
+        $resizedWidth = max(1, (int) round($originalWidth * $scale));
+        $resizedHeight = max(1, (int) round($originalHeight * $scale));
+        $destinationX = (int) floor(($targetWidth - $resizedWidth) / 2);
+        $destinationY = (int) floor(($targetHeight - $resizedHeight) / 2);
+
+        $canvas = imagecreatetruecolor($targetWidth, $targetHeight);
+
+        if (in_array($mime, ['image/png', 'image/gif', 'image/webp'], true)) {
+            imagealphablending($canvas, false);
+            imagesavealpha($canvas, true);
+            $transparent = imagecolorallocatealpha($canvas, 0, 0, 0, 127);
+            imagefilledrectangle($canvas, 0, 0, $targetWidth, $targetHeight, $transparent);
+        }
+
+        imagecopyresampled(
+            $canvas,
+            $source,
+            $destinationX,
+            $destinationY,
+            0,
+            0,
+            $resizedWidth,
+            $resizedHeight,
+            $originalWidth,
+            $originalHeight
+        );
+
+        match ($mime) {
+            'image/jpeg', 'image/jpg' => imagejpeg($canvas, $path, 85),
+            'image/png' => imagepng($canvas, $path, 6),
+            'image/gif' => imagegif($canvas, $path),
+            'image/webp' => function_exists('imagewebp') ? imagewebp($canvas, $path, 85) : false,
+            default => false,
+        };
+
+        imagedestroy($source);
+        imagedestroy($canvas);
     }
 }

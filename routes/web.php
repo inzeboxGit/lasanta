@@ -367,10 +367,21 @@ Route::get('/piscine', function () {
         $aboutSectionSetting->loadMissing('translations');
     }
 
-    $restaurantExtraTextSectionSetting = (object) [
-        'small_title' => '',
-        'description' => '',
-    ];
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
+        $restaurantExtraTextSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
+            ['section' => 'pool_after_about'],
+            [
+                'small_title' => '',
+                'title' => '',
+                'lead' => '',
+                'description' => '',
+                'signature' => '',
+                'main_image' => '',
+                'overlay_image' => '',
+            ]
+        );
+        $restaurantExtraTextSectionSetting->loadMissing('translations');
+    }
 
     return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting', 'restaurantExtraTextSectionSetting'));
 })->name('pool.index');
@@ -451,6 +462,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('pool', \App\Http\Controllers\Admin\PoolAmenityController::class)->names('admin.pool');
         Route::post('pool/section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateSectionSettings'])->name('admin.pool.section-settings.update');
         Route::post('pool/about-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateAboutSectionSettings'])->name('admin.pool.about-section-settings.update');
+        Route::post('pool/extra-text-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateExtraTextSectionSettings'])->name('admin.pool.extra-text-section-settings.update');
         Route::get('contact', [\App\Http\Controllers\Admin\ContactPageController::class, 'index'])->name('admin.contact.index');
         Route::post('contact', [\App\Http\Controllers\Admin\ContactPageController::class, 'update'])->name('admin.contact.update');
         Route::get('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'index'])->name('admin.maintenance.index');

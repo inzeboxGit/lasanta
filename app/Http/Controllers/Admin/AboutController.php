@@ -51,7 +51,7 @@ class AboutController extends Controller
                 Storage::disk('public')->delete($setting->main_image);
             }
 
-            $data['main_image'] = $this->storeResizedImage($request->file('main_image'), 'about');
+            $data['main_image'] = $this->storeResizedImage($request->file('main_image'), 'about', 600, 730);
         }
 
         if ($request->hasFile('overlay_image')) {
@@ -59,7 +59,7 @@ class AboutController extends Controller
                 Storage::disk('public')->delete($setting->overlay_image);
             }
 
-            $data['overlay_image'] = $this->storeResizedImage($request->file('overlay_image'), 'about');
+            $data['overlay_image'] = $this->storeResizedImage($request->file('overlay_image'), 'about', 600, 830);
         }
 
         $setting->update([
@@ -88,13 +88,12 @@ class AboutController extends Controller
         ];
     }
 
-    private function storeResizedImage(UploadedFile $file, string $directory): string
+    private function storeResizedImage(UploadedFile $file, string $directory, int $width, int $height): string
     {
-        // upload 600, 750
         $path = $file->store($directory, 'public');
         $absolutePath = Storage::disk('public')->path($path);
 
-        $this->cropImageToSize($absolutePath, 600, 750);
+        $this->cropImageToSize($absolutePath, $width, $height);
 
         return $path;
     }

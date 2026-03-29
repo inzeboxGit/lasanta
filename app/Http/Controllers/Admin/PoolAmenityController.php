@@ -38,4 +38,13 @@ class PoolAmenityController extends AbstractLocalAmenityController
         'image_directory' => 'pool-about',
         'success_message' => 'Section À propos Piscine mise à jour.',
     ];
+
+    protected ?array $extraTextSectionConfig = [
+        'section' => 'pool_after_about',
+        'panel_title' => 'Section après À propos Piscine',
+        'subtitle' => '',
+        'title' => '',
+        'description' => '',
+        'success_message' => 'Section après À propos Piscine mise à jour.',
+    ];
 }
