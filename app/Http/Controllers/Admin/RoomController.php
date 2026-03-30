@@ -23,17 +23,26 @@ class RoomController extends Controller
         $appartmentPageSetting = (object) [
             'title' => 'Our Rooms & Suites',
             'subtitle' => 'Luxury Hotel Experience',
+            'home_title' => 'Chambres et suites',
+            'home_subtitle' => 'Expérience hôtelière',
             'header_image' => 'img/rooms/4.jpg',
         ];
 
         if (Schema::hasTable('appartment_page_settings')) {
+            $defaults = [
+                'title' => 'Our Rooms & Suites',
+                'subtitle' => 'Luxury Hotel Experience',
+                'header_image' => 'img/rooms/4.jpg',
+            ];
+
+            if (Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
+                $defaults['home_title'] = 'Chambres et suites';
+                $defaults['home_subtitle'] = 'Expérience hôtelière';
+            }
+
             $appartmentPageSetting = AppartmentPageSetting::firstOrCreate(
                 ['page' => 'appartements'],
-                [
-                    'title' => 'Our Rooms & Suites',
-                    'subtitle' => 'Luxury Hotel Experience',
-                    'header_image' => 'img/rooms/4.jpg',
-                ]
+                $defaults
             );
         }
 
@@ -55,11 +64,18 @@ class RoomController extends Controller
             ]
         );
 
-        $data = $request->validate([
+        $rules = [
             'title' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'header_image' => ['nullable', 'image', 'max:5120'],
-        ]);
+        ];
+
+        if (Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
+            $rules['home_title'] = ['nullable', 'string', 'max:255'];
+            $rules['home_subtitle'] = ['nullable', 'string', 'max:255'];
+        }
+
+        $data = $request->validate($rules);
 
         if ($request->hasFile('header_image')) {
             if (!empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
@@ -69,11 +85,18 @@ class RoomController extends Controller
             $data['header_image'] = $request->file('header_image')->store('page-headers', 'public');
         }
 
-        $setting->update([
+        $payload = [
             'title' => $data['title'] ?? $setting->title,
             'subtitle' => $data['subtitle'] ?? $setting->subtitle,
             'header_image' => $data['header_image'] ?? $setting->header_image,
-        ]);
+        ];
+
+        if (Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
+            $payload['home_title'] = $data['home_title'] ?? $setting->home_title;
+            $payload['home_subtitle'] = $data['home_subtitle'] ?? $setting->home_subtitle;
+        }
+
+        $setting->update($payload);
 
         return redirect()->route('admin.rooms.index')->with('success', 'En-tête de la page appartements mise à jour.');
     }
@@ -229,6 +252,7 @@ class RoomController extends Controller
         return $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
+            'external_id' => ['nullable', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', $uniqueSlug],
             'price_per_night' => ['nullable', 'numeric', 'min:0'],
             'description' => ['nullable', 'string'],

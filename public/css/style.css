@@ -3958,8 +3958,8 @@ a.box_contents:hover img {
   }
 }
 .parallax_wrapper .img_over {
-  left: -33%;
-  bottom: 5%; /*16*/
+  left: -25%;
+  bottom: 10%; /*16*/
   position: absolute;
   z-index: 99;
 }
@@ -3970,7 +3970,7 @@ a.box_contents:hover img {
 }
 .parallax_wrapper .img_over img {
   border: 4px solid #fff;
-  width: 50%;
+  width: 48%;
   height: auto;
   box-shadow: 10px 10px 26px 0px rgba(0, 0, 0, 0.21);
 }

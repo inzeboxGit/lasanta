@@ -14,6 +14,8 @@ class AppartmentPageSetting extends Model
         'page',
         'title',
         'subtitle',
+        'home_title',
+        'home_subtitle',
         'header_image',
     ];
 }

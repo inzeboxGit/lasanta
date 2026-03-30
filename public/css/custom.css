@@ -5,9 +5,49 @@
   max-width: 82%;
 }
 
+.pinned-image.apartment-list-image {
+  height: 60vh;
+}
+
+.pinned-image.apartment-list-image .apartment-list-image__asset {
+  object-fit: cover;
+  object-position: center center;
+}
+
+a.box_cat_rooms.home-room-card {
+  height: 440px;
+}
+
+a.box_cat_rooms.home-room-card:hover .background-image {
+  transform: scale(1.04);
+}
+
+@media (min-width: 992px) {
+  .about-copy-column {
+    padding-left: 5rem;
+  }
+
+  .about-copy-column .intro {
+    max-width: 34rem;
+    margin-left: auto;
+  }
+}
+
 @media (max-width: 991px) {
+  .pinned-image.apartment-list-image {
+    height: 48vh;
+  }
+
+  a.box_cat_rooms.home-room-card {
+    height: 360px;
+  }
+
   .about-main-media {
     max-width: 100%;
+  }
+
+  .about-copy-column {
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
   }
 }
 

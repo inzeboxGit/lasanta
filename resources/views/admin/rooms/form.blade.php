@@ -59,6 +59,10 @@
             <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $room->subtitle ?? '') }}">
         </div>
         <div class="col-md-4">
+            <label class="form-label">ID associé</label>
+            <input type="text" name="external_id" class="form-control" value="{{ old('external_id', $room->external_id ?? '') }}" placeholder="Ex: APT-102">
+        </div>
+        <div class="col-md-4">
             <label class="form-label">Prix / nuit</label>
             <input type="number" step="0.01" name="price_per_night" class="form-control" value="{{ old('price_per_night', $room->price_per_night ?? '') }}">
         </div>

@@ -69,16 +69,17 @@
                             : ($record->t($field, $selectedLocale) ?? '');
                         $frValue = $record->{$field} ?? '';
                         $isLong = in_array($field, ['description', 'body', 'content', 'excerpt', 'hero_text', 'availability_text'], true);
+                        $useWysiwyg = in_array($field, ($typeConfig['wysiwyg_fields'] ?? []), true);
                     @endphp
                     <div class="col-12">
                         <label class="form-label text-capitalize">{{ str_replace('_', ' ', $field) }}</label>
                         @if($isLong)
-                            <textarea name="fields[{{ $field }}]" class="form-control" rows="5">{{ old('fields.' . $field, $current) }}</textarea>
+                            <textarea name="fields[{{ $field }}]" class="form-control {{ $useWysiwyg ? 'js-tinymce-translation' : '' }}" rows="{{ $useWysiwyg ? 18 : 5 }}">{{ old('fields.' . $field, $current) }}</textarea>
                         @else
                             <input type="text" name="fields[{{ $field }}]" class="form-control" value="{{ old('fields.' . $field, $current) }}">
                         @endif
                         @if($selectedLocale !== 'fr')
-                            <small class="text-muted d-block mt-1">FR source: {{ \Illuminate\Support\Str::limit($frValue, 180) }}</small>
+                            <small class="text-muted d-block mt-1">FR source: {{ \Illuminate\Support\Str::limit(strip_tags($frValue), 180) }}</small>
                         @endif
                     </div>
                 @endforeach
@@ -90,3 +91,25 @@
     </div>
 @endif
 @endsection
+
+@push('scripts')
+    @if($typeConfig && count($typeConfig['wysiwyg_fields'] ?? []) > 0)
+        <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof tinymce === 'undefined' || !document.querySelector('.js-tinymce-translation')) return;
+
+                tinymce.init({
+                    selector: '.js-tinymce-translation',
+                    height: 420,
+                    menubar: false,
+                    branding: false,
+                    plugins: 'lists link table code fullscreen',
+                    toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | alignleft aligncenter alignright alignjustify | link table | code fullscreen',
+                    convert_urls: false,
+                    promotion: false
+                });
+            });
+        </script>
+    @endif
+@endpush

@@ -48,7 +48,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 about-copy-column">
                         <div class="intro">
                             <div class="title mb-3">
                                 <small>{{ method_exists($aboutSectionSetting, 't') ?

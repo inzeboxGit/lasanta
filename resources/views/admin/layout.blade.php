@@ -9,9 +9,12 @@
     <!-- Favicons -->
     <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{{ asset('img/apple-touch-icon-57x57-precomposed.png') }}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{{ asset('img/apple-touch-icon-72x72-precomposed.png') }}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{{ asset('img/apple-touch-icon-114x114-precomposed.png') }}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{{ asset('img/apple-touch-icon-144x144-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
+        href="{{ asset('img/apple-touch-icon-72x72-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
+        href="{{ asset('img/apple-touch-icon-114x114-precomposed.png') }}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
+        href="{{ asset('img/apple-touch-icon-144x144-precomposed.png') }}">
 
     <!-- AdminLTE + Bootstrap via CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
@@ -67,6 +70,7 @@
                 ['label' => 'Piscine', 'route' => route('admin.pool.index'), 'active' => request()->routeIs('admin.pool.*'), 'icon' => 'icon-hotel-swimming_pool'],
                 ['label' => 'Contact', 'route' => route('admin.contact.index'), 'active' => request()->routeIs('admin.contact.*'), 'icon' => 'bi-envelope'],
                 ['label' => 'Actualités', 'route' => route('admin.news.index'), 'active' => request()->routeIs('admin.news.*'), 'icon' => 'bi-megaphone'],
+                ['label' => 'Conditions & Confidentialité', 'route' => route('admin.legal.index'), 'active' => request()->routeIs('admin.legal.*'), 'icon' => 'bi-shield-check'],
             ],
         ],
         [
@@ -77,7 +81,7 @@
                 ['label' => 'Utilisateurs', 'route' => route('admin.users.index'), 'active' => request()->routeIs('admin.users.*'), 'icon' => 'bi-people'],
                 ['label' => 'Paramètres', 'route' => route('admin.settings.index'), 'active' => request()->routeIs('admin.settings.*'), 'icon' => 'bi-gear'],
                 ['label' => 'Traductions', 'route' => route('admin.translations.index'), 'active' => request()->routeIs('admin.translations.*'), 'icon' => 'bi-translate'],
-                ['label' => 'Galerie', 'route' => '#0', 'active' => false, 'icon' => 'bi-images'],
+                // ['label' => 'Galerie', 'route' => '#0', 'active' => false, 'icon' => 'bi-images'],
             ],
         ],
     ];
@@ -111,7 +115,8 @@
                                             <ul class="admin-subnav__list">
                                                 @foreach($item['children'] as $child)
                                                     <li>
-                                                        <a href="{{ $child['route'] }}" class="admin-subnav__link {{ $child['active'] ? 'is-active' : '' }}">
+                                                        <a href="{{ $child['route'] }}"
+                                                            class="admin-subnav__link {{ $child['active'] ? 'is-active' : '' }}">
                                                             <span class="admin-subnav__icon"><i class="{{ $child['icon'] }}"></i></span>
                                                             <span>{{ $child['label'] }}</span>
                                                         </a>

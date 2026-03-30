@@ -112,6 +112,25 @@ Route::get('/', function () {
         ->limit(3)
         ->get();
 
+    $appartmentPageSetting = (object) [
+        'home_title' => null,
+        'home_subtitle' => null,
+    ];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('appartment_page_settings')) {
+        $defaults = [];
+
+        if (\Illuminate\Support\Facades\Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
+            $defaults['home_title'] = 'Chambres et suites';
+            $defaults['home_subtitle'] = 'Expérience hôtelière';
+        }
+
+        $appartmentPageSetting = \App\Models\AppartmentPageSetting::firstOrCreate(
+            ['page' => 'appartements'],
+            $defaults
+        );
+    }
+
     $aboutSectionSetting = (object) [
         'small_title' => 'À PROPOS DE NOUS',
         'title' => 'La Résidence Bella Vista',
@@ -182,7 +201,7 @@ Route::get('/', function () {
         $promoSetting->loadMissing('translations');
     }
 
-    return view('home', compact('heroSetting', 'installations', 'homeNews', 'localComodites', 'homeTestimonials', 'homeVideoSetting', 'testimonialSectionSetting', 'installationSectionSetting', 'aboutSectionSetting', 'promoSetting', 'homeRooms'));
+    return view('home', compact('heroSetting', 'installations', 'homeNews', 'localComodites', 'homeTestimonials', 'homeVideoSetting', 'testimonialSectionSetting', 'installationSectionSetting', 'aboutSectionSetting', 'promoSetting', 'homeRooms', 'appartmentPageSetting'));
 });
 
 Route::get('/contacts', function () {
@@ -220,11 +239,55 @@ Route::get('/contacts', function () {
 Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'send'])->name('contact.send');
 
 Route::get('/termsOfUse', function () {
-    return view('terms-of-use');
+    $locale = app()->getLocale();
+    if (!in_array($locale, ['fr', 'en', 'de', 'it'], true)) {
+        $locale = 'en';
+    }
+
+    $termsHtml = \App\Models\LegalPage::defaultBody(\App\Models\LegalPage::PAGE_TERMS, $locale);
+    $termsPage = null;
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('legal_pages')) {
+        $termsPage = \App\Models\LegalPage::firstOrCreate(
+            ['page' => \App\Models\LegalPage::PAGE_TERMS],
+            [
+                'header_title' => 'Conditions d’utilisations',
+                'header_subtitle' => 'Informations légales',
+                'header_background_color' => '#000000',
+                'body' => \App\Models\LegalPage::defaultBody(\App\Models\LegalPage::PAGE_TERMS),
+            ]
+        );
+        $termsPage->loadMissing('translations');
+        $termsHtml = $termsPage->t('body', $locale) ?: $termsHtml;
+    }
+
+    return view('terms-of-use', compact('termsHtml', 'termsPage'));
 })->name('termsOfUse.index');
 
 Route::get('/privacy', function () {
-    return view('privacy');
+    $locale = app()->getLocale();
+    if (!in_array($locale, ['fr', 'en', 'de', 'it'], true)) {
+        $locale = 'en';
+    }
+
+    $privacyHtml = \App\Models\LegalPage::defaultBody(\App\Models\LegalPage::PAGE_PRIVACY, $locale);
+    $privacyPage = null;
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('legal_pages')) {
+        $privacyPage = \App\Models\LegalPage::firstOrCreate(
+            ['page' => \App\Models\LegalPage::PAGE_PRIVACY],
+            [
+                'header_title' => 'Mentions légales',
+                'header_subtitle' => 'Informations légales',
+                'header_background_color' => '#000000',
+                'body' => \App\Models\LegalPage::defaultBody(\App\Models\LegalPage::PAGE_PRIVACY),
+            ]
+        );
+        $privacyPage->loadMissing('translations');
+        $privacyHtml = $privacyPage->t('body', $locale) ?: $privacyHtml;
+    }
+
+    return view('privacy', compact('privacyHtml', 'privacyPage'));
 })->name('privacy.index');
 
 Route::get('/conditions', function () {
@@ -484,6 +547,8 @@ Route::prefix('admin')->group(function () {
         Route::post('restaurant/extra-text-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateExtraTextSectionSettings'])->name('admin.restaurant.extra-text-section-settings.update');
         Route::get('settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('admin.settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('admin.settings.update');
+        Route::get('legal', [\App\Http\Controllers\Admin\LegalPageController::class, 'index'])->name('admin.legal.index');
+        Route::post('legal', [\App\Http\Controllers\Admin\LegalPageController::class, 'update'])->name('admin.legal.update');
         Route::get('translations', [\App\Http\Controllers\Admin\TranslationController::class, 'index'])->name('admin.translations.index');
         Route::post('translations', [\App\Http\Controllers\Admin\TranslationController::class, 'update'])->name('admin.translations.update');
         Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class)->names('admin.testimonials');

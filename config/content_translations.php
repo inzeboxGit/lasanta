@@ -39,6 +39,78 @@ return [
             'fields' => ['subtitle', 'title', 'hero_text'],
             'display_field' => 'section',
         ],
+        'restaurant_page' => [
+            'label' => 'Restaurant - Header',
+            'class' => \App\Models\LocalAmenitySectionSetting::class,
+            'fields' => ['subtitle', 'title', 'hero_text'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'about_local_amenities',
+            ],
+        ],
+        'restaurant_about' => [
+            'label' => 'Restaurant - À propos',
+            'class' => \App\Models\AboutSectionSetting::class,
+            'fields' => ['small_title', 'title', 'lead', 'description', 'signature'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'restaurant_about',
+            ],
+        ],
+        'restaurant_extra_text' => [
+            'label' => 'Restaurant - Après À propos',
+            'class' => \App\Models\AboutSectionSetting::class,
+            'fields' => ['small_title', 'title', 'description'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'restaurant_after_about',
+            ],
+        ],
+        'restaurant_items' => [
+            'label' => 'Restaurant - Contenu',
+            'class' => \App\Models\LocalAmenity::class,
+            'fields' => ['small_title', 'title', 'description'],
+            'display_field' => 'title',
+            'where' => [
+                'display_context' => \App\Models\LocalAmenity::CONTEXT_RESTAURANT,
+            ],
+        ],
+        'pool_page' => [
+            'label' => 'Piscine - Header',
+            'class' => \App\Models\LocalAmenitySectionSetting::class,
+            'fields' => ['subtitle', 'title', 'hero_text'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'about_pool_amenities',
+            ],
+        ],
+        'pool_about' => [
+            'label' => 'Piscine - À propos',
+            'class' => \App\Models\AboutSectionSetting::class,
+            'fields' => ['small_title', 'title', 'lead', 'description', 'signature'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'pool_about',
+            ],
+        ],
+        'pool_extra_text' => [
+            'label' => 'Piscine - Après À propos',
+            'class' => \App\Models\AboutSectionSetting::class,
+            'fields' => ['small_title', 'title', 'description'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'pool_after_about',
+            ],
+        ],
+        'pool_items' => [
+            'label' => 'Piscine - Contenu',
+            'class' => \App\Models\LocalAmenity::class,
+            'fields' => ['small_title', 'title', 'description'],
+            'display_field' => 'title',
+            'where' => [
+                'display_context' => \App\Models\LocalAmenity::CONTEXT_POOL,
+            ],
+        ],
         'page_headers' => [
             'label' => 'En-têtes de page',
             'class' => \App\Models\PageHeaderSetting::class,
@@ -57,7 +129,14 @@ return [
         'appartment_page' => [
             'label' => 'Page Appartements',
             'class' => \App\Models\AppartmentPageSetting::class,
-            'fields' => ['subtitle', 'title'],
+            'fields' => ['subtitle', 'title', 'home_subtitle', 'home_title'],
+            'display_field' => 'page',
+        ],
+        'legal_pages' => [
+            'label' => 'Conditions & Confidentialité',
+            'class' => \App\Models\LegalPage::class,
+            'fields' => ['header_subtitle', 'header_title', 'body'],
+            'wysiwyg_fields' => ['body'],
             'display_field' => 'page',
         ],
         'site_settings' => [

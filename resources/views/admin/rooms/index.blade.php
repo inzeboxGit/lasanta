@@ -39,6 +39,14 @@
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $appartmentPageSetting->title ?? '') }}">
             </div>
+            <div class="col-md-6">
+                <label class="form-label">Sous-titre de la section accueil</label>
+                <input type="text" name="home_subtitle" class="form-control" value="{{ old('home_subtitle', $appartmentPageSetting->home_subtitle ?? '') }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Titre de la section accueil</label>
+                <input type="text" name="home_title" class="form-control" value="{{ old('home_title', $appartmentPageSetting->home_title ?? '') }}">
+            </div>
             <div class="col-md-4">
                 <label class="form-label">Image header</label>
                 <input type="file" name="header_image" id="appartement_header_image" class="form-control" accept="image/*">
@@ -59,6 +67,7 @@
             <thead>
                 <tr>
                     <th>Titre</th>
+                    <th>ID associé</th>
                     <th>Prix / nuit</th>
                     <th>Statut</th>
                     <th>Créée</th>
@@ -73,6 +82,7 @@
                             <div class="fw-semibold">{{ $room->title }}</div>
                             <div class="text-muted small">{{ $room->slug }}</div>
                         </td>
+                        <td>{{ $room->external_id ?: '-' }}</td>
                         <td>{{ $room->price_per_night ? number_format($room->price_per_night, 2) . ' €' : '-' }}</td>
                         <td>
                             <span class="badge {{ $room->status === 'published' ? 'bg-success' : 'bg-secondary' }}">
@@ -93,7 +103,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted">Aucune chambre</td>
+                        <td colspan="7" class="text-center text-muted">Aucune chambre</td>
                     </tr>
                 @endforelse
             </tbody>

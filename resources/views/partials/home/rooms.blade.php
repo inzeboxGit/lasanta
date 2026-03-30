@@ -1,26 +1,66 @@
 <!-- chambres hotel -->
 @php
-$locale = app()->getLocale();
-$labels = [
-'fr' => ['small' => 'Expérience hôtelière....', 'title' => 'Chambres et suites', 'from' => 'À partir de', 'per_night' =>
-'€/nuit', 'double' => 'Chambres Doubles', 'superior' => 'Chambres Supérieures', 'exclusive' => 'Chambres Exclusives',
-'view_all' => 'Voir toutes les chambres'],
-'en' => ['small' => 'Hotel Experience', 'title' => 'Rooms and Suites', 'from' => 'From', 'per_night' => 'EUR/night',
-'double' => 'Double Rooms', 'superior' => 'Superior Rooms', 'exclusive' => 'Exclusive Rooms', 'view_all' => 'View all
-rooms'],
-'de' => ['small' => 'Hotelerlebnis', 'title' => 'Zimmer und Suiten', 'from' => 'Ab', 'per_night' => 'EUR/Nacht',
-'double' => 'Doppelzimmer', 'superior' => 'Superior-Zimmer', 'exclusive' => 'Exklusive Zimmer', 'view_all' => 'Alle
-Zimmer anzeigen'],
-'it' => ['small' => 'Esperienza hoteliera', 'title' => 'Camere e suite', 'from' => 'Da', 'per_night' => 'EUR/notte',
-'double' => 'Camere doppie', 'superior' => 'Camere superiori', 'exclusive' => 'Camere esclusive', 'view_all' =>
-'Vedi tutte le camere'],
-];
-$ui = $labels[$locale] ?? $labels['en'];
-$homeRooms = $homeRooms ?? collect();
+    $locale = app()->getLocale();
+    $labels = [
+        'fr' => [
+            'small' => 'Expérience hôtelière....',
+            'title' => 'Chambres et suites',
+            'from' => 'À partir de',
+            'per_night' =>
+                '€/nuit',
+            'double' => 'Chambres Doubles',
+            'superior' => 'Chambres Supérieures',
+            'exclusive' => 'Chambres Exclusives',
+            'view_all' => 'Voir toutes les chambres'
+        ],
+        'en' => [
+            'small' => 'Hotel Experience',
+            'title' => 'Rooms and Suites',
+            'from' => 'From',
+            'per_night' => 'EUR/night',
+            'double' => 'Double Rooms',
+            'superior' => 'Superior Rooms',
+            'exclusive' => 'Exclusive Rooms',
+            'view_all' => 'View all
+            rooms'
+        ],
+        'de' => [
+            'small' => 'Hotelerlebnis',
+            'title' => 'Zimmer und Suiten',
+            'from' => 'Ab',
+            'per_night' => 'EUR/Nacht',
+            'double' => 'Doppelzimmer',
+            'superior' => 'Superior-Zimmer',
+            'exclusive' => 'Exklusive Zimmer',
+            'view_all' => 'Alle
+            Zimmer anzeigen'
+        ],
+        'it' => [
+            'small' => 'Esperienza hoteliera',
+            'title' => 'Camere e suite',
+            'from' => 'Da',
+            'per_night' => 'EUR/notte',
+            'double' => 'Camere doppie',
+            'superior' => 'Camere superiori',
+            'exclusive' => 'Camere esclusive',
+            'view_all' =>
+                'Vedi tutte le camere'
+        ],
+    ];
+    $ui = $labels[$locale] ?? $labels['en'];
+    $homeRooms = $homeRooms ?? collect();
+    $sectionSubtitle = isset($appartmentPageSetting) && method_exists($appartmentPageSetting, 't')
+        ? trim((string) ($appartmentPageSetting->t('home_subtitle') ?? ''))
+        : trim((string) ($appartmentPageSetting->home_subtitle ?? ''));
+    $sectionTitle = isset($appartmentPageSetting) && method_exists($appartmentPageSetting, 't')
+        ? trim((string) ($appartmentPageSetting->t('home_title') ?? ''))
+        : trim((string) ($appartmentPageSetting->home_title ?? ''));
+    $sectionSubtitle = $sectionSubtitle !== '' ? $sectionSubtitle : $ui['small'];
+    $sectionTitle = $sectionTitle !== '' ? $sectionTitle : $ui['title'];
 @endphp
 <div class="title mb-3">
-    <small data-cue="slideInUp">{{ $ui['small'] }}</small>
-    <h2 data-cue="slideInUp" data-delay="200">{{ $ui['title'] }}</h2>
+    <small data-cue="slideInUp">{{ $sectionSubtitle }}</small>
+    <h2 data-cue="slideInUp" data-delay="200">{{ $sectionTitle }}</h2>
 </div>
 
 <div class="row justify-content-center add_bottom_90" data-cues="slideInUp" data-delay="300">
@@ -38,7 +78,7 @@ $homeRooms = $homeRooms ?? collect();
                 : '';
         @endphp
         <div class="{{ $columnClass }}">
-            <a href="{{ route('rooms.show', $room->slug) }}" class="box_cat_rooms">
+            <a href="{{ route('rooms.show', $room->slug) }}" class="box_cat_rooms home-room-card">
                 <figure>
                     <div class="background-image" data-background="url({{ $imageSrc }})"></div>
                     <div class="info">
