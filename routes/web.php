@@ -174,31 +174,27 @@ Route::get('/', function () {
     }
 
     $promoSetting = (object) [
-        'is_enabled' => true,
+        'is_enabled' => false,
         'start_date' => null,
         'end_date' => null,
-        'subtitle' => 'Offre speciale',
-        'title' => 'Profitez de votre sejour a Bella Vista',
-        'text' => 'Decouvrez nos meilleures offres et disponibilites en quelques clics.',
-        'button_link' => url('/appartements'),
-        'image' => 'img/home_2.jpg',
+        'subtitle' => '',
+        'title' => '',
+        'text' => '',
+        'button_link' => '',
+        'image' => '',
     ];
 
     if (\Illuminate\Support\Facades\Schema::hasTable('promo_section_settings')) {
-        $promoSetting = \App\Models\PromoSectionSetting::firstOrCreate(
-            ['section' => 'home_promo'],
-            [
-                'is_enabled' => true,
-                'start_date' => null,
-                'end_date' => null,
-                'subtitle' => 'Offre speciale',
-                'title' => 'Profitez de votre sejour a Bella Vista',
-                'text' => 'Decouvrez nos meilleures offres et disponibilites en quelques clics.',
-                'button_link' => url('/appartements'),
-                'image' => 'img/home_2.jpg',
-            ]
-        );
-        $promoSetting->loadMissing('translations');
+        $promoSetting = \App\Models\PromoSectionSetting::query()
+            ->where('section', 'home_promo')
+            ->where('is_enabled', true)
+            ->latest('updated_at')
+            ->latest('id')
+            ->first() ?? $promoSetting;
+
+        if ($promoSetting instanceof \App\Models\PromoSectionSetting) {
+            $promoSetting->loadMissing('translations');
+        }
     }
 
     return view('home', compact('heroSetting', 'installations', 'homeNews', 'localComodites', 'homeTestimonials', 'homeVideoSetting', 'testimonialSectionSetting', 'installationSectionSetting', 'aboutSectionSetting', 'promoSetting', 'homeRooms', 'appartmentPageSetting'));
@@ -539,7 +535,9 @@ Route::prefix('admin')->group(function () {
         Route::post('hero', [\App\Http\Controllers\Admin\HomeHeroController::class, 'update'])->name('admin.hero.update');
         Route::post('hero/video-section', [\App\Http\Controllers\Admin\HomeHeroController::class, 'updateVideoSection'])->name('admin.hero.video-section.update');
         Route::get('promo', [\App\Http\Controllers\Admin\PromoController::class, 'index'])->name('admin.promo.index');
-        Route::post('promo', [\App\Http\Controllers\Admin\PromoController::class, 'update'])->name('admin.promo.update');
+        Route::post('promo', [\App\Http\Controllers\Admin\PromoController::class, 'store'])->name('admin.promo.store');
+        Route::put('promo/{promo}', [\App\Http\Controllers\Admin\PromoController::class, 'update'])->name('admin.promo.update');
+        Route::delete('promo/{promo}', [\App\Http\Controllers\Admin\PromoController::class, 'destroy'])->name('admin.promo.destroy');
         Route::resource('comodites', \App\Http\Controllers\Admin\LocalAmenityController::class)->names('admin.comodites');
         Route::resource('restaurant', \App\Http\Controllers\Admin\RestaurantAmenityController::class)->names('admin.restaurant');
         Route::post('restaurant/section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateSectionSettings'])->name('admin.restaurant.section-settings.update');

@@ -1,12 +1,14 @@
 @php
     $promoImage = $promoSetting->image ?? '';
-    $promoImageSrc = str_starts_with($promoImage, 'img/')
-        ? asset($promoImage)
-        : asset('storage/' . $promoImage);
+    $promoImageSrc = empty($promoImage)
+        ? asset('img/home_2.jpg')
+        : (str_starts_with($promoImage, 'img/')
+            ? asset($promoImage)
+            : asset('storage/' . $promoImage));
 
     $locale = app()->getLocale();
     $buttonLabels = [
-        'fr' => 'Voir l offre',
+        'fr' => 'Voir l\'offre',
         'en' => 'View offer',
         'de' => 'Angebot ansehen',
         'it' => 'Vedi offerta',
@@ -19,15 +21,19 @@
         <span class="popup_close"><i class="bi bi-x"></i></span>
         <div class="row g-0">
             <div class="col-md-5 d-none d-md-flex align-items-center justify-content-center">
-                <figure><img src="{{ $promoImageSrc }}" alt="{{ method_exists($promoSetting, 't') ? $promoSetting->t('title') : ($promoSetting->title ?? '') }}"></figure>
+                <figure><img src="{{ $promoImageSrc }}"
+                        alt="{{ method_exists($promoSetting, 't') ? $promoSetting->t('title') : ($promoSetting->title ?? '') }}">
+                </figure>
             </div>
             <div class="col-md-7">
                 <div class="content">
                     <div class="wrapper">
                         @if(!empty($promoSetting->subtitle ?? null))
-                            <small class="d-block mb-2">{{ method_exists($promoSetting, 't') ? $promoSetting->t('subtitle') : $promoSetting->subtitle }}</small>
+                            <small
+                                class="d-block mb-2">{{ method_exists($promoSetting, 't') ? $promoSetting->t('subtitle') : $promoSetting->subtitle }}</small>
                         @endif
-                        <h3>{{ method_exists($promoSetting, 't') ? $promoSetting->t('title') : ($promoSetting->title ?? '') }}</h3>
+                        <h3>{{ method_exists($promoSetting, 't') ? $promoSetting->t('title') : ($promoSetting->title ?? '') }}
+                        </h3>
                         @if(!empty($promoSetting->text ?? null))
                             <p>{{ method_exists($promoSetting, 't') ? $promoSetting->t('text') : $promoSetting->text }}</p>
                         @endif

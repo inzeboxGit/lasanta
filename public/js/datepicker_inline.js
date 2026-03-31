@@ -20,6 +20,24 @@ $(function() {
 
       //Datepicker V2 embedded - - https://easepick.com/
       $(function () {
+      const element = document.getElementById('date_booking');
+
+      if (!element) {
+        return;
+      }
+
+      const pageLocale = (document.documentElement.lang || 'en').toLowerCase();
+      const pickerLocales = {
+        fr: { lang: 'fr-FR', format: 'DD/MM/YYYY', one: 'nuit', other: 'nuits' },
+        en: { lang: 'en-EN', format: 'MM/DD/YYYY', one: 'night', other: 'nights' },
+        de: { lang: 'de-DE', format: 'DD.MM.YYYY', one: 'Nacht', other: 'Nächte' },
+        it: { lang: 'it-IT', format: 'DD/MM/YYYY', one: 'notte', other: 'notti' },
+      };
+      const localeKey = Object.keys(pickerLocales).find(key => pageLocale.startsWith(key)) || 'en';
+      const pickerLocale = pickerLocales[localeKey];
+      const nightLabel = element.dataset.nightLabel || pickerLocale.one;
+      const nightsLabel = element.dataset.nightsLabel || pickerLocale.other;
+
       /* Booked Dates */
       const DateTime = easepick.DateTime;
       const bookedDates = [
@@ -39,12 +57,12 @@ $(function() {
 
       /* Configuration picker */
       const picker = new easepick.create({
-        element: document.getElementById('date_booking'),
+        element,
         css: [
           'css/daterangepicker_v2.css',
         ],
-        lang: 'en-EN', // Language tags https://www.techonthenet.com/js/language_tags.php
-        format: "DD/MM/YYYY",
+        lang: pickerLocale.lang, // Language tags https://www.techonthenet.com/js/language_tags.php
+        format: pickerLocale.format,
         calendars: 2,
         grid: 2,
         zIndex: 10,
@@ -55,8 +73,8 @@ $(function() {
             return num - 1;
           },
           locale: {
-            one: 'night',
-            other: 'nights',
+            one: nightLabel,
+            other: nightsLabel,
           },
         },
         LockPlugin: {

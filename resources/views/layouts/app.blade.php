@@ -72,7 +72,7 @@
         && (!$promoEndsAt || $today->lessThanOrEqualTo($promoEndsAt));
     $showPromoModal = $isHomePage && isset($promoSetting) && ($promoSetting->is_enabled ?? false) && $promoIsInDateRange;
 @endphp
-<html lang="zxx">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">

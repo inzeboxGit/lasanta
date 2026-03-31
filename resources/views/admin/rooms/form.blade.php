@@ -68,7 +68,7 @@
         </div>
         <div class="col-12">
             <label class="form-label">Description</label>
-            <textarea name="description" class="form-control" rows="5">{{ old('description', $room->description ?? '') }}</textarea>
+            <textarea name="description" class="form-control js-tinymce-room" rows="10">{{ old('description', $room->description ?? '') }}</textarea>
         </div>
         <div class="col-12">
             <label class="form-label">Equipements</label>
@@ -149,8 +149,22 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    if (typeof tinymce !== 'undefined' && document.querySelector('.js-tinymce-room')) {
+        tinymce.init({
+            selector: '.js-tinymce-room',
+            height: 420,
+            menubar: false,
+            branding: false,
+            plugins: 'lists link table code fullscreen',
+            toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | alignleft aligncenter alignright alignjustify | link table | code fullscreen',
+            convert_urls: false,
+            promotion: false
+        });
+    }
+
     document.querySelectorAll('.custom-file-input').forEach(input => {
         input.addEventListener('change', function (e) {
             const label = this.parentElement.querySelector('.file-upload-label span');

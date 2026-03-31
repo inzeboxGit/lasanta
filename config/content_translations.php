@@ -18,14 +18,14 @@ return [
         'home_hero' => [
             'label' => 'Hero accueil',
             'class' => \App\Models\HomeHeroSetting::class,
-            'fields' => ['small_title', 'title'],
+            'fields' => ['small_title', 'title', 'dates_label', 'adults_label', 'children_label', 'search_label'],
             'display_field' => 'section',
         ],
         'promo_section' => [
             'label' => 'Section Promo',
             'class' => \App\Models\PromoSectionSetting::class,
             'fields' => ['subtitle', 'title', 'text'],
-            'display_field' => 'section',
+            'display_field' => 'title',
         ],
         'installation_section' => [
             'label' => 'Section Installations',
@@ -120,7 +120,7 @@ return [
         'contact_page' => [
             'label' => 'Page Contact',
             'class' => \App\Models\PageHeaderSetting::class,
-            'fields' => ['subtitle', 'title', 'availability_small', 'availability_title', 'availability_text'],
+            'fields' => ['subtitle', 'title', 'availability_small', 'availability_title', 'availability_text', 'info_booking_label', 'select_room_label', 'adults_label', 'children_label', 'book_now_label'],
             'display_field' => 'page',
             'where' => [
                 'page' => 'contact',

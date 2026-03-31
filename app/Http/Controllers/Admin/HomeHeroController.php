@@ -15,12 +15,14 @@ class HomeHeroController extends Controller
     {
         $heroSetting = (object) $this->defaultSetting();
         $homeVideoSetting = $this->defaultVideoSettingObject();
+        $locales = config('content_translations.locales', ['fr' => 'Français']);
 
         if (Schema::hasTable('home_hero_settings')) {
             $heroSetting = HomeHeroSetting::firstOrCreate(
                 ['section' => 'home_hero'],
                 $this->defaultSetting()
             );
+            $heroSetting->loadMissing('translations');
         }
 
         if (Schema::hasTable('page_header_settings')) {
@@ -30,7 +32,7 @@ class HomeHeroController extends Controller
             );
         }
 
-        return view('admin.hero.index', compact('heroSetting', 'homeVideoSetting'));
+        return view('admin.hero.index', compact('heroSetting', 'homeVideoSetting', 'locales'));
     }
 
     public function update(Request $request)
@@ -47,6 +49,10 @@ class HomeHeroController extends Controller
         $data = $request->validate([
             'small_title' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
+            'dates_label' => ['nullable', 'string', 'max:255'],
+            'adults_label' => ['nullable', 'string', 'max:255'],
+            'children_label' => ['nullable', 'string', 'max:255'],
+            'search_label' => ['nullable', 'string', 'max:255'],
             'button_link' => ['nullable', 'string', 'max:2048'],
             'button_target' => ['nullable', 'in:_self,_blank'],
             'background_type' => ['required', 'in:video,image'],
@@ -77,6 +83,10 @@ class HomeHeroController extends Controller
             'show_booking_form' => $data['show_booking_form'],
             'small_title' => $data['small_title'] ?? $setting->small_title,
             'title' => $data['title'] ?? $setting->title,
+            'dates_label' => $data['dates_label'] ?? $setting->dates_label,
+            'adults_label' => $data['adults_label'] ?? $setting->adults_label,
+            'children_label' => $data['children_label'] ?? $setting->children_label,
+            'search_label' => $data['search_label'] ?? $setting->search_label,
             'button_link' => $data['button_link'] ?? $setting->button_link,
             'button_target' => $data['button_target'] ?? $setting->button_target,
             'background_type' => $data['background_type'] ?? ($setting->background_type ?? 'video'),
@@ -84,6 +94,20 @@ class HomeHeroController extends Controller
             'youtube_video_url' => array_key_exists('youtube_video_url', $data) ? $data['youtube_video_url'] : $setting->youtube_video_url,
             'background_image' => $data['background_image'] ?? $setting->background_image,
         ]);
+
+        $translatedFields = ['dates_label', 'adults_label', 'children_label', 'search_label'];
+        $translationPayload = $request->input('translations', []);
+        $locales = array_keys(config('content_translations.locales', ['fr' => 'Français']));
+
+        foreach ($translationPayload as $locale => $fields) {
+            if ($locale === 'fr' || ! in_array($locale, $locales, true) || ! is_array($fields)) {
+                continue;
+            }
+
+            foreach ($translatedFields as $field) {
+                $setting->setTranslation($field, $locale, $fields[$field] ?? null);
+            }
+        }
 
         return redirect()->route('admin.hero.index')->with('success', 'Section Hero accueil mise à jour.');
     }
@@ -129,6 +153,10 @@ class HomeHeroController extends Controller
             'show_booking_form' => true,
             'small_title' => '',
             'title' => '',
+            'dates_label' => 'Arrivée / Départ',
+            'adults_label' => 'Adultes',
+            'children_label' => 'Enfants',
+            'search_label' => 'Rechercher',
             'button_link' => '',
             'button_target' => '_self',
             'background_type' => 'video',

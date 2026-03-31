@@ -13,8 +13,12 @@ class ContactPageController extends Controller
     public function index()
     {
         $contactPageSetting = $this->resolveSetting();
+        if (method_exists($contactPageSetting, 'loadMissing')) {
+            $contactPageSetting->loadMissing('translations');
+        }
+        $locales = config('content_translations.locales', ['fr' => 'Français']);
 
-        return view('admin.contact.index', compact('contactPageSetting'));
+        return view('admin.contact.index', compact('contactPageSetting', 'locales'));
     }
 
     public function update(Request $request)
@@ -30,6 +34,11 @@ class ContactPageController extends Controller
             'availability_small' => ['nullable', 'string', 'max:255'],
             'availability_title' => ['nullable', 'string', 'max:255'],
             'availability_text' => ['nullable', 'string'],
+            'info_booking_label' => ['nullable', 'string', 'max:255'],
+            'select_room_label' => ['nullable', 'string', 'max:255'],
+            'adults_label' => ['nullable', 'string', 'max:255'],
+            'children_label' => ['nullable', 'string', 'max:255'],
+            'book_now_label' => ['nullable', 'string', 'max:255'],
             'map_latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'map_longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'header_image' => ['nullable', 'image', 'max:5120'],
@@ -49,10 +58,35 @@ class ContactPageController extends Controller
             'availability_small' => array_key_exists('availability_small', $data) ? $data['availability_small'] : $setting->availability_small,
             'availability_title' => array_key_exists('availability_title', $data) ? $data['availability_title'] : $setting->availability_title,
             'availability_text' => array_key_exists('availability_text', $data) ? $data['availability_text'] : $setting->availability_text,
+            'info_booking_label' => array_key_exists('info_booking_label', $data) ? $data['info_booking_label'] : $setting->info_booking_label,
+            'select_room_label' => array_key_exists('select_room_label', $data) ? $data['select_room_label'] : $setting->select_room_label,
+            'adults_label' => array_key_exists('adults_label', $data) ? $data['adults_label'] : $setting->adults_label,
+            'children_label' => array_key_exists('children_label', $data) ? $data['children_label'] : $setting->children_label,
+            'book_now_label' => array_key_exists('book_now_label', $data) ? $data['book_now_label'] : $setting->book_now_label,
             'map_latitude' => array_key_exists('map_latitude', $data) ? $data['map_latitude'] : $setting->map_latitude,
             'map_longitude' => array_key_exists('map_longitude', $data) ? $data['map_longitude'] : $setting->map_longitude,
             'header_image' => $data['header_image'] ?? $setting->header_image,
         ]);
+
+        $translatedFields = [
+            'info_booking_label',
+            'select_room_label',
+            'adults_label',
+            'children_label',
+            'book_now_label',
+        ];
+        $translationPayload = $request->input('translations', []);
+        $locales = array_keys(config('content_translations.locales', ['fr' => 'Français']));
+
+        foreach ($translationPayload as $locale => $fields) {
+            if ($locale === 'fr' || ! in_array($locale, $locales, true) || ! is_array($fields)) {
+                continue;
+            }
+
+            foreach ($translatedFields as $field) {
+                $setting->setTranslation($field, $locale, $fields[$field] ?? null);
+            }
+        }
 
         return redirect()->route('admin.contact.index')->with('success', 'En-tête de la page contact mise à jour.');
     }
@@ -66,6 +100,11 @@ class ContactPageController extends Controller
             'availability_small' => 'Residence Bella Vista',
             'availability_title' => 'Disponibilité',
             'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
+            'info_booking_label' => 'Infos et réservations',
+            'select_room_label' => 'Sélectionner un appartement',
+            'adults_label' => 'Adultes',
+            'children_label' => 'Enfants',
+            'book_now_label' => 'Réserver maintenant',
             'map_latitude' => 42.6043096,
             'map_longitude' => 8.9295210,
             'header_image' => '',

@@ -21,6 +21,22 @@
 
 	//Datepicker V2 - https://easepick.com/
 	$(function () {
+		const element = document.getElementById('dates');
+
+		if (!element) {
+			return;
+		}
+
+		const pageLocale = (document.documentElement.lang || 'en').toLowerCase();
+		const pickerLocales = {
+			fr: { lang: 'fr-FR', format: 'DD/MM/YYYY', one: 'nuit', other: 'nuits' },
+			en: { lang: 'en-EN', format: 'MM/DD/YYYY', one: 'night', other: 'nights' },
+			de: { lang: 'de-DE', format: 'DD.MM.YYYY', one: 'Nacht', other: 'Nächte' },
+			it: { lang: 'it-IT', format: 'DD/MM/YYYY', one: 'notte', other: 'notti' },
+		};
+		const localeKey = Object.keys(pickerLocales).find(key => pageLocale.startsWith(key)) || 'en';
+		const pickerLocale = pickerLocales[localeKey];
+
 	/* Booked Dates */
 		const DateTime = easepick.DateTime;
 		const bookedDates = [
@@ -40,12 +56,12 @@
 
 		/* Configuration picker */
 		const picker = new easepick.create({
-			element: document.getElementById('dates'),
+			element,
 			css: [
 				'css/daterangepicker_v2.css',
 			],
-			lang: 'en-EN', // Language tags https://www.techonthenet.com/js/language_tags.php
-			format: "MM/DD/YYYY",
+			lang: pickerLocale.lang, // Language tags https://www.techonthenet.com/js/language_tags.php
+			format: pickerLocale.format,
 			calendars: 2,
 			grid: 2,
 			zIndex: 99999,
@@ -55,8 +71,8 @@
 					return num - 1;
 				},
 				locale: {
-					one: 'night',
-					other: 'nights',
+					one: pickerLocale.one,
+					other: pickerLocale.other,
 				},
 			},
 			LockPlugin: {

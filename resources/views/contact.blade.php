@@ -64,6 +64,34 @@
     $availabilityText = method_exists($contactPageSetting, 't')
     ? $contactPageSetting->t('availability_text')
     : ($contactPageSetting->availability_text ?? $ui['availability_text']);
+    $settingTranslation = function (string $field, string $default) use ($contactPageSetting, $locale) {
+    if ($locale === 'fr') {
+    return $contactPageSetting->{$field} ?? $default;
+    }
+
+    if (method_exists($contactPageSetting, 'translations') && $contactPageSetting->relationLoaded('translations')) {
+    $translatedValue = $contactPageSetting->translations
+    ->first(fn ($item) => $item->locale === $locale && $item->field === $field)?->value;
+
+    if (!empty($translatedValue)) {
+    return $translatedValue;
+    }
+    }
+
+    return $default;
+    };
+    $calendarDefaults = [
+    'fr' => ['night' => 'nuit', 'nights' => 'nuits'],
+    'en' => ['night' => 'night', 'nights' => 'nights'],
+    'de' => ['night' => 'Nacht', 'nights' => 'Nächte'],
+    'it' => ['night' => 'notte', 'nights' => 'notti'],
+    ];
+    $infoBookingLabel = $settingTranslation('info_booking_label', $ui['info_booking']);
+    $selectRoomLabel = $settingTranslation('select_room_label', $ui['select_room']);
+    $adultsLabel = $settingTranslation('adults_label', $ui['adults']);
+    $childrenLabel = $settingTranslation('children_label', $ui['children']);
+    $bookNowLabel = $settingTranslation('book_now_label', $ui['book_now']);
+    $calendarUi = $calendarDefaults[$locale] ?? $calendarDefaults['en'];
     $mapLatitude = $contactPageSetting->map_latitude ?? 42.6043096;
     $mapLongitude = $contactPageSetting->map_longitude ?? 8.9295210;
     $mapSrc = 'https://www.google.com/maps?q=' . $mapLatitude . ',' . $mapLongitude . '&z=15&output=embed';
@@ -205,7 +233,7 @@
                     <p class="phone_element no_borders">
                         <a href="tel:{{ $primaryPhoneHref }}">
                             <i class="bi bi-telephone"></i>
-                            <span><em>{{ $ui['info_booking'] }}</em>{{ $primaryPhone ?: '-' }}</span>
+                            <span><em>{{ $infoBookingLabel }}</em>{{ $primaryPhone ?: '-' }}</span>
                         </a>
                     </p>
                 </div>
@@ -214,13 +242,15 @@
                 <div data-cue="slideInUp" data-delay="200">
                     <div class="booking_wrapper">
                         <div class="col-12">
-                            <input type="hidden" id="date_booking" name="date_booking">
+                            <input type="hidden" id="date_booking" name="date_booking"
+                                data-night-label="{{ $calendarUi['night'] }}"
+                                data-nights-label="{{ $calendarUi['nights'] }}">
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="custom_select">
                                     <select class="wide">
-                                        <option selected disabled>{{ $ui['select_room'] }}</option>
+                                        <option selected disabled>{{ $selectRoomLabel }}</option>
                                         @foreach(($rooms ?? collect()) as $room)
                                             <option>{{ method_exists($room, 't') ? $room->t('title') : $room->title }}</option>
                                         @endforeach
@@ -233,7 +263,7 @@
                                         <div class="qty-buttons mb-3 version_2">
                                             <input type="button" value="+" class="qtyplus" name="adults_booking">
                                             <input type="text" name="adults_booking" id="adults_booking" value=""
-                                                class="qty form-control" placeholder="{{ $ui['adults'] }}">
+                                                class="qty form-control" placeholder="{{ $adultsLabel }}">
                                             <input type="button" value="-" class="qtyminus" name="adults_booking">
                                         </div>
                                     </div>
@@ -241,7 +271,7 @@
                                         <div class="mb-3 qty-buttons mb-3 version_2">
                                             <input type="button" value="+" class="qtyplus" name="childs_booking">
                                             <input type="text" name="childs_booking" id="childs_booking" value=""
-                                                class="qty form-control" placeholder="{{ $ui['children'] }}">
+                                                class="qty form-control" placeholder="{{ $childrenLabel }}">
                                             <input type="button" value="-" class="qtyminus" name="childs_booking">
                                         </div>
                                     </div>
@@ -250,7 +280,7 @@
                         </div>
                     </div>
                     <!-- / row -->
-                    <p class="text-end mt-5"><a href="#0" class="btn_1 outline">{{ $ui['book_now'] }}</a></p>
+                    <p class="text-end mt-5"><a href="#0" class="btn_1 outline">{{ $bookNowLabel }}</a></p>
                 </div>
             </div>
             <!-- /col -->

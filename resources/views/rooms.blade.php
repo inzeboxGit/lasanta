@@ -97,6 +97,10 @@
                     $rowClass = $isEven ? 'row justify-content-end' : 'row justify-content-start';
                     $infoClass = $isEven ? 'box_item_info float-lg-end' : 'box_item_info';
                     $imageSrc = $room->main_image ? asset('storage/' . $room->main_image) : asset('img/rooms/1.jpg');
+                    $roomDescription = method_exists($room, 't')
+                        ? ($room->t('description') ?: $ui['room_desc_fallback'])
+                        : ($room->description ?: $ui['room_desc_fallback']);
+                    $roomExcerpt = \Illuminate\Support\Str::limit(trim(strip_tags($roomDescription)), 180);
                 @endphp
                 <div class="row_list_version_1">
                     <div class="pinned-image rounded_container pinned-image--medium apartment-list-image">
@@ -115,7 +119,7 @@
                                 <h2>{{ method_exists($room, 't') ? $room->t('title') : $room->title }}</h2>
                                 <p
                                     style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
-                                    {{ method_exists($room, 't') ? ($room->t('description') ?: $ui['room_desc_fallback']) : ($room->description ?: $ui['room_desc_fallback']) }}
+                                    {{ $roomExcerpt }}
                                 </p>
                                 <div class="facilities clearfix">
                                     <ul>

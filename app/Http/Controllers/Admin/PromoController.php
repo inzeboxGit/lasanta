@@ -5,36 +5,81 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PromoSectionSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 class PromoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $promos = collect();
         $promoSetting = (object) $this->defaultSetting();
+        $editingPromo = null;
 
         if (Schema::hasTable('promo_section_settings')) {
-            $promoSetting = PromoSectionSetting::firstOrCreate(
-                ['section' => 'home_promo'],
-                $this->defaultSetting()
-            );
+            $promos = PromoSectionSetting::query()
+                ->latest('is_enabled')
+                ->latest('updated_at')
+                ->latest('id')
+                ->get();
+
+            $editingPromo = $request->filled('edit')
+                ? PromoSectionSetting::find($request->integer('edit'))
+                : null;
+
+            if ($editingPromo) {
+                $promoSetting = $editingPromo;
+            }
         }
 
-        return view('admin.promo.index', compact('promoSetting'));
+        return view('admin.promo.index', compact('promoSetting', 'promos', 'editingPromo'));
     }
 
-    public function update(Request $request)
+    public function store(Request $request)
     {
         if (!Schema::hasTable('promo_section_settings')) {
             return redirect()->route('admin.promo.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
 
-        $setting = PromoSectionSetting::firstOrCreate(
-            ['section' => 'home_promo'],
-            $this->defaultSetting()
-        );
+        $data = $this->validatePromo($request);
+        $setting = new PromoSectionSetting();
+        $setting->section = 'home_promo';
 
+        $this->fillPromo($setting, $data, $request);
+
+        return redirect()->route('admin.promo.index')->with('success', 'Promo créée.');
+    }
+
+    public function update(Request $request, PromoSectionSetting $promo)
+    {
+        if (!Schema::hasTable('promo_section_settings')) {
+            return redirect()->route('admin.promo.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $data = $this->validatePromo($request);
+        $this->fillPromo($promo, $data, $request);
+
+        return redirect()->route('admin.promo.index', ['edit' => $promo->id])->with('success', 'Promo mise à jour.');
+    }
+
+    public function destroy(PromoSectionSetting $promo)
+    {
+        if (!Schema::hasTable('promo_section_settings')) {
+            return redirect()->route('admin.promo.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        if (!empty($promo->image) && !str_starts_with($promo->image, 'img/')) {
+            Storage::disk('public')->delete($promo->image);
+        }
+
+        $promo->delete();
+
+        return redirect()->route('admin.promo.index')->with('success', 'Promo supprimée.');
+    }
+
+    private function validatePromo(Request $request): array
+    {
         $data = $request->validate([
             'subtitle' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
@@ -47,33 +92,49 @@ class PromoController extends Controller
 
         $data['is_enabled'] = $request->boolean('is_enabled');
 
+        return $data;
+    }
+
+    private function fillPromo(PromoSectionSetting $setting, array $data, Request $request): void
+    {
+        $previousImage = $setting->image;
+
         if ($request->hasFile('image')) {
-            if (!empty($setting->image) && !str_starts_with($setting->image, 'img/')) {
-                Storage::disk('public')->delete($setting->image);
+            if (!empty($previousImage) && !str_starts_with($previousImage, 'img/')) {
+                Storage::disk('public')->delete($previousImage);
             }
 
             $data['image'] = $request->file('image')->store('promo', 'public');
         }
 
-        $setting->update([
-            'is_enabled' => $data['is_enabled'],
-            'start_date' => $data['start_date'] ?? null,
-            'end_date' => $data['end_date'] ?? null,
-            'subtitle' => $data['subtitle'] ?? $setting->subtitle,
-            'title' => $data['title'] ?? $setting->title,
-            'text' => $data['text'] ?? $setting->text,
-            'button_link' => $data['button_link'] ?? $setting->button_link,
-            'image' => $data['image'] ?? $setting->image,
-        ]);
+        DB::transaction(function () use ($setting, $data) {
+            $setting->fill([
+                'section' => $setting->section ?: 'home_promo',
+                'is_enabled' => $data['is_enabled'],
+                'start_date' => $data['start_date'] ?? null,
+                'end_date' => $data['end_date'] ?? null,
+                'subtitle' => $data['subtitle'] ?? '',
+                'title' => $data['title'] ?? '',
+                'text' => $data['text'] ?? '',
+                'button_link' => $data['button_link'] ?? '',
+                'image' => $data['image'] ?? ($setting->image ?? ''),
+            ]);
+            $setting->save();
 
-        return redirect()->route('admin.promo.index')->with('success', 'Section promo mise à jour.');
+            if ($setting->is_enabled) {
+                PromoSectionSetting::query()
+                    ->whereKeyNot($setting->id)
+                    ->where('is_enabled', true)
+                    ->update(['is_enabled' => false]);
+            }
+        });
     }
 
     private function defaultSetting(): array
     {
         return [
             'section' => 'home_promo',
-            'is_enabled' => true,
+            'is_enabled' => false,
             'start_date' => null,
             'end_date' => null,
             'subtitle' => '',

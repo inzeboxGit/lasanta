@@ -19,6 +19,13 @@ class PageHeaderSetting extends Model
         'availability_small',
         'availability_title',
         'availability_text',
+        'info_booking_label',
+        'select_room_label',
+        'adults_label',
+        'children_label',
+        'book_now_label',
+        'calendar_night_label',
+        'calendar_nights_label',
         'map_latitude',
         'map_longitude',
     ];

@@ -5,34 +5,123 @@
 @section('content')
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h1 class="h3 mb-1">Section promo</h1>
-        <div class="text-muted">Gerer le modal promotionnel affiche sur la page d'accueil</div>
+        <h1 class="h3 mb-1">Promotions</h1>
+        <div class="text-muted">Créer plusieurs promos et garder une seule promo active sur la page d'accueil</div>
     </div>
-    <a href="{{ url('/') }}" class="btn btn-outline-secondary" target="_blank" rel="noopener">Voir la home</a>
+    <div class="d-flex gap-2">
+        <a href="{{ route('admin.promo.index') }}" class="btn btn-outline-primary">Nouvelle promo</a>
+        <a href="{{ url('/') }}" class="btn btn-outline-secondary" target="_blank" rel="noopener">Voir la home</a>
+    </div>
 </div>
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
+@if($errors->any())
+    <div class="alert alert-danger">
+        {{ $errors->first() }}
+    </div>
+@endif
+
+<div class="alert alert-info">
+    Une seule promotion peut être active à la fois. Si vous activez une promo, toutes les autres seront automatiquement désactivées.
+</div>
+
+<div class="admin-card p-4 mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 mb-0">Promos existantes</h2>
+        <small class="text-muted">Une seule promo peut être active à la fois.</small>
+    </div>
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Titre</th>
+                    <th>Période</th>
+                    <th>Statut</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($promos as $promo)
+                    <tr>
+                        <td>{{ $promo->id }}</td>
+                        <td>
+                            <div class="fw-semibold">{{ $promo->title ?: ('Promo #' . $promo->id) }}</div>
+                            @if(!empty($promo->subtitle))
+                                <small class="text-muted">{{ $promo->subtitle }}</small>
+                            @endif
+                        </td>
+                        <td>
+                            @if($promo->start_date || $promo->end_date)
+                                {{ $promo->start_date?->format('d/m/Y') ?: 'Immédiat' }}
+                                -
+                                {{ $promo->end_date?->format('d/m/Y') ?: 'Sans fin' }}
+                            @else
+                                <span class="text-muted">Sans limite</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($promo->is_enabled)
+                                <span class="badge bg-success">Active</span>
+                            @else
+                                <span class="badge bg-secondary">Inactive</span>
+                            @endif
+                        </td>
+                        <td class="text-end">
+                            <div class="d-inline-flex gap-2">
+                                <a href="{{ route('admin.promo.index', ['edit' => $promo->id]) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                                <form action="{{ route('admin.promo.destroy', $promo) }}" method="post" onsubmit="return confirm('Supprimer cette promo ?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">Aucune promo enregistrée.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
 <div class="admin-card p-4">
-    <form action="{{ route('admin.promo.update') }}" method="post" enctype="multipart/form-data">
+    @php
+        $imageSrc = null;
+        if (!empty($promoSetting->image ?? null)) {
+            $imageSrc = str_starts_with($promoSetting->image, 'img/')
+                ? asset($promoSetting->image)
+                : asset('storage/' . $promoSetting->image);
+        }
+        $isEditing = $editingPromo !== null;
+    @endphp
+
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 mb-0">{{ $isEditing ? 'Modifier la promo' : 'Créer une promo' }}</h2>
+        @if($isEditing)
+            <small class="text-muted">Promo #{{ $editingPromo->id }}</small>
+        @endif
+    </div>
+
+    <form action="{{ $isEditing ? route('admin.promo.update', $editingPromo) : route('admin.promo.store') }}" method="post" enctype="multipart/form-data">
         @csrf
-        @php
-            $imageSrc = null;
-            if (!empty($promoSetting->image ?? null)) {
-                $imageSrc = str_starts_with($promoSetting->image, 'img/')
-                    ? asset($promoSetting->image)
-                    : asset('storage/' . $promoSetting->image);
-            }
-        @endphp
+        @if($isEditing)
+            @method('PUT')
+        @endif
 
         <div class="row g-3">
             <div class="col-12">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="promo_enabled" name="is_enabled" value="1" {{ old('is_enabled', $promoSetting->is_enabled ?? false) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="promo_enabled">Afficher le modal promo sur la home</label>
+                    <label class="form-check-label" for="promo_enabled">Activer cette promo sur la home</label>
                 </div>
+                <div class="form-text">Si cette promo est activée, toutes les autres seront désactivées automatiquement.</div>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Sous-titre</label>
@@ -67,7 +156,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <button type="submit" class="btn btn-primary">{{ $isEditing ? 'Mettre à jour' : 'Créer la promo' }}</button>
             </div>
         </div>
     </form>

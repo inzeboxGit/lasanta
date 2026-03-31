@@ -40,6 +40,52 @@
                     <label class="form-check-label" for="hero_show_booking_form">Afficher le formulaire de recherche</label>
                 </div>
             </div>
+            <div class="col-12">
+                <label class="form-label d-block mb-2">Libellés du formulaire de recherche</label>
+                <ul class="nav nav-tabs" id="booking-labels-tabs" role="tablist">
+                    @foreach($locales as $localeKey => $localeLabel)
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="booking-labels-{{ $localeKey }}-tab" data-bs-toggle="tab" data-bs-target="#booking-labels-{{ $localeKey }}" type="button" role="tab" aria-controls="booking-labels-{{ $localeKey }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                {{ $localeLabel }}
+                            </button>
+                        </li>
+                    @endforeach
+                </ul>
+                <div class="tab-content border border-top-0 rounded-bottom p-3" id="booking-labels-content">
+                    @foreach($locales as $localeKey => $localeLabel)
+                        @php
+                            $isFrench = $localeKey === 'fr';
+                            $valueFor = function (string $field) use ($heroSetting, $localeKey, $isFrench) {
+                                if ($isFrench) {
+                                    return old($field, $heroSetting->{$field} ?? '');
+                                }
+
+                                return old('translations.' . $localeKey . '.' . $field, $heroSetting->t($field, $localeKey) ?? '');
+                            };
+                        @endphp
+                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="booking-labels-{{ $localeKey }}" role="tabpanel" aria-labelledby="booking-labels-{{ $localeKey }}-tab" tabindex="0">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Arrivée / Départ</label>
+                                    <input type="text" name="{{ $isFrench ? 'dates_label' : 'translations[' . $localeKey . '][dates_label]' }}" class="form-control" value="{{ $valueFor('dates_label') }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Adultes</label>
+                                    <input type="text" name="{{ $isFrench ? 'adults_label' : 'translations[' . $localeKey . '][adults_label]' }}" class="form-control" value="{{ $valueFor('adults_label') }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Enfants</label>
+                                    <input type="text" name="{{ $isFrench ? 'children_label' : 'translations[' . $localeKey . '][children_label]' }}" class="form-control" value="{{ $valueFor('children_label') }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Rechercher</label>
+                                    <input type="text" name="{{ $isFrench ? 'search_label' : 'translations[' . $localeKey . '][search_label]' }}" class="form-control" value="{{ $valueFor('search_label') }}">
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
             <div class="col-md-4">
                 <label class="form-label">Petit titre</label>
                 <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $heroSetting->small_title ?? '') }}">
