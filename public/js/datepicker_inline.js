@@ -29,7 +29,7 @@ $(function() {
       const pageLocale = (document.documentElement.lang || 'en').toLowerCase();
       const pickerLocales = {
         fr: { lang: 'fr-FR', format: 'DD/MM/YYYY', one: 'nuit', other: 'nuits' },
-        en: { lang: 'en-EN', format: 'MM/DD/YYYY', one: 'night', other: 'nights' },
+        en: { lang: 'en-US', format: 'MM/DD/YYYY', one: 'night', other: 'nights' },
         de: { lang: 'de-DE', format: 'DD.MM.YYYY', one: 'Nacht', other: 'Nächte' },
         it: { lang: 'it-IT', format: 'DD/MM/YYYY', one: 'notte', other: 'notti' },
       };

@@ -97,9 +97,10 @@ a.box_cat_rooms.home-room-card:hover .background-image {
 }
 
 .popup_wrapper .popup_content.newsletter_c figure img {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
+  width: auto;
+  max-width: none;
+  margin: 0 auto;
 }
 
 .popup_wrapper .popup_content.newsletter_c .content .wrapper small {
@@ -107,4 +108,14 @@ a.box_cat_rooms.home-room-card:hover .background-image {
   letter-spacing: 0.12em;
   font-weight: 600;
   color: #978667;
+}
+
+html[lang^="fr"] .calendar > .header .month-name {
+  text-transform: capitalize;
+}
+
+.calendars:not(.grid-1) .calendar>.header .month-name {
+  order: 2;
+  text-align: center;
+  text-transform: capitalize !important;
 }
