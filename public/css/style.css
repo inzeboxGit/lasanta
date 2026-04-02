@@ -1335,8 +1335,20 @@ ul > li:first-child .image {
   .main-menu #mainNav ul li a:hover, .main-menu #mainNav ul li a.active {
     color: #978667 !important;
   }
-  .main-menu #mainNav ul li a.btn_1 {
-    background-color: transparent;
+  .main-menu #mainNav ul li a.btn_1.nav-book-btn {
+    display: flex;
+    width: 100%;
+    margin-top: 8px;
+    padding: 0.85rem 1rem !important;
+    background-color: #978667;
+    color: #fff !important;
+    border-radius: 999px;
+    text-transform: none;
+  }
+  .main-menu #mainNav ul li a.btn_1.nav-book-btn:hover,
+  .main-menu #mainNav ul li a.btn_1.nav-book-btn.active {
+    background-color: #4b514d;
+    color: #fff !important;
   }
   .main-menu.show {
     transform: translateX(0);

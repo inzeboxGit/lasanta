@@ -72,9 +72,17 @@ a.box_cat_rooms.home-room-card:hover .background-image {
   justify-content: center;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.5);
+  overflow: hidden;
   background: transparent;
   font-size: 16px;
   line-height: 1;
+}
+
+.lang-picker__flag-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .lang-picker__menu {
@@ -94,6 +102,53 @@ a.box_cat_rooms.home-room-card:hover .background-image {
 
 .lang-picker__item {
   text-decoration: none;
+}
+
+.lang-picker__item.is-active .lang-picker__flag,
+.lang-picker-mobile__item.is-active .lang-picker__flag {
+  border-color: #978667;
+}
+
+.lang-picker-mobile {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .main-menu #mainNav ul li.nav-lang-item .lang-picker {
+    display: none;
+  }
+
+  .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0 14px;
+  }
+
+  .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile__item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile__item .lang-picker__flag {
+    border-color: rgba(151, 134, 103, 0.5);
+  }
+
+  .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile__code {
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    color: #333;
+  }
 }
 
 .popup_wrapper .popup_content.newsletter_c figure img {
