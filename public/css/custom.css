@@ -2,175 +2,203 @@
 /* Your custom styles below */
 /*============================================================================================*/
 .about-main-media {
-  max-width: 82%;
+    max-width: 82%;
 }
 
 .pinned-image.apartment-list-image {
-  height: 60vh;
+    height: 60vh;
 }
 
 .pinned-image.apartment-list-image .apartment-list-image__asset {
-  object-fit: cover;
-  object-position: center center;
+    object-fit: cover;
+    object-position: center center;
 }
 
 a.box_cat_rooms.home-room-card {
-  height: 440px;
+    height: 440px;
 }
 
 a.box_cat_rooms.home-room-card:hover .background-image {
-  transform: scale(1.04);
+    transform: scale(1.04);
 }
 
 @media (min-width: 992px) {
-  .about-copy-column {
-    padding-left: 5rem;
-  }
+    .about-copy-column {
+        padding-left: 5rem;
+    }
 
-  .about-copy-column .intro {
-    max-width: 34rem;
-    margin-left: auto;
-  }
+    .about-copy-column .intro {
+        max-width: 34rem;
+        margin-left: auto;
+    }
 }
 
 @media (max-width: 991px) {
-  .pinned-image.apartment-list-image {
-    height: 48vh;
-  }
+    .pinned-image.apartment-list-image {
+        height: 48vh;
+    }
 
-  a.box_cat_rooms.home-room-card {
-    height: 360px;
-  }
+    a.box_cat_rooms.home-room-card {
+        height: 360px;
+    }
 
-  .about-main-media {
-    max-width: 100%;
-  }
+    .about-main-media {
+        max-width: 100%;
+    }
 
-  .about-copy-column {
-    padding-left: calc(var(--bs-gutter-x) * 0.5);
-  }
+    .about-copy-column {
+        padding-left: calc(var(--bs-gutter-x) * 0.5);
+    }
 }
 
 .lang-picker {
-  position: relative;
+    position: relative;
 }
 
 .lang-picker__summary {
-  list-style: none;
-  cursor: pointer;
+    list-style: none;
+    cursor: pointer;
 }
 
 .lang-picker__summary::-webkit-details-marker {
-  display: none;
+    display: none;
 }
 
 .lang-picker__flag {
-  width: 28px;
-  height: 28px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  overflow: hidden;
-  background: transparent;
-  font-size: 16px;
-  line-height: 1;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+    background: transparent;
+    font-size: 16px;
+    line-height: 1;
 }
 
 .lang-picker__flag-image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    display: block;
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+    border-radius: 20px;
 }
 
 .lang-picker__menu {
-  position: absolute;
-  right: 0;
-  top: 34px;
-  display: none;
-  gap: 8px;
-  padding: 8px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.25);
+    position: absolute;
+    right: 0;
+    top: 34px;
+    display: none;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.25);
 }
 
 .lang-picker[open] .lang-picker__menu {
-  display: inline-flex;
+    display: inline-flex;
 }
 
 .lang-picker__item {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .lang-picker__item.is-active .lang-picker__flag,
 .lang-picker-mobile__item.is-active .lang-picker__flag {
-  border-color: #978667;
+    border-color: #978667;
 }
 
 .lang-picker-mobile {
-  display: none;
+    display: none;
 }
 
 @media (max-width: 991px) {
-  .main-menu #mainNav ul li.nav-lang-item .lang-picker {
-    display: none;
-  }
+    .main-menu #mainNav ul li.nav-lang-item .lang-picker {
+        display: none;
+    }
 
-  .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin: 6px 0 14px;
-  }
+    .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin: 6px 0 14px;
+    }
 
-  .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile__item {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    text-decoration: none;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
+    .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile__item {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        text-decoration: none;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 
-  .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile__item .lang-picker__flag {
-    border-color: rgba(151, 134, 103, 0.5);
-  }
+    .main-menu
+        #mainNav
+        ul
+        li.nav-lang-item
+        .lang-picker-mobile__item
+        .lang-picker__flag {
+        border-color: rgba(151, 134, 103, 0.5);
+    }
 
-  .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile__code {
-    font-size: 11px;
-    line-height: 1;
-    letter-spacing: 0.04em;
-    font-weight: 600;
-    color: #333;
-  }
+    .main-menu #mainNav ul li.nav-lang-item .lang-picker-mobile__code {
+        font-size: 11px;
+        line-height: 1;
+        letter-spacing: 0.04em;
+        font-weight: 600;
+        color: #333;
+    }
 }
 
 .popup_wrapper .popup_content.newsletter_c figure img {
-  height: 100%;
-  width: auto;
-  max-width: none;
-  margin: 0 auto;
+    height: 100%;
+    width: auto;
+    max-width: none;
+    margin: 0 auto;
 }
 
 .popup_wrapper .popup_content.newsletter_c .content .wrapper small {
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-weight: 600;
-  color: #978667;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    color: #978667;
 }
 
 html[lang^="fr"] .calendar > .header .month-name {
-  text-transform: capitalize;
+    text-transform: capitalize;
 }
 
-.calendars:not(.grid-1) .calendar>.header .month-name {
-  order: 2;
-  text-align: center;
-  text-transform: capitalize !important;
+.calendars:not(.grid-1) .calendar > .header .month-name {
+    order: 2;
+    text-align: center;
+    text-transform: capitalize !important;
+}
+
+.carousel_item_centered .item img {
+    height: 440px;
+    object-fit: cover;
+    object-position: center;
+}
+
+@media (max-width: 991px) {
+    .carousel_item_centered .item img {
+        height: 360px;
+    }
+}
+
+
+/* style mobile size  */
+@media (max-width: 991px) {
+    .parallax_wrapper.about-main-media .img_over {
+        right: auto !important;
+        left: 5% !important;
+        text-align: left !important;
+    }
 }

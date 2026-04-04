@@ -41,10 +41,8 @@
     @endphp
 
     <main>
-        <div class="hero medium-height jarallax" data-jarallax data-speed="0.2">
-            <img class="jarallax-img" src="{{ asset('img/hero_home_2.jpg') }}" alt="Privacy Policy">
-            <div class="wrapper opacity-mask d-flex align-items-center justify-content-center text-center animate_hero"
-                data-opacity-mask="{{ $backgroundColor }}">
+        <div class="hero medium-height" style="background-color: {{ $privacyPage->header_background_color ?? '#000000' }};">
+            <div class="wrapper d-flex align-items-center justify-content-center text-center animate_hero">
                 <div class="container">
                     <small class="slide-animated one">{{ $heroSubtitle }}</small>
                     <h1 class="slide-animated two">{{ $heroTitle }}</h1>

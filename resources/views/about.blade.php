@@ -20,7 +20,7 @@
                 <div class="container">
                     <small class="slide-animated one">{{ method_exists($localAmenitySectionSetting, 't') ?
         $localAmenitySectionSetting->t('subtitle') : ($localAmenitySectionSetting->subtitle ?? '')
-                        }}</small>
+                            }}</small>
                     <h1 class="slide-animated two">{{ method_exists($localAmenitySectionSetting, 't') ?
         $localAmenitySectionSetting->t('title') : ($localAmenitySectionSetting->title ?? '') }}
                     </h1>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="bg_white">
-            <div class="container margin_120_95">
+            <div class="container margin_120_0">
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-6">
                         <div class="parallax_wrapper about-main-media">
