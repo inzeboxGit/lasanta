@@ -19,6 +19,7 @@ class PromoSectionSetting extends Model
         'title',
         'text',
         'button_link',
+        'button_text',
         'image',
     ];
 

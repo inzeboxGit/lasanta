@@ -181,6 +181,7 @@ Route::get('/', function () {
         'title' => '',
         'text' => '',
         'button_link' => '',
+        'button_text' => '',
         'image' => '',
     ];
 

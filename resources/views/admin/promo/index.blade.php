@@ -144,9 +144,17 @@
                 <input type="date" name="end_date" class="form-control" value="{{ old('end_date', !empty($promoSetting->end_date) ? \Illuminate\Support\Carbon::parse($promoSetting->end_date)->format('Y-m-d') : '') }}">
                 <div class="form-text">Laissez vide pour afficher sans limite de date.</div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-4">
                 <label class="form-label">Lien du bouton</label>
                 <input type="text" name="button_link" class="form-control" value="{{ old('button_link', $promoSetting->button_link ?? '') }}" placeholder="https://... ou /appartements">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Texte du bouton</label>
+                <input type="text" name="button_text" class="form-control" value="{{ old('button_text', $promoSetting->button_text ?? '') }}" placeholder="Voir l'offre">
+                <div class="form-text">Ce texte sera affiché dans le modal (traduisible dans l'onglet Traductions).</div>
+                @if($isEditing)
+                    <a href="{{ route('admin.translations.index', ['type' => 'promo_section', 'id' => $editingPromo->id, 'locale' => 'en']) }}" class="btn btn-sm btn-outline-secondary mt-2">Modifier les traductions du bouton</a>
+                @endif
             </div>
             <div class="col-md-4">
                 <label class="form-label">Image</label>

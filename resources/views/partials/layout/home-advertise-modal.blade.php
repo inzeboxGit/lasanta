@@ -13,7 +13,10 @@
         'de' => 'Angebot ansehen',
         'it' => 'Vedi offerta',
     ];
-    $buttonLabel = $buttonLabels[$locale] ?? $buttonLabels['en'];
+    $defaultButtonLabel = $buttonLabels[$locale] ?? $buttonLabels['en'];
+    $buttonLabel = method_exists($promoSetting, 't')
+        ? ($promoSetting->t('button_text') ?: $defaultButtonLabel)
+        : (($promoSetting->button_text ?? '') ?: $defaultButtonLabel);
 @endphp
 
 <div class="popup_wrapper" aria-hidden="true">

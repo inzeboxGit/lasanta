@@ -25,7 +25,7 @@ return [
         'promo_section' => [
             'label' => 'Section Promo',
             'class' => \App\Models\PromoSectionSetting::class,
-            'fields' => ['subtitle', 'title', 'text'],
+            'fields' => ['subtitle', 'title', 'text', 'button_text'],
             'wysiwyg_fields' => ['text'],
             'display_field' => 'title',
         ],

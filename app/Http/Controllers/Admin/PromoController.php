@@ -85,6 +85,7 @@ class PromoController extends Controller
             'title' => ['nullable', 'string', 'max:255'],
             'text' => ['nullable', 'string'],
             'button_link' => ['nullable', 'string', 'max:2048'],
+            'button_text' => ['nullable', 'string', 'max:255'],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'image' => ['nullable', 'image', 'max:5120'],
@@ -117,6 +118,7 @@ class PromoController extends Controller
                 'title' => $data['title'] ?? '',
                 'text' => $data['text'] ?? '',
                 'button_link' => $data['button_link'] ?? '',
+                'button_text' => $data['button_text'] ?? '',
                 'image' => $data['image'] ?? ($setting->image ?? ''),
             ]);
             $setting->save();
@@ -141,6 +143,7 @@ class PromoController extends Controller
             'title' => '',
             'text' => '',
             'button_link' => '',
+            'button_text' => '',
             'image' => '',
         ];
     }
