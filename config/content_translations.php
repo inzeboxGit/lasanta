@@ -13,6 +13,7 @@ return [
             'label' => 'Section À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'lead', 'description', 'signature'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'section',
         ],
         'home_hero' => [
@@ -25,6 +26,7 @@ return [
             'label' => 'Section Promo',
             'class' => \App\Models\PromoSectionSetting::class,
             'fields' => ['subtitle', 'title', 'text'],
+            'wysiwyg_fields' => ['text'],
             'display_field' => 'title',
         ],
         'installation_section' => [
@@ -52,6 +54,7 @@ return [
             'label' => 'Restaurant - À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'lead', 'description', 'signature'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'section',
             'where' => [
                 'section' => 'restaurant_about',
@@ -61,6 +64,7 @@ return [
             'label' => 'Restaurant - Après À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'description'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'section',
             'where' => [
                 'section' => 'restaurant_after_about',
@@ -70,6 +74,7 @@ return [
             'label' => 'Restaurant - Contenu',
             'class' => \App\Models\LocalAmenity::class,
             'fields' => ['small_title', 'title', 'description'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'title',
             'where' => [
                 'display_context' => \App\Models\LocalAmenity::CONTEXT_RESTAURANT,
@@ -88,6 +93,7 @@ return [
             'label' => 'Piscine - À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'lead', 'description', 'signature'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'section',
             'where' => [
                 'section' => 'pool_about',
@@ -97,6 +103,7 @@ return [
             'label' => 'Piscine - Après À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'description'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'section',
             'where' => [
                 'section' => 'pool_after_about',
@@ -106,6 +113,7 @@ return [
             'label' => 'Piscine - Contenu',
             'class' => \App\Models\LocalAmenity::class,
             'fields' => ['small_title', 'title', 'description'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'title',
             'where' => [
                 'display_context' => \App\Models\LocalAmenity::CONTEXT_POOL,
@@ -149,30 +157,35 @@ return [
             'label' => 'Installations / Équipements',
             'class' => \App\Models\Amenity::class,
             'fields' => ['title', 'description'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'title',
         ],
         'local_amenities' => [
             'label' => 'Commodités locales',
             'class' => \App\Models\LocalAmenity::class,
             'fields' => ['small_title', 'title', 'description'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'title',
         ],
         'rooms' => [
             'label' => 'Chambres',
             'class' => \App\Models\Room::class,
             'fields' => ['title', 'subtitle', 'description'],
+            'wysiwyg_fields' => ['description'],
             'display_field' => 'title',
         ],
         'news' => [
             'label' => 'Actualités',
             'class' => \App\Models\News::class,
             'fields' => ['title', 'excerpt', 'body'],
+            'wysiwyg_fields' => ['excerpt', 'body'],
             'display_field' => 'title',
         ],
         'testimonials' => [
             'label' => 'Témoignages',
             'class' => \App\Models\Testimonial::class,
             'fields' => ['name', 'content'],
+            'wysiwyg_fields' => ['content'],
             'display_field' => 'name',
         ],
     ],

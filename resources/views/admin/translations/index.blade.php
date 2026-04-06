@@ -68,7 +68,7 @@
                             ? ($record->{$field} ?? '')
                             : ($record->t($field, $selectedLocale) ?? '');
                         $frValue = $record->{$field} ?? '';
-                        $isLong = in_array($field, ['description', 'body', 'content', 'excerpt', 'hero_text', 'availability_text'], true);
+                        $isLong = in_array($field, ['description', 'body', 'content', 'excerpt', 'hero_text', 'availability_text', 'text'], true);
                         $useWysiwyg = in_array($field, ($typeConfig['wysiwyg_fields'] ?? []), true);
                     @endphp
                     <div class="col-12">
