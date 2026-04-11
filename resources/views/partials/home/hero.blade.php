@@ -90,7 +90,7 @@
             <iframe class="hero-background-embed" src="{{ $heroYoutubeEmbedSrc }}" title="Hero background video"
                 allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" tabindex="-1"></iframe>
         @else
-            <video class="hero-background-video" autoplay loop muted playsinline poster="{{ $heroBackgroundSrc }}">
+            <video class="hero-background-video" autoplay loop muted playsinline preload="auto">
                 <source src="{{ $heroVideoSrc }}">
             </video>
         @endif
