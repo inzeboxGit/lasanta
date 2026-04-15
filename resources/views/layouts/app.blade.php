@@ -84,7 +84,7 @@
     </title>
 
     <!-- Favicons-->
-    <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{{ asset('img/apple-touch-icon-57x57-precomposed.png') }}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
         href="{{ asset('img/apple-touch-icon-72x72-precomposed.png') }}">
@@ -124,8 +124,8 @@
                 <div class="col-4">
                     <a href="{{ url('/') }}" class="logo_normal"><img src="{{ asset('img/logo.png') }}" width="135"
                             alt=""></a>
-                    <a href="{{ url('/') }}" class="logo_sticky"><img src="{{ asset('img/logo_sticky.png') }}" width="155"
-                            alt=""></a>
+                    <a href="{{ url('/') }}" class="logo_sticky"><img src="{{ asset('img/logo_sticky.png') }}"
+                            width="155" alt=""></a>
                 </div>
                 <div class="col-8">
                     <div class="main-menu">
@@ -168,18 +168,18 @@
         <script src="{{ asset('js/modal_popup.js') }}"></script>
     @endif
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const header = document.querySelector('header.no_sticky_header');
+        document.addEventListener('DOMContentLoaded', function () {
+            const header = document.querySelector('header.no_sticky_header');
 
-        if (!header) return;
+            if (!header) return;
 
-        const syncHeaderState = function () {
-            header.classList.toggle('is-scrolled', window.scrollY > 10);
-        };
+            const syncHeaderState = function () {
+                header.classList.toggle('is-scrolled', window.scrollY > 10);
+            };
 
-        window.addEventListener('scroll', syncHeaderState, { passive: true });
-        syncHeaderState();
-    });
+            window.addEventListener('scroll', syncHeaderState, { passive: true });
+            syncHeaderState();
+        });
     </script>
     @stack('scripts')
 

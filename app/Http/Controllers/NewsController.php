@@ -44,6 +44,16 @@ class NewsController extends Controller
         abort_unless($news->status === 'published', 404);
         $news->loadMissing('translations');
 
-        return view('news.show', compact('news'));
+        $nextNews = News::where('status', 'published')
+            ->where('published_at', '<', $news->published_at)
+            ->orderByDesc('published_at')
+            ->first();
+
+        $prevNews = News::where('status', 'published')
+            ->where('published_at', '>', $news->published_at)
+            ->orderBy('published_at')
+            ->first();
+
+        return view('news.show', compact('news', 'nextNews', 'prevNews'));
     }
 }

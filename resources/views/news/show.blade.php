@@ -3,15 +3,15 @@
 @section('content')
 <main>
 
-    @php
-        $locale = app()->getLocale();
-        $labels = [
-            'fr' => ['by' => 'par', 'next' => 'Actualité suivante'],
-            'en' => ['by' => 'by', 'next' => 'Next news'],
-            'de' => ['by' => 'von', 'next' => 'Nächste Neuigkeit'],
-            'it' => ['by' => 'di', 'next' => 'Notizia successiva'],
-        ];
-        $ui = $labels[$locale] ?? $labels['en'];
+	    @php
+	        $locale = app()->getLocale();
+	        $labels = [
+	            'fr' => ['by' => 'par', 'prev' => 'Actualité précédente', 'back' => 'Toutes les actualités', 'next' => 'Actualité suivante'],
+	            'en' => ['by' => 'by', 'prev' => 'Previous news', 'back' => 'All news', 'next' => 'Next news'],
+	            'de' => ['by' => 'von', 'prev' => 'Vorherige Neuigkeit', 'back' => 'Alle Neuigkeiten', 'next' => 'Nächste Neuigkeit'],
+	            'it' => ['by' => 'di', 'prev' => 'Notizia precedente', 'back' => 'Tutte le notizie', 'next' => 'Notizia successiva'],
+	        ];
+	        $ui = $labels[$locale] ?? $labels['en'];
 
         $heroSrc = null;
         if (!empty($news->hero_image)) {
@@ -60,18 +60,41 @@
                     } else {
                         $coverSrc = asset('img/blog_in.jpg');
                     }
-                @endphp
-                <figure><img src="{{ $coverSrc }}" alt="" class="img-fluid"></figure>
-            </div>
-            <div class="col-lg-8">
-                <div class="box_contents_in">
-                    <small><span></span></small>
-                    @if(method_exists($news, 't') ? $news->t('body') : $news->body)
-                        <!-- <h2 class="mb-4">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</h2> -->
-                        <p>{!! nl2br(e(method_exists($news, 't') ? $news->t('body') : $news->body)) !!}</p>
-                    @endif
-                </div>
-                <p class="text-center mt-5"><a href="{{ url('/news') }}" class="btn_1 outline">{{ $ui['next'] }}</a></p>
+	                @endphp
+	                <figure><img src="{{ $coverSrc }}" alt="" class="img-fluid"></figure>
+	            </div>
+	            <div class="col-lg-8">
+	                <div class="box_contents_in"><small><span></span></small></div>
+	                <p class="text-center mt-5 d-flex justify-content-center gap-3">
+
+    {{-- Précédente --}}
+    @if($prevNews)
+        <a href="{{ route('news.show', $prevNews) }}" class="btn_1 outline">
+            ← {{ $ui['prev'] }}
+        </a>
+    @else
+        <span class="btn_1 outline disabled" style="opacity:0.4; cursor:not-allowed; pointer-events:none;">
+            ← {{ $ui['prev'] }}
+        </span>
+    @endif
+
+    {{-- Retour à la liste --}}
+    <a href="{{ url('/news') }}" class="btn_1">
+        {{ $ui['back'] }}
+    </a>
+
+    {{-- Suivante --}}
+    @if($nextNews)
+        <a href="{{ route('news.show', $nextNews) }}" class="btn_1 outline">
+            {{ $ui['next'] }} →
+        </a>
+    @else
+        <span class="btn_1 outline disabled" style="opacity:0.4; cursor:not-allowed; pointer-events:none;">
+            {{ $ui['next'] }} →
+        </span>
+    @endif
+
+</p>
             </div>
         </div>
         <!--/row -->
