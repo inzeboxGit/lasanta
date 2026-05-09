@@ -45,3 +45,66 @@ if (! function_exists('public_storage_is_available')) {
         return is_dir($publicStoragePath);
     }
 }
+
+if (! function_exists('current_front_theme')) {
+    function current_front_theme(): string
+    {
+        $defaultTheme = 'default';
+        $siteSetting = null;
+
+        if (app()->bound('view')) {
+            $siteSetting = app('view')->shared('siteSetting');
+        }
+
+        $theme = is_object($siteSetting) ? ($siteSetting->front_theme ?? null) : null;
+        $theme = is_string($theme) ? strtolower(trim($theme)) : '';
+
+        if ($theme === '' || ! preg_match('/^[a-z0-9_-]+$/', $theme)) {
+            return $defaultTheme;
+        }
+
+        return $theme;
+    }
+}
+
+if (! function_exists('themed_view_name')) {
+    function themed_view_name(string $view): string
+    {
+        $theme = current_front_theme();
+
+        if ($theme !== 'default') {
+            $themedView = 'themes.' . $theme . '.' . ltrim($view, '.');
+
+            if (view()->exists($themedView)) {
+                return $themedView;
+            }
+        }
+
+        return $view;
+    }
+}
+
+if (! function_exists('themed_view')) {
+    function themed_view(string $view, array $data = [], array $mergeData = [])
+    {
+        return view(themed_view_name($view), $data, $mergeData);
+    }
+}
+
+if (! function_exists('theme_asset')) {
+    function theme_asset(string $path): string
+    {
+        $normalizedPath = ltrim($path, '/');
+        $theme = current_front_theme();
+
+        if ($theme !== 'default') {
+            $themedPath = 'themes/' . $theme . '/' . $normalizedPath;
+
+            if (is_file(public_path($themedPath))) {
+                return asset($themedPath);
+            }
+        }
+
+        return asset($normalizedPath);
+    }
+}

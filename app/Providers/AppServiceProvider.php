@@ -35,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
             'whatsapp_url' => '',
             'twitter_url' => '',
             'default_locale' => config('app.locale', 'fr'),
+            'front_theme' => 'default',
             'maintenance_enabled' => false,
             'maintenance_message' => 'Le site est temporairement indisponible pour cause de mise a jour.' . PHP_EOL . 'Merci de revenir un peu plus tard.',
             'footer_background_image' => '',
@@ -55,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
                     'whatsapp_url' => '',
                     'twitter_url' => '',
                     'default_locale' => config('app.locale', 'fr'),
+                    'front_theme' => 'default',
                     'maintenance_enabled' => false,
                     'footer_background_image' => '',
                 ];
@@ -69,6 +71,10 @@ class AppServiceProvider extends ServiceProvider
 
                 if (! Schema::hasColumn('site_settings', 'default_locale')) {
                     unset($defaults['default_locale']);
+                }
+
+                if (! Schema::hasColumn('site_settings', 'front_theme')) {
+                    unset($defaults['front_theme']);
                 }
 
                 if (! Schema::hasColumn('site_settings', 'footer_background_image')) {

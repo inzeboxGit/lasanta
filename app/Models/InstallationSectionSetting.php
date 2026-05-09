@@ -14,5 +14,6 @@ class InstallationSectionSetting extends Model
         'section',
         'title',
         'subtitle',
+        'description',
     ];
 }

@@ -19,6 +19,7 @@
     <!-- AdminLTE + Bootstrap via CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('themes/lasanta/css/plugins/font-awesome-pro.css') }}">
     <link rel="stylesheet" href="{{ asset('css/vendors.min.css') }}">
 
     <!-- Admin custom assets -->
@@ -48,15 +49,17 @@
                     'active' => request()->routeIs('admin.hero.*')
                         || request()->routeIs('admin.installations.*')
                         || request()->routeIs('admin.promo.*')
+                        || request()->routeIs('admin.services.*')
                         || request()->routeIs('admin.about.*')
                         || request()->routeIs('admin.testimonials.*')
                         || request()->routeIs('admin.comodites.*'),
                     'children' => [
                         ['label' => 'Hero accueil', 'route' => route('admin.hero.index'), 'active' => request()->routeIs('admin.hero.*'), 'icon' => 'bi-play-circle'],
-                        ['label' => 'Installations', 'route' => route('admin.installations.index'), 'active' => request()->routeIs('admin.installations.*'), 'icon' => 'icon-hotel-reception'],
                         ['label' => 'À propos', 'route' => route('admin.about.index'), 'active' => request()->routeIs('admin.about.*'), 'icon' => 'bi-info-circle'],
-                        ['label' => 'Promo', 'route' => route('admin.promo.index'), 'active' => request()->routeIs('admin.promo.*'), 'icon' => 'bi-ticket-perforated'],
-                        ['label' => 'Commodités', 'route' => route('admin.comodites.index'), 'active' => request()->routeIs('admin.comodites.*'), 'icon' => 'bi-geo-alt'],
+                        ['label' => 'Services (Equipements)', 'route' => route('admin.installations.index'), 'active' => request()->routeIs('admin.installations.*'), 'icon' => 'icon-hotel-reception'],
+                        ['label' => 'Offres spéciales', 'route' => route('admin.promo.index'), 'active' => request()->routeIs('admin.promo.*'), 'icon' => 'bi-ticket-perforated'],
+                        ['label' => 'Services', 'route' => route('admin.services.index'), 'active' => request()->routeIs('admin.services.*'), 'icon' => 'bi-grid-3x2-gap'],
+                        ['label' => 'Activités', 'route' => route('admin.comodites.index'), 'active' => request()->routeIs('admin.comodites.*'), 'icon' => 'bi-geo-alt'],
                         ['label' => 'Témoignages', 'route' => route('admin.testimonials.index'), 'active' => request()->routeIs('admin.testimonials.*'), 'icon' => 'bi-chat-quote'],
                     ],
                 ],
@@ -70,6 +73,7 @@
                 ['label' => 'Piscine', 'route' => route('admin.pool.index'), 'active' => request()->routeIs('admin.pool.*'), 'icon' => 'icon-hotel-swimming_pool'],
                 ['label' => 'Contact', 'route' => route('admin.contact.index'), 'active' => request()->routeIs('admin.contact.*'), 'icon' => 'bi-envelope'],
                 ['label' => 'Actualités', 'route' => route('admin.news.index'), 'active' => request()->routeIs('admin.news.*'), 'icon' => 'bi-megaphone'],
+                ['label' => 'FAQ', 'route' => route('admin.faqs.index'), 'active' => request()->routeIs('admin.faqs.*'), 'icon' => 'bi-question-circle'],
                 ['label' => 'Conditions & Confidentialité', 'route' => route('admin.legal.index'), 'active' => request()->routeIs('admin.legal.*'), 'icon' => 'bi-shield-check'],
             ],
         ],
@@ -175,6 +179,55 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
     <script src="{{ asset('xyres/admin/js/admin.js') }}"></script>
     @stack('scripts')
+
+    {{-- Custom file inputs --}}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('input[type="file"].form-control').forEach(function (input) {
+            var defaultLabel = input.multiple ? 'Choisir des fichiers' : 'Choisir un fichier';
+            var hint = input.accept && input.accept.includes('image') ? 'JPG, PNG, WEBP recommandé' : 'Sélectionner un fichier';
+
+            // Wrap input
+            var wrapper = document.createElement('label');
+            wrapper.className = 'custom-file-upload';
+            wrapper.setAttribute('for', input.id || '');
+
+            var icon = document.createElement('span');
+            icon.className = 'custom-file-upload__icon';
+            icon.innerHTML = '<i class="fas fa-image"></i>';
+
+            var text = document.createElement('span');
+            text.className = 'custom-file-upload__text';
+
+            var labelSpan = document.createElement('span');
+            labelSpan.className = 'custom-file-upload__label';
+            labelSpan.textContent = defaultLabel;
+
+            var hintSpan = document.createElement('span');
+            hintSpan.className = 'custom-file-upload__hint';
+            hintSpan.textContent = hint;
+
+            text.appendChild(labelSpan);
+            text.appendChild(hintSpan);
+            wrapper.appendChild(icon);
+            wrapper.appendChild(text);
+
+            input.parentNode.insertBefore(wrapper, input);
+            wrapper.appendChild(input);
+
+            // Update label on change
+            input.addEventListener('change', function () {
+                if (input.files && input.files.length > 0) {
+                    labelSpan.textContent = input.multiple
+                        ? input.files.length + ' fichier(s) sélectionné(s)'
+                        : input.files[0].name;
+                } else {
+                    labelSpan.textContent = defaultLabel;
+                }
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>

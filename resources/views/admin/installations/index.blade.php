@@ -29,6 +29,10 @@
                 <input type="text" name="title" class="form-control" value="{{ old('title', $sectionSetting->title ?? '') }}">
             </div>
             <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea name="description" class="form-control" rows="3">{{ old('description', $sectionSetting->description ?? '') }}</textarea>
+            </div>
+            <div class="col-12">
                 <button class="btn btn-primary" type="submit">Mettre à jour</button>
             </div>
         </div>
@@ -96,6 +100,6 @@
 </div>
 
 <div class="mt-3">
-    {{ $installations->links() }}
+    {{ $installations->links('pagination::bootstrap-5') }}
 </div>
 @endsection

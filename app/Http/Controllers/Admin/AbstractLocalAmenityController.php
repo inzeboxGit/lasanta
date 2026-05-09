@@ -26,19 +26,38 @@ abstract class AbstractLocalAmenityController extends Controller
     protected ?array $sectionSettingConfig = null;
     protected ?array $aboutSectionConfig = null;
     protected ?array $extraTextSectionConfig = null;
+    protected ?array $secondaryExtraSectionConfig = null;
 
-    public function index()
+    public function index(Request $request)
     {
-        $comodites = LocalAmenity::forDisplayContext($this->displayContext)
+        $categoryFilter = trim((string) $request->query('category', ''));
+        $baseQuery = LocalAmenity::forDisplayContext($this->displayContext);
+
+        $categoryOptions = (clone $baseQuery)
+            ->whereNotNull('title')
+            ->where('title', '!=', '')
+            ->distinct()
+            ->orderBy('title')
+            ->pluck('title');
+
+        if ($categoryFilter !== '') {
+            $baseQuery->where('title', $categoryFilter);
+        }
+
+        $comodites = $baseQuery
             ->orderBy('sort_order')
             ->orderBy('id')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return view('admin.comodites.index', $this->viewData([
             'comodites' => $comodites,
+            'categoryOptions' => $categoryOptions,
+            'activeCategoryFilter' => $categoryFilter,
             'sectionSetting' => $this->resolveSectionSetting(),
             'aboutSectionSetting' => $this->resolveAboutSectionSetting(),
             'extraTextSectionSetting' => $this->resolveExtraTextSectionSetting(),
+            'secondaryExtraSectionSetting' => $this->resolveSecondaryExtraSectionSetting(),
         ]));
     }
 
@@ -91,14 +110,26 @@ abstract class AbstractLocalAmenityController extends Controller
         }
 
         $setting = $this->resolveAboutSectionSetting();
+        $mainImageDimensions = $this->aboutSectionImageDimensions('main_image', 600, 730);
+        $overlayImageDimensions = $this->aboutSectionImageDimensions('overlay_image', 600, 830);
         $data = $request->validate([
             'small_title' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
             'lead' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'signature' => ['nullable', 'string', 'max:255'],
-            'main_image' => ['nullable', 'image', 'max:5120'],
-            'overlay_image' => ['nullable', 'image', 'max:5120'],
+            'main_image' => [
+                'nullable',
+                'image',
+                'max:5120',
+                "dimensions:width={$mainImageDimensions['width']},height={$mainImageDimensions['height']}",
+            ],
+            'overlay_image' => [
+                'nullable',
+                'image',
+                'max:5120',
+                "dimensions:width={$overlayImageDimensions['width']},height={$overlayImageDimensions['height']}",
+            ],
         ]);
 
         if ($request->hasFile('main_image')) {
@@ -106,7 +137,12 @@ abstract class AbstractLocalAmenityController extends Controller
                 Storage::disk('public')->delete($setting->main_image);
             }
 
-            $data['main_image'] = $this->storeResizedImage($request->file('main_image'), $this->aboutSectionConfig['image_directory'] ?? 'about', 600, 730);
+            $data['main_image'] = $this->storeResizedImage(
+                $request->file('main_image'),
+                $this->aboutSectionConfig['image_directory'] ?? 'about',
+                $mainImageDimensions['width'],
+                $mainImageDimensions['height']
+            );
         }
 
         if ($request->hasFile('overlay_image')) {
@@ -114,7 +150,12 @@ abstract class AbstractLocalAmenityController extends Controller
                 Storage::disk('public')->delete($setting->overlay_image);
             }
 
-            $data['overlay_image'] = $this->storeResizedImage($request->file('overlay_image'), $this->aboutSectionConfig['image_directory'] ?? 'about', 600, 830);
+            $data['overlay_image'] = $this->storeResizedImage(
+                $request->file('overlay_image'),
+                $this->aboutSectionConfig['image_directory'] ?? 'about',
+                $overlayImageDimensions['width'],
+                $overlayImageDimensions['height']
+            );
         }
 
         $setting->update([
@@ -141,16 +182,72 @@ abstract class AbstractLocalAmenityController extends Controller
         }
 
         $setting = $this->resolveExtraTextSectionSetting();
+        $extraImageDimensions = $this->extraTextSectionImageDimensions(800, 1200);
         $data = $request->validate([
             'subtitle' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'image_one' => $this->supportsExtraTextSectionImages()
+                ? ['nullable', 'image', 'max:5120', "dimensions:width={$extraImageDimensions['width']},height={$extraImageDimensions['height']}"]
+                : ['nullable'],
+            'image_two' => $this->supportsExtraTextSectionImages()
+                ? ['nullable', 'image', 'max:5120', "dimensions:width={$extraImageDimensions['width']},height={$extraImageDimensions['height']}"]
+                : ['nullable'],
+            'image_three' => $this->supportsExtraTextSectionImages()
+                ? ['nullable', 'image', 'max:5120', "dimensions:width={$extraImageDimensions['width']},height={$extraImageDimensions['height']}"]
+                : ['nullable'],
         ]);
+
+        if ($this->supportsExtraTextSectionImages()) {
+            $imageDirectory = $this->extraTextSectionConfig['image_directory'] ?? 'extra-text';
+
+            if ($request->hasFile('image_one')) {
+                if (! empty($setting->main_image) && ! str_starts_with($setting->main_image, 'img/')) {
+                    Storage::disk('public')->delete($setting->main_image);
+                }
+
+                $data['main_image'] = $this->storeResizedImage(
+                    $request->file('image_one'),
+                    $imageDirectory,
+                    $extraImageDimensions['width'],
+                    $extraImageDimensions['height']
+                );
+            }
+
+            if ($request->hasFile('image_two')) {
+                if (! empty($setting->overlay_image) && ! str_starts_with($setting->overlay_image, 'img/')) {
+                    Storage::disk('public')->delete($setting->overlay_image);
+                }
+
+                $data['overlay_image'] = $this->storeResizedImage(
+                    $request->file('image_two'),
+                    $imageDirectory,
+                    $extraImageDimensions['width'],
+                    $extraImageDimensions['height']
+                );
+            }
+
+            if ($request->hasFile('image_three')) {
+                if (! empty($setting->third_image) && ! str_starts_with($setting->third_image, 'img/')) {
+                    Storage::disk('public')->delete($setting->third_image);
+                }
+
+                $data['third_image'] = $this->storeResizedImage(
+                    $request->file('image_three'),
+                    $imageDirectory,
+                    $extraImageDimensions['width'],
+                    $extraImageDimensions['height']
+                );
+            }
+        }
 
         $setting->update([
             'small_title' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->small_title,
             'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
             'description' => array_key_exists('description', $data) ? $data['description'] : $setting->description,
+            'main_image' => $data['main_image'] ?? $setting->main_image,
+            'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
+            'third_image' => $data['third_image'] ?? $setting->third_image,
         ]);
 
         return redirect()->route($this->indexRouteName())
@@ -160,6 +257,75 @@ abstract class AbstractLocalAmenityController extends Controller
     public function create()
     {
         return view('admin.comodites.create', $this->viewData());
+    }
+
+    public function updateSecondaryExtraSectionSettings(Request $request)
+    {
+        abort_unless($this->hasSecondaryExtraSectionSettings(), 404);
+
+        if (! Schema::hasTable('about_section_settings')) {
+            return redirect()->route($this->indexRouteName())
+                ->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = $this->resolveSecondaryExtraSectionSetting();
+        $mainImageDimensions = $this->secondaryExtraSectionImageDimensions('main_image', 1920, 1080);
+        $overlayImageDimensions = $this->secondaryExtraSectionImageDimensions('overlay_image', 1920, 1080);
+
+        $data = $request->validate([
+            'title' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'main_image' => [
+                'nullable',
+                'image',
+                'max:5120',
+                "dimensions:width={$mainImageDimensions['width']},height={$mainImageDimensions['height']}",
+            ],
+            'overlay_image' => [
+                'nullable',
+                'image',
+                'max:5120',
+                "dimensions:width={$overlayImageDimensions['width']},height={$overlayImageDimensions['height']}",
+            ],
+        ]);
+
+        $imageDirectory = $this->secondaryExtraSectionConfig['image_directory'] ?? 'secondary-extra';
+
+        if ($request->hasFile('main_image')) {
+            if (! empty($setting->main_image) && ! str_starts_with($setting->main_image, 'img/')) {
+                Storage::disk('public')->delete($setting->main_image);
+            }
+
+            $data['main_image'] = $this->storeResizedImage(
+                $request->file('main_image'),
+                $imageDirectory,
+                $mainImageDimensions['width'],
+                $mainImageDimensions['height']
+            );
+        }
+
+        if ($request->hasFile('overlay_image')) {
+            if (! empty($setting->overlay_image) && ! str_starts_with($setting->overlay_image, 'img/')) {
+                Storage::disk('public')->delete($setting->overlay_image);
+            }
+
+            $data['overlay_image'] = $this->storeResizedImage(
+                $request->file('overlay_image'),
+                $imageDirectory,
+                $overlayImageDimensions['width'],
+                $overlayImageDimensions['height']
+            );
+        }
+
+        $setting->update([
+            'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
+            'description' => array_key_exists('description', $data) ? $data['description'] : $setting->description,
+            'main_image' => $data['main_image'] ?? $setting->main_image,
+            'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
+        ]);
+
+        return redirect()->route($this->indexRouteName())
+            ->with('success', $this->secondaryExtraSectionConfig['success_message'] ?? "Section complémentaire {$this->itemLabelSingular} mise à jour.");
     }
 
     public function store(Request $request)
@@ -261,6 +427,15 @@ abstract class AbstractLocalAmenityController extends Controller
                     'enabled' => $this->hasExtraTextSectionSettings(),
                     'title' => $this->extraTextSectionConfig['panel_title'] ?? '',
                     'route' => $this->extraTextSectionSettingsRouteName(),
+                    'show_images' => $this->supportsExtraTextSectionImages(),
+                    'image_dimensions' => $this->extraTextSectionImageDimensions(800, 1200),
+                ],
+                'secondary_extra_section' => [
+                    'enabled' => $this->hasSecondaryExtraSectionSettings(),
+                    'title' => $this->secondaryExtraSectionConfig['panel_title'] ?? '',
+                    'route' => $this->secondaryExtraSectionSettingsRouteName(),
+                    'main_image_dimensions' => $this->secondaryExtraSectionImageDimensions('main_image', 1920, 1080),
+                    'overlay_image_dimensions' => $this->secondaryExtraSectionImageDimensions('overlay_image', 1920, 1080),
                 ],
             ],
         ], $extra);
@@ -335,6 +510,29 @@ abstract class AbstractLocalAmenityController extends Controller
         return $this->extraTextSectionConfig !== null;
     }
 
+    protected function resolveSecondaryExtraSectionSetting(): object
+    {
+        if (! $this->hasSecondaryExtraSectionSettings()) {
+            return (object) [];
+        }
+
+        $defaults = $this->secondaryExtraSectionDefaults();
+
+        if (Schema::hasTable('about_section_settings')) {
+            return AboutSectionSetting::firstOrCreate(
+                ['section' => $this->secondaryExtraSectionConfig['section']],
+                $defaults
+            );
+        }
+
+        return (object) $defaults;
+    }
+
+    protected function hasSecondaryExtraSectionSettings(): bool
+    {
+        return $this->secondaryExtraSectionConfig !== null;
+    }
+
     protected function aboutSectionDefaults(): array
     {
         return [
@@ -358,6 +556,7 @@ abstract class AbstractLocalAmenityController extends Controller
             'signature' => '',
             'main_image' => '',
             'overlay_image' => '',
+            'third_image' => '',
         ];
     }
 
@@ -371,9 +570,62 @@ abstract class AbstractLocalAmenityController extends Controller
         ];
     }
 
+    protected function secondaryExtraSectionDefaults(): array
+    {
+        return [
+            'small_title' => '',
+            'title' => $this->secondaryExtraSectionConfig['title'] ?? '',
+            'lead' => '',
+            'description' => $this->secondaryExtraSectionConfig['description'] ?? '',
+            'signature' => '',
+            'main_image' => '',
+            'overlay_image' => '',
+            'third_image' => '',
+        ];
+    }
+
     protected function supportsHeroText(): bool
     {
         return (bool) ($this->sectionSettingConfig['supports_hero_text'] ?? false);
+    }
+
+    protected function supportsExtraTextSectionImages(): bool
+    {
+        return (bool) ($this->extraTextSectionConfig['supports_images'] ?? false);
+    }
+
+    protected function extraTextSectionImageDimensions(int $defaultWidth, int $defaultHeight): array
+    {
+        $configured = $this->extraTextSectionConfig['image_dimensions'] ?? null;
+
+        if (! is_array($configured)) {
+            return ['width' => $defaultWidth, 'height' => $defaultHeight];
+        }
+
+        $width = (int) ($configured['width'] ?? $defaultWidth);
+        $height = (int) ($configured['height'] ?? $defaultHeight);
+
+        return [
+            'width' => $width > 0 ? $width : $defaultWidth,
+            'height' => $height > 0 ? $height : $defaultHeight,
+        ];
+    }
+
+    protected function secondaryExtraSectionImageDimensions(string $key, int $defaultWidth, int $defaultHeight): array
+    {
+        $configured = $this->secondaryExtraSectionConfig["{$key}_dimensions"] ?? null;
+
+        if (! is_array($configured)) {
+            return ['width' => $defaultWidth, 'height' => $defaultHeight];
+        }
+
+        $width = (int) ($configured['width'] ?? $defaultWidth);
+        $height = (int) ($configured['height'] ?? $defaultHeight);
+
+        return [
+            'width' => $width > 0 ? $width : $defaultWidth,
+            'height' => $height > 0 ? $height : $defaultHeight,
+        ];
     }
 
     protected function validatedData(Request $request): array
@@ -448,6 +700,30 @@ abstract class AbstractLocalAmenityController extends Controller
         return $this->hasExtraTextSectionSettings()
             ? "{$this->routePrefix}.extra-text-section-settings.update"
             : null;
+    }
+
+    protected function secondaryExtraSectionSettingsRouteName(): ?string
+    {
+        return $this->hasSecondaryExtraSectionSettings()
+            ? "{$this->routePrefix}.secondary-extra-section-settings.update"
+            : null;
+    }
+
+    protected function aboutSectionImageDimensions(string $key, int $defaultWidth, int $defaultHeight): array
+    {
+        $configured = $this->aboutSectionConfig["{$key}_dimensions"] ?? null;
+
+        if (! is_array($configured)) {
+            return ['width' => $defaultWidth, 'height' => $defaultHeight];
+        }
+
+        $width = (int) ($configured['width'] ?? $defaultWidth);
+        $height = (int) ($configured['height'] ?? $defaultHeight);
+
+        return [
+            'width' => $width > 0 ? $width : $defaultWidth,
+            'height' => $height > 0 ? $height : $defaultHeight,
+        ];
     }
 
     protected function storeResizedImage(UploadedFile $file, string $directory, int $width, int $height): string

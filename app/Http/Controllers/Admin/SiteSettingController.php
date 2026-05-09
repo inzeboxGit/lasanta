@@ -14,6 +14,7 @@ class SiteSettingController extends Controller
     {
         $siteSetting = $this->defaultSetting();
         $locales = config('content_translations.locales', ['fr' => 'Français']);
+        $frontThemes = $this->availableFrontThemes();
         $supportsFooterBackgroundImage = Schema::hasTable('site_settings')
             && Schema::hasColumn('site_settings', 'footer_background_image');
 
@@ -24,7 +25,7 @@ class SiteSettingController extends Controller
             );
         }
 
-        return view('admin.settings.index', compact('siteSetting', 'locales', 'supportsFooterBackgroundImage'));
+        return view('admin.settings.index', compact('siteSetting', 'locales', 'frontThemes', 'supportsFooterBackgroundImage'));
     }
 
     public function update(Request $request)
@@ -34,6 +35,8 @@ class SiteSettingController extends Controller
         }
 
         $supportsFooterBackgroundImage = Schema::hasColumn('site_settings', 'footer_background_image');
+        $supportsFrontTheme = Schema::hasColumn('site_settings', 'front_theme');
+        $frontThemes = $this->availableFrontThemes();
 
         $rules = [
             'site_name' => ['nullable', 'string', 'max:255'],
@@ -49,6 +52,10 @@ class SiteSettingController extends Controller
             'default_locale' => ['nullable', 'string', 'max:10'],
             'custom_head_scripts' => ['nullable', 'string'],
         ];
+
+        if ($supportsFrontTheme) {
+            $rules['front_theme'] = ['nullable', 'string', 'max:64'];
+        }
 
         if ($supportsFooterBackgroundImage) {
             $rules['footer_background_image'] = ['nullable', 'image', 'max:5120'];
@@ -67,6 +74,16 @@ class SiteSettingController extends Controller
 
         if ($data['use_site_email_for_contact']) {
             $data['contact_recipient_email'] = null;
+        }
+
+        if ($supportsFrontTheme) {
+            $frontTheme = strtolower(trim((string) ($data['front_theme'] ?? 'default')));
+
+            if (! array_key_exists($frontTheme, $frontThemes)) {
+                return back()->withErrors(['front_theme' => 'Thème front invalide.'])->withInput();
+            }
+
+            $data['front_theme'] = $frontTheme;
         }
 
         $setting = SiteSetting::firstOrCreate(
@@ -102,6 +119,7 @@ class SiteSettingController extends Controller
             'whatsapp_url' => '',
             'twitter_url' => '',
             'default_locale' => config('app.locale', 'fr'),
+            'front_theme' => 'default',
             'maintenance_enabled' => false,
             'maintenance_message' => '',
             'custom_head_scripts' => '',
@@ -129,6 +147,10 @@ class SiteSettingController extends Controller
             unset($defaults['default_locale']);
         }
 
+        if (! Schema::hasColumn('site_settings', 'front_theme')) {
+            unset($defaults['front_theme']);
+        }
+
         if (! Schema::hasColumn('site_settings', 'custom_head_scripts')) {
             unset($defaults['custom_head_scripts']);
         }
@@ -138,5 +160,50 @@ class SiteSettingController extends Controller
         }
 
         return $defaults;
+    }
+
+    private function availableFrontThemes(): array
+    {
+        $themes = ['default' => 'Thème actuel'];
+        $themesPath = resource_path('views/themes');
+
+        if (! is_dir($themesPath)) {
+            return $themes;
+        }
+
+        $entries = scandir($themesPath) ?: [];
+
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..') {
+                continue;
+            }
+
+            if (! preg_match('/^[a-z0-9_-]+$/i', $entry)) {
+                continue;
+            }
+
+            if (! is_dir($themesPath . DIRECTORY_SEPARATOR . $entry)) {
+                continue;
+            }
+
+            $key = strtolower($entry);
+
+            if ($key === 'default') {
+                continue;
+            }
+
+            $label = ucwords(str_replace(['-', '_'], ' ', $key));
+            $themes[$key] = $label;
+        }
+
+        ksort($themes);
+
+        if (isset($themes['default'])) {
+            $defaultLabel = $themes['default'];
+            unset($themes['default']);
+            $themes = ['default' => $defaultLabel] + $themes;
+        }
+
+        return $themes;
     }
 }

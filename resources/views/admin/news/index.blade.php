@@ -25,8 +25,8 @@
         @php
             $headerSrc = media_url($newsPageSetting->header_image ?? null, 'img/hero_home_2.jpg');
         @endphp
-        <div class="row g-3">
-            <div class="col-md-3">
+        <div class="row g-6">
+            <div class="col-md-7">
                 <label class="form-label">Sous-titre</label>
                 <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $newsPageSetting->subtitle ?? '') }}">
             </div>
@@ -34,11 +34,12 @@
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $newsPageSetting->title ?? '') }}">
             </div>
-            <div class="col-md-3">
+
+            <div class="col-md-11">
                 <label class="form-label">Texte hero</label>
-                <textarea name="hero_text" class="form-control" rows="2">{{ old('hero_text', $newsPageSetting->hero_text ?? '') }}</textarea>
+                <textarea name="hero_text" class="form-control" rows="4">{{ old('hero_text', $newsPageSetting->hero_text ?? '') }}</textarea>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-7">
                 <label class="form-label">Image header</label>
                 <input type="file" name="header_image" id="news_header_image" class="form-control" accept="image/*">
                 <div class="mt-2">
@@ -47,6 +48,29 @@
             </div>
             <div class="col-12">
                 <button class="btn btn-primary" type="submit">Mettre à jour</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="admin-card p-4 mb-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 mb-0">Section Actualités — Home</h2>
+        <small class="text-muted">Titre et sous-titre affichés sur la page d'accueil</small>
+    </div>
+    <form action="{{ route('admin.news.home-section.update') }}" method="post">
+        @csrf
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Sous-titre</label>
+                <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $newsSectionSetting->subtitle ?? 'Dernières nouvelles') }}">
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Titre</label>
+                <input type="text" name="title" class="form-control" value="{{ old('title', $newsSectionSetting->title ?? 'Actualités') }}">
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Enregistrer</button>
             </div>
         </div>
     </form>
@@ -97,7 +121,7 @@
 </div>
 
 <div class="mt-3">
-    {{ $news->links() }}
+    {{ $news->links('pagination::bootstrap-5') }}
 </div>
 
 <script>

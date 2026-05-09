@@ -1,15 +1,20 @@
+@php
+    $crudLabels = $pageMeta['crud_labels'] ?? [];
+@endphp
+
 <div class="admin-card p-4">
     <div class="row g-3">
+        
         <div class="col-md-6">
-            <label class="form-label">Petit titre</label>
-            <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $comodite->small_title ?? '') }}">
-        </div>
-        <div class="col-md-6">
-            <label class="form-label">Titre</label>
+            <label class="form-label">{{ $crudLabels['title'] ?? 'Titre' }}</label>
             <input type="text" name="title" class="form-control" value="{{ old('title', $comodite->title ?? '') }}" required>
         </div>
+        <div class="col-md-6">
+            <label class="form-label">{{ $crudLabels['small_title'] ?? 'Petit titre' }}</label>
+            <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $comodite->small_title ?? '') }}">
+        </div>
         <div class="col-md-3">
-            <label class="form-label">Ordre</label>
+            <label class="form-label">{{ $crudLabels['sort_order'] ?? 'Ordre' }}</label>
             <input type="number" min="0" name="sort_order" class="form-control" value="{{ old('sort_order', $comodite->sort_order ?? 0) }}">
         </div>
         <div class="col-md-3 d-flex align-items-end">
@@ -19,15 +24,15 @@
             </div>
         </div>
         <div class="col-12">
-            <label class="form-label">Description</label>
+            <label class="form-label">{{ $crudLabels['description'] ?? 'Description' }}</label>
             <textarea name="description" class="form-control" rows="4">{{ old('description', $comodite->description ?? '') }}</textarea>
         </div>
         <div class="col-md-6">
-            <label class="form-label">Lien (optionnel)</label>
+            <label class="form-label">{{ $crudLabels['link_url'] ?? 'Lien (optionnel laisse vide)' }}</label>
             <input type="text" name="link_url" class="form-control" value="{{ old('link_url', $comodite->link_url ?? $pageMeta['link_placeholder']) }}" placeholder="{{ $pageMeta['link_placeholder'] }}">
         </div>
         <div class="col-md-6">
-            <label class="form-label">Image</label>
+            <label class="form-label">{{ $crudLabels['image'] ?? 'Image' }}</label>
             <input type="file" name="image" id="comodite_image" class="form-control" accept="image/*">
             @php
                 $existingSrc = media_url($comodite->image_path ?? null);

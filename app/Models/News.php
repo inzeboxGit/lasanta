@@ -14,6 +14,7 @@ class News extends Model
         'title',
         'slug',
         'author',
+        'category',
         'published_at',
         'hero_image',
         'cover_image',

@@ -16,6 +16,8 @@ class HomeHeroSetting extends Model
         'small_title',
         'title',
         'dates_label',
+        'check_in_label',
+        'check_out_label',
         'adults_label',
         'children_label',
         'search_label',

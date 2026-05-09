@@ -39,6 +39,17 @@
                     @endforeach
                 </select>
             </div>
+            <div class="col-md-6">
+                <label class="form-label">Thème front</label>
+                <select name="front_theme" class="form-select">
+                    @foreach(($frontThemes ?? ['default' => 'Thème actuel']) as $themeKey => $themeLabel)
+                        <option value="{{ $themeKey }}" {{ old('front_theme', $siteSetting->front_theme ?? 'default') === $themeKey ? 'selected' : '' }}>
+                            {{ $themeLabel }}
+                        </option>
+                    @endforeach
+                </select>
+                <div class="form-text">Appliqué uniquement à la partie publique du site.</div>
+            </div>
             <div class="col-12">
                 <div class="form-check mt-2">
                     <input

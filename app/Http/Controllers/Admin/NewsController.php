@@ -19,8 +19,38 @@ class NewsController extends Controller
     {
         $news = News::latest()->paginate(10);
         $newsPageSetting = $this->resolvePageSetting();
+        $newsSectionSetting = Schema::hasTable('page_header_settings')
+            ? PageHeaderSetting::firstOrCreate(
+                ['page' => 'home_news_section'],
+                ['subtitle' => 'Dernières nouvelles', 'title' => 'Actualités', 'header_image' => '', 'hero_text' => '']
+            )
+            : (object) ['subtitle' => 'Dernières nouvelles', 'title' => 'Actualités'];
 
-        return view('admin.news.index', compact('news', 'newsPageSetting'));
+        return view('admin.news.index', compact('news', 'newsPageSetting', 'newsSectionSetting'));
+    }
+
+    public function updateHomeSectionSettings(Request $request)
+    {
+        if (! Schema::hasTable('page_header_settings')) {
+            return redirect()->route('admin.news.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = PageHeaderSetting::firstOrCreate(
+            ['page' => 'home_news_section'],
+            ['subtitle' => 'Dernières nouvelles', 'title' => 'Actualités', 'header_image' => '', 'hero_text' => '']
+        );
+
+        $data = $request->validate([
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title'    => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $setting->update([
+            'subtitle' => $data['subtitle'] ?? $setting->subtitle,
+            'title'    => $data['title'] ?? $setting->title,
+        ]);
+
+        return redirect()->route('admin.news.index')->with('success', 'Section Actualités (home) mise à jour.');
     }
 
     public function updatePageSettings(Request $request)
@@ -144,6 +174,7 @@ class NewsController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', $uniqueSlug],
             'author' => ['nullable', 'string', 'max:255'],
+            'category' => ['nullable', 'string', 'max:255'],
             'published_at' => ['nullable', 'date'],
             'excerpt' => ['nullable', 'string'],
             'body' => ['nullable', 'string'],

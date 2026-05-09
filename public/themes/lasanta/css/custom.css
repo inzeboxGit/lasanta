@@ -1,0 +1,10 @@
+/* ======= Rooms 2 : contrainte hauteur image carousel ======= */
+.rooms2 .owl-carousel .img {
+    height: 480px;
+    overflow: hidden;
+}
+.rooms2 .owl-carousel .img img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}

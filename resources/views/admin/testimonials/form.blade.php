@@ -17,6 +17,11 @@
             <textarea name="content" class="form-control" rows="4" required>{{ old('content', $testimonial->content ?? '') }}</textarea>
         </div>
         <div class="col-md-6">
+            <label class="form-label">Source</label>
+            <input type="text" name="source" class="form-control" value="{{ old('source', $testimonial->source ?? '') }}" placeholder="ex: Tripadvisor, Google, Booking...">
+            <div class="form-text">Affiché sous le nom du client.</div>
+        </div>
+        <div class="col-md-6">
             <label class="form-label">Photo</label>
             <input type="file" name="photo" id="testimonial_photo" class="form-control" accept="image/*">
             @php

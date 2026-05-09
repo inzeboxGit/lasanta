@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PageHeaderSetting;
 use App\Models\PromoSectionSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\JpegEncoder;
 
 class PromoController extends Controller
 {
@@ -16,6 +21,7 @@ class PromoController extends Controller
         $promos = collect();
         $promoSetting = (object) $this->defaultSetting();
         $editingPromo = null;
+        $promoHeaderSetting = (object) ['subtitle' => 'NOS OFFRES', 'title' => 'OFFRES SPÉCIALES', 'header_image' => ''];
 
         if (Schema::hasTable('promo_section_settings')) {
             $promos = PromoSectionSetting::query()
@@ -33,7 +39,14 @@ class PromoController extends Controller
             }
         }
 
-        return view('admin.promo.index', compact('promoSetting', 'promos', 'editingPromo'));
+        if (Schema::hasTable('page_header_settings')) {
+            $promoHeaderSetting = PageHeaderSetting::firstOrCreate(
+                ['page' => 'home_promo_section'],
+                ['subtitle' => 'NOS OFFRES', 'title' => 'OFFRES SPÉCIALES', 'header_image' => '', 'hero_text' => '']
+            );
+        }
+
+        return view('admin.promo.index', compact('promoSetting', 'promos', 'editingPromo', 'promoHeaderSetting'));
     }
 
     public function store(Request $request)
@@ -78,6 +91,44 @@ class PromoController extends Controller
         return redirect()->route('admin.promo.index')->with('success', 'Promo supprimée.');
     }
 
+    public function updateSection(Request $request)
+    {
+        if (!Schema::hasTable('page_header_settings')) {
+            return redirect()->route('admin.promo.index')->with('success', 'Table indisponible.');
+        }
+
+        $data = $request->validate([
+            'subtitle'     => ['nullable', 'string', 'max:255'],
+            'title'        => ['nullable', 'string', 'max:255'],
+            'header_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        $setting = PageHeaderSetting::firstOrCreate(
+            ['page' => 'home_promo_section'],
+            ['subtitle' => 'NOS OFFRES', 'title' => 'OFFRES SPÉCIALES', 'header_image' => '', 'hero_text' => '']
+        );
+
+        if ($request->hasFile('header_image')) {
+            if (!empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
+                Storage::disk('public')->delete($setting->header_image);
+            }
+            $manager = new ImageManager(new Driver());
+            $img = $manager->decode($request->file('header_image'));
+            $img->cover(1920, 600);
+            $filename = 'promo-section/' . Str::random(40) . '.jpg';
+            Storage::disk('public')->put($filename, $img->encode(new JpegEncoder(90)));
+            $data['header_image'] = $filename;
+        }
+
+        $setting->update([
+            'subtitle'     => $data['subtitle'] ?? $setting->subtitle,
+            'title'        => $data['title'] ?? $setting->title,
+            'header_image' => $data['header_image'] ?? $setting->header_image,
+        ]);
+
+        return redirect()->route('admin.promo.index')->with('success', 'En-tête de section Offres mis à jour.');
+    }
+
     private function validatePromo(Request $request): array
     {
         $data = $request->validate([
@@ -105,7 +156,13 @@ class PromoController extends Controller
                 Storage::disk('public')->delete($previousImage);
             }
 
-            $data['image'] = $request->file('image')->store('promo', 'public');
+            $file = $request->file('image');
+            $filename = 'promo/' . Str::uuid() . '.jpg';
+            $manager = new ImageManager(new Driver());
+            $img = $manager->decode($file->getPathname());
+            $img->cover(1550, 1080);
+            Storage::disk('public')->put($filename, $img->encode(new JpegEncoder(90)));
+            $data['image'] = $filename;
         }
 
         DB::transaction(function () use ($setting, $data) {
@@ -122,13 +179,6 @@ class PromoController extends Controller
                 'image' => $data['image'] ?? ($setting->image ?? ''),
             ]);
             $setting->save();
-
-            if ($setting->is_enabled) {
-                PromoSectionSetting::query()
-                    ->whereKeyNot($setting->id)
-                    ->where('is_enabled', true)
-                    ->update(['is_enabled' => false]);
-            }
         });
     }
 

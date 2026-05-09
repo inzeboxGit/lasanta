@@ -13,6 +13,7 @@ class Testimonial extends Model
     protected $fillable = [
         'name',
         'content',
+        'source',
         'photo_path',
         'published_at',
         'sort_order',

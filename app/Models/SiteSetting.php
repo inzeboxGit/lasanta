@@ -24,6 +24,7 @@ class SiteSetting extends Model
         'whatsapp_url',
         'twitter_url',
         'default_locale',
+        'front_theme',
         'maintenance_enabled',
         'maintenance_message',
         'custom_head_scripts',

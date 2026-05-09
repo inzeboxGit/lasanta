@@ -57,44 +57,94 @@
         </div>
         <!-- /Background Img Parallax -->
 
-        <div class="bg_white" id="first_section">
-            <div class="container margin_120_95">
-            <div class="row justify-content-between">
-                <div class="col-lg-5">
-                        <div class="title">
-                            <small>{{ $ui['section_small'] }}</small>
-                            <h2>{{ method_exists($room, 't') ? $room->t('title') : $room->title }}</h2>
+        <section class="page-details section-padding" id="first_section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-7 col-md-12 mb-30">
+                        <div class="row mb-30">
+                            <div class="col-md-12">
+                                <div class="section-subtitle">{{ $ui['section_small'] }}</div>
+                                <div class="section-title">{{ method_exists($room, 't') ? $room->t('title') : $room->title }}</div>
+                                @php
+                                    $roomDescription = method_exists($room, 't') ? $room->t('description') : $room->description;
+                                @endphp
+                                @if(!empty($roomDescription))
+                                    <div class="room-description">{!! $roomDescription !!}</div>
+                                @endif
+                            </div>
                         </div>
-                        @php
-                            $roomDescription = method_exists($room, 't') ? $room->t('description') : $room->description;
-                        @endphp
-                        @if(!empty($roomDescription))
-                            <div class="room-description">{!! $roomDescription !!}</div>
-                        @endif
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 mb-30">
+                                <h5>Check-in</h5>
+                                <ul class="list-unstyled page-list">
+                                    <li>
+                                        <div class="page-list-icon"> <span class="ti-check"></span> </div>
+                                        <div class="page-list-text">
+                                            <p>Check-in from 9:00 AM - anytime</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="page-list-icon"> <span class="ti-check"></span> </div>
+                                        <div class="page-list-text">
+                                            <p>Early check-in subject to availability</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-6 col-md-12 mb-30">
+                                <h5>Check-out</h5>
+                                <ul class="list-unstyled page-list mb-30">
+                                    <li>
+                                        <div class="page-list-icon"> <span class="ti-check"></span> </div>
+                                        <div class="page-list-text">
+                                            <p>Check-out before noon</p>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="page-list-icon"> <span class="ti-check"></span> </div>
+                                        <div class="page-list-text">
+                                            <p>Express check-out</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row mb-30">
+                            <div class="col-md-12">
+                                <h5>Special check-in instructions</h5>
+                                <p>Guests will receive an email 5 days before arrival with check-in instructions; front desk staff will greet guests on arrival For more details, please contact the property using the information on the booking confirmation.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>Children and extra beds</h5>
+                                <p>Children are welcome Kids stay free! Children stay free when using existing bedding; children may not be eligible for complimentary breakfast Rollaway/extra beds are available for $ 10 per day.</p>
+                            </div>
+                        </div>
                     </div>
-                <div class="col-lg-6">
-                        <div class="room_facilities_list">
-                            <ul data-cues="slideInLeft" data-disabled="true">
+                    <div class="col-lg-4 offset-lg-1 col-md-12">
+                        <div class="cont">
+                            <h5>Room Equipment</h5>
+                            <ul class="list">
                                 @foreach($room->amenities as $amenity)
-                                    <li data-cue="slideInLeft">
-                                        @if($amenity->image_path)
-                                            <img src="{{ asset($amenity->image_path) }}" alt=""
-                                                style="width: 25px; height: 25px; margin-right: 10px; object-fit: contain;">
-                                        @elseif($amenity->icon)
-                                            <i class="{{ $amenity->icon }}"></i>
-                                        @endif
-                                        {{ method_exists($amenity, 't') ? $amenity->t('title') : $amenity->title }}
+                                    <li>
+                                        <span>
+                                            @if($amenity->image_path)
+                                                <img src="{{ asset($amenity->image_path) }}" alt=""
+                                                    style="width: 22px; height: 22px; object-fit: contain;">
+                                            @elseif($amenity->icon)
+                                                <i class="{{ $amenity->icon }}"></i>
+                                            @endif
+                                        </span>
+                                        <span>{{ method_exists($amenity, 't') ? $amenity->t('title') : $amenity->title }}</span>
                                     </li>
                                 @endforeach
                             </ul>
                         </div>
                     </div>
                 </div>
-                <!-- /row -->
             </div>
-            <!-- /container -->
-        </div>
-        <!-- /bg_white -->
+        </section>
 
         @if(!empty($room->gallery))
             <div class="bg_white add_bottom_120">

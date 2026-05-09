@@ -8,9 +8,17 @@ class LocalAmenityController extends AbstractLocalAmenityController
 {
     protected string $displayContext = LocalAmenity::CONTEXT_HOME;
     protected string $routePrefix = 'admin.comodites';
-    protected string $pageTitle = 'Commodités accueil';
-    protected string $pageDescription = "Gerer les commodites locales affichees sur la page d'accueil";
-    protected string $itemLabelSingular = 'commodité';
-    protected string $itemLabelPlural = 'commodités';
-    protected ?string $emptyStateLabel = "Aucune commodité d'accueil";
+    protected string $pageTitle = 'Activites accueil';
+    protected string $pageDescription = "Gerer les activites locales affichees sur la page d'accueil";
+    protected string $itemLabelSingular = 'activite';
+    protected string $itemLabelPlural = 'activites';
+    protected ?string $emptyStateLabel = "Aucune activite d'accueil";
+
+    protected ?array $sectionSettingConfig = [
+        'panel_title'  => 'Titre de la section Activités',
+        'section'      => 'home_activities',
+        'subtitle'     => 'Nos activités',
+        'title'        => 'Activités & Loisirs',
+        'supports_hero_text' => false,
+    ];
 }

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             AmenitySeeder::class,
             InstallationSeeder::class,
             LocalAmenitySeeder::class,
+            RestaurantMenuSeeder::class,
             NewsSeeder::class,
             TestimonialSeeder::class,
         ]);

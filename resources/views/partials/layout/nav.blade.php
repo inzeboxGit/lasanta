@@ -49,7 +49,7 @@
         $t = $labels[$locale] ?? $labels['en'];
         $isHome = request()->routeIs('home') || request()->is('/');
         $isApartments = request()->routeIs('appartements.index') || request()->routeIs('rooms.show') || request()->is('appartements') || request()->is('rooms/*');
-        $isRestaurant = request()->routeIs('about.index') || request()->is('restaurant');
+        $isRestaurant = request()->routeIs('restaurant.index') || request()->is('restaurant');
         $isPool = request()->routeIs('pool.index') || request()->is('piscine');
         $isNews = request()->routeIs('news.index') || request()->routeIs('news.show') || request()->is('news') || request()->is('news/*');
         $isContact = request()->is('contacts');
@@ -58,7 +58,7 @@
         <li><a href="{{ url('/') }}" class="animated_link {{ $isHome ? 'active' : '' }}">{{ $t['home'] }}</a></li>
         <li><a href="{{ url('/appartements') }}"
                 class="animated_link {{ $isApartments ? 'active' : '' }}">{{ $t['apartments'] }}</a></li>
-        <li><a href="{{ route('about.index') }}"
+        <li><a href="{{ route('restaurant.index') }}"
                 class="animated_link {{ $isRestaurant ? 'active' : '' }}">{{ $t['restaurant'] }}</a></li>
         <li><a href="{{ route('pool.index') }}" class="animated_link {{ $isPool ? 'active' : '' }}">{{ $t['pool'] }}</a>
         </li>

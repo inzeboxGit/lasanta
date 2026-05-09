@@ -84,14 +84,14 @@
     </title>
 
     <!-- Favicons-->
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    <link rel="apple-touch-icon" type="image/x-icon" href="{{ asset('img/apple-touch-icon-57x57-precomposed.png') }}">
+    <link rel="shortcut icon" href="{{ theme_asset('favicon.png') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="{{ theme_asset('img/apple-touch-icon-57x57-precomposed.png') }}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72"
-        href="{{ asset('img/apple-touch-icon-72x72-precomposed.png') }}">
+        href="{{ theme_asset('img/apple-touch-icon-72x72-precomposed.png') }}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114"
-        href="{{ asset('img/apple-touch-icon-114x114-precomposed.png') }}">
+        href="{{ theme_asset('img/apple-touch-icon-114x114-precomposed.png') }}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144"
-        href="{{ asset('img/apple-touch-icon-144x144-precomposed.png') }}">
+        href="{{ theme_asset('img/apple-touch-icon-144x144-precomposed.png') }}">
 
     <!-- GOOGLE WEB FONT-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -101,17 +101,17 @@
         rel="stylesheet">
 
     <!-- BASE CSS -->
-    <link href="{{ asset('css/bootstrap.min.css') }}?v={{ time() }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}?v={{ time() }}" rel="stylesheet">
-    <link href="{{ asset('css/vendors.min.css') }}?v={{ time() }}" rel="stylesheet">
+    <link href="{{ theme_asset('css/bootstrap.min.css') }}?v={{ time() }}" rel="stylesheet">
+    <link href="{{ theme_asset('css/style.css') }}?v={{ time() }}" rel="stylesheet">
+    <link href="{{ theme_asset('css/vendors.min.css') }}?v={{ time() }}" rel="stylesheet">
 
     <!-- YOUR CUSTOM CSS -->
-    <link href="{{ asset('css/custom.css') }}?v={{ time() }}" rel="stylesheet">
+    <link href="{{ theme_asset('css/custom.css') }}?v={{ time() }}" rel="stylesheet">
 
     {!! $siteSetting->custom_head_scripts ?? '' !!}
 </head>
 
-<body>
+<body class="front-theme-{{ current_front_theme() }}">
 
     <div id="preloader">
         <div data-loader="circle-side"></div>
@@ -122,15 +122,15 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-4">
-                    <a href="{{ url('/') }}" class="logo_normal"><img src="{{ asset('img/logo.png') }}" width="135"
+                    <a href="{{ url('/') }}" class="logo_normal"><img src="{{ theme_asset('img/logo.png') }}" width="135"
                             alt=""></a>
-                    <a href="{{ url('/') }}" class="logo_sticky"><img src="{{ asset('img/logo_sticky.png') }}"
+                    <a href="{{ url('/') }}" class="logo_sticky"><img src="{{ theme_asset('img/logo_sticky.png') }}"
                             width="155" alt=""></a>
                 </div>
                 <div class="col-8">
                     <div class="main-menu">
                         <a href="#" class="closebt open_close_menu"><i class="bi bi-x"></i></a>
-                        <div class="logo_panel"><img src="{{ asset('img/logo_sticky.png') }}" width="155" alt=""></div>
+                        <div class="logo_panel"><img src="{{ theme_asset('img/logo_sticky.png') }}" width="155" alt=""></div>
                         @include('partials.layout.nav')
                     </div>
                     <div class="hamburger_2 open_close_menu float-end">
@@ -159,13 +159,13 @@
     <!-- /back to top -->
 
     <!-- COMMON SCRIPTS -->
-    <script src="{{ asset('js/common_scripts.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/common_functions.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/datepicker_search.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('js/datepicker_inline.js') }}?v={{ time() }}"></script>
+    <script src="{{ theme_asset('js/common_scripts.js') }}?v={{ time() }}"></script>
+    <script src="{{ theme_asset('js/common_functions.js') }}?v={{ time() }}"></script>
+    <script src="{{ theme_asset('js/datepicker_search.js') }}?v={{ time() }}"></script>
+    <script src="{{ theme_asset('js/datepicker_inline.js') }}?v={{ time() }}"></script>
     <script src="{{ asset('phpmailer/validate.js') }}?v={{ filemtime(public_path('phpmailer/validate.js')) }}"></script>
     @if($showPromoModal)
-        <script src="{{ asset('js/modal_popup.js') }}"></script>
+        <script src="{{ theme_asset('js/modal_popup.js') }}"></script>
     @endif
     <script>
         document.addEventListener('DOMContentLoaded', function () {

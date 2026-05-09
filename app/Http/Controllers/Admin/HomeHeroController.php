@@ -15,6 +15,7 @@ class HomeHeroController extends Controller
     {
         $heroSetting = (object) $this->defaultSetting();
         $homeVideoSetting = $this->defaultVideoSettingObject();
+        $bookingFooterSetting = $this->defaultBookingFooterObject();
         $locales = config('content_translations.locales', ['fr' => 'Français']);
 
         if (Schema::hasTable('home_hero_settings')) {
@@ -30,9 +31,14 @@ class HomeHeroController extends Controller
                 ['page' => 'home_video'],
                 $this->defaultVideoSetting()
             );
+
+            $bookingFooterSetting = PageHeaderSetting::firstOrCreate(
+                ['page' => 'booking_footer'],
+                $this->defaultBookingFooter()
+            );
         }
 
-        return view('admin.hero.index', compact('heroSetting', 'homeVideoSetting', 'locales'));
+        return view('admin.hero.index', compact('heroSetting', 'homeVideoSetting', 'bookingFooterSetting', 'locales'));
     }
 
     public function update(Request $request)
@@ -50,6 +56,8 @@ class HomeHeroController extends Controller
             'small_title' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
             'dates_label' => ['nullable', 'string', 'max:255'],
+            'check_in_label' => ['nullable', 'string', 'max:255'],
+            'check_out_label' => ['nullable', 'string', 'max:255'],
             'adults_label' => ['nullable', 'string', 'max:255'],
             'children_label' => ['nullable', 'string', 'max:255'],
             'search_label' => ['nullable', 'string', 'max:255'],
@@ -84,6 +92,8 @@ class HomeHeroController extends Controller
             'small_title' => $data['small_title'] ?? $setting->small_title,
             'title' => $data['title'] ?? $setting->title,
             'dates_label' => $data['dates_label'] ?? $setting->dates_label,
+            'check_in_label' => $data['check_in_label'] ?? $setting->check_in_label,
+            'check_out_label' => $data['check_out_label'] ?? $setting->check_out_label,
             'adults_label' => $data['adults_label'] ?? $setting->adults_label,
             'children_label' => $data['children_label'] ?? $setting->children_label,
             'search_label' => $data['search_label'] ?? $setting->search_label,
@@ -95,7 +105,7 @@ class HomeHeroController extends Controller
             'background_image' => $data['background_image'] ?? $setting->background_image,
         ]);
 
-        $translatedFields = ['dates_label', 'adults_label', 'children_label', 'search_label'];
+        $translatedFields = ['dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'search_label'];
         $translationPayload = $request->input('translations', []);
         $locales = array_keys(config('content_translations.locales', ['fr' => 'Français']));
 
@@ -146,6 +156,55 @@ class HomeHeroController extends Controller
         return redirect()->route('admin.hero.index')->with('success', 'Section image accueil mise à jour.');
     }
 
+    public function updateBookingFooter(Request $request)
+    {
+        if (! Schema::hasTable('page_header_settings')) {
+            return redirect()->route('admin.hero.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = PageHeaderSetting::firstOrCreate(
+            ['page' => 'booking_footer'],
+            $this->defaultBookingFooter()
+        );
+
+        $data = $request->validate([
+            'subtitle'     => ['nullable', 'string', 'max:255'],
+            'title'        => ['nullable', 'string', 'max:255'],
+            'header_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        if ($request->hasFile('header_image')) {
+            if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+                Storage::disk('public')->delete($setting->header_image);
+            }
+            $data['header_image'] = $request->file('header_image')->store('booking-footer', 'public');
+        }
+
+        $setting->update([
+            'subtitle'     => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
+            'title'        => array_key_exists('title', $data) ? $data['title'] : $setting->title,
+            'header_image' => $data['header_image'] ?? $setting->header_image,
+        ]);
+
+        return redirect()->route('admin.hero.index')->with('success', 'Section Booking Footer mise à jour.');
+    }
+
+    private function defaultBookingFooter(): array
+    {
+        return [
+            'page'         => 'booking_footer',
+            'header_image' => 'img/rooms/01.jpg',
+            'subtitle'     => 'Hotel Experience',
+            'title'        => 'Booking Form',
+            'hero_text'    => '',
+        ];
+    }
+
+    private function defaultBookingFooterObject(): object
+    {
+        return (object) $this->defaultBookingFooter();
+    }
+
     private function defaultSetting(): array
     {
         return [
@@ -154,6 +213,8 @@ class HomeHeroController extends Controller
             'small_title' => '',
             'title' => '',
             'dates_label' => 'Arrivée / Départ',
+            'check_in_label' => 'Arrivée',
+            'check_out_label' => 'Départ',
             'adults_label' => 'Adultes',
             'children_label' => 'Enfants',
             'search_label' => 'Rechercher',

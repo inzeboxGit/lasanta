@@ -19,5 +19,11 @@ class AboutSectionSetting extends Model
         'signature',
         'main_image',
         'overlay_image',
+        'third_image',
+        'gallery',
+    ];
+
+    protected $casts = [
+        'gallery' => 'array',
     ];
 }

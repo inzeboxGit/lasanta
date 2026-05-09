@@ -1,23 +1,14 @@
 @php
     $currentIcon = old('icon', $installation->icon ?? '');
     $iconOptions = [
-        'customicon-private-parking',
-        'customicon-wifi',
-        'customicon-cocktail',
-        'customicon-swimming-pool',
-        'customicon-double-bed',
-        'customicon-television',
-        'icon-hotel-double_bed_2',
-        'icon-hotel-safety_box',
-        'icon-hotel-patio',
-        'icon-hotel-tv',
-        'icon-hotel-disable',
-        'icon-hotel-dog',
-        'icon-hotel-bottle',
-        'icon-hotel-wifi',
-        'icon-hotel-hairdryer',
-        'icon-hotel-condition',
-        'icon-hotel-loundry',
+        'fa-thin fa-truck-plane',
+        'fa-thin fa-circle-parking',
+        'fa-thin fa-vacuum',
+        'fa-thin fa-water-ladder',
+        'fa-thin fa-wifi',
+        'fa-thin fa-mug-saucer',
+        'dosdan.png',
+        
     ];
     $iconInList = in_array($currentIcon, $iconOptions, true);
 @endphp

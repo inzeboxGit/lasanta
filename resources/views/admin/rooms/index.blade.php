@@ -67,7 +67,7 @@
             <thead>
                 <tr>
                     <th>Titre</th>
-                    <th>ID associé</th>
+                    <th>Superficie</th>
                     <th>Prix / nuit</th>
                     <th>Statut</th>
                     <th>Créée</th>
@@ -112,7 +112,7 @@
 </div>
 
 <div class="mt-3">
-    {{ $rooms->links() }}
+    {{ $rooms->links('pagination::bootstrap-5') }}
 </div>
 
 <script>

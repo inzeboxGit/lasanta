@@ -1,8 +1,4 @@
-@php
-    $isEdit = isset($amenity);
-    $currentIcon = old('icon', $amenity->icon ?? '');
-    $iconOptions = [
-        'icon-hotel-double_bed_2',
+<!-- 'icon-hotel-double_bed_2',
         'icon-hotel-safety_box',
         'icon-hotel-patio',
         'icon-hotel-tv',
@@ -18,7 +14,23 @@
         'customicon-private-parking',
         'customicon-wifi',
         'customicon-cocktail',
-        'customicon-swimming-pool',
+        'customicon-swimming-pool', -->
+@php
+    $isEdit = isset($amenity);
+    $currentIcon = old('icon', $amenity->icon ?? '');
+    $iconOptions = [
+        
+        'fa-thin fa-bed-front',
+        'fa-thin fa-bath',
+        'fa-light fa-baby-carriage',
+        'fa-light fa-refrigerator',
+        'fa-light fa-dryer',
+        'fa-light fa-martini-glass',
+        'fa-light fa-water-ladder',
+        'fa-light fa-bed',
+        'fa-light fa-air-conditioner',
+        'fa-light fa-tv',
+        'fa-light fa-wifi'
     ];
     $iconInList = in_array($currentIcon, $iconOptions, true);
 @endphp

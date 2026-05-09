@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\JpegEncoder;
 
 class RoomController extends Controller
 {
@@ -123,7 +126,13 @@ class RoomController extends Controller
         $data['slug'] = $data['slug'] ?: Str::slug($data['title']);
 
         if ($request->hasFile('main_image')) {
-            $data['main_image'] = $request->file('main_image')->store('rooms', 'public');
+            $file = $request->file('main_image');
+            $filename = 'rooms/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $manager = new ImageManager(new Driver());
+            $img = $manager->decode($file->getPathname());
+            $img->cover(1550, 1080);
+            Storage::disk('public')->put($filename, $img->encode(new JpegEncoder(90)));
+            $data['main_image'] = $filename;
         }
 
         // gallery_order contains existing images (empty on create), new uploads appended
@@ -131,8 +140,13 @@ class RoomController extends Controller
         unset($data['gallery_order']);
 
         if ($request->hasFile('gallery')) {
+            $manager = new ImageManager(new Driver());
             foreach ($request->file('gallery') as $file) {
-                $gallery[] = $file->store('rooms', 'public');
+                $filename = 'rooms/' . Str::uuid() . '.jpg';
+                $img = $manager->decode($file->getPathname());
+                $img->cover(1550, 1080);
+                Storage::disk('public')->put($filename, $img->encode(new JpegEncoder(90)));
+                $gallery[] = $filename;
             }
         }
 
@@ -167,8 +181,9 @@ class RoomController extends Controller
             ->orderBy('title')
             ->get();
         $selectedAmenities = $room->amenities()->pluck('amenities.id')->all();
+        $nextRoom = Room::where('id', '>', $room->id)->orderBy('id')->first();
 
-        return view('admin.rooms.edit', compact('room', 'amenities', 'selectedAmenities'));
+        return view('admin.rooms.edit', compact('room', 'amenities', 'selectedAmenities', 'nextRoom'));
     }
 
     /**
@@ -181,7 +196,13 @@ class RoomController extends Controller
         $data['slug'] = $data['slug'] ?: Str::slug($data['title']);
 
         if ($request->hasFile('main_image')) {
-            $data['main_image'] = $request->file('main_image')->store('rooms', 'public');
+            $file = $request->file('main_image');
+            $filename = 'rooms/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
+            $manager = new ImageManager(new Driver());
+            $img = $manager->decode($file->getPathname());
+            $img->cover(1550, 1080);
+            Storage::disk('public')->put($filename, $img->encode(new JpegEncoder(90)));
+            $data['main_image'] = $filename;
         }
 
         // gallery_order = ordered list of kept images (from hidden inputs)
@@ -197,8 +218,13 @@ class RoomController extends Controller
 
         // Append newly uploaded images
         if ($request->hasFile('gallery')) {
+            $manager = new ImageManager(new Driver());
             foreach ($request->file('gallery') as $file) {
-                $keptGallery[] = $file->store('rooms', 'public');
+                $filename = 'rooms/' . Str::uuid() . '.jpg';
+                $img = $manager->decode($file->getPathname());
+                $img->cover(1550, 1080);
+                Storage::disk('public')->put($filename, $img->encode(new JpegEncoder(90)));
+                $keptGallery[] = $filename;
             }
         }
 
@@ -255,13 +281,18 @@ class RoomController extends Controller
             'external_id' => ['nullable', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', $uniqueSlug],
             'price_per_night' => ['nullable', 'numeric', 'min:0'],
+            'discount' => ['nullable', 'string', 'max:50'],
             'description' => ['nullable', 'string'],
+            'checkin_info' => ['nullable', 'string'],
+            'checkout_info' => ['nullable', 'string'],
+            'special_instructions' => ['nullable', 'string'],
+            'children_policy' => ['nullable', 'string'],
             'amenities' => ['nullable', 'array'],
             'amenities.*' => [
                 'integer',
                 Rule::exists('amenities', 'id')->where(fn ($query) => $query->whereIn('scope', ['room', 'both'])),
             ],
-            'main_image' => ['nullable', 'image', 'max:5120'],
+            'main_image' => ['nullable', 'image', 'max:10240'],
             'gallery.*' => ['nullable', 'image', 'max:5120'],
             'gallery_order' => ['nullable', 'array'],
             'gallery_order.*' => ['string'],

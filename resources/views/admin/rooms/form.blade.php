@@ -59,16 +59,41 @@
             <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $room->subtitle ?? '') }}">
         </div>
         <div class="col-md-4">
-            <label class="form-label">ID associé</label>
+            <label class="form-label">Superficie</label>
             <input type="text" name="external_id" class="form-control" value="{{ old('external_id', $room->external_id ?? '') }}" placeholder="Ex: APT-102">
         </div>
         <div class="col-md-4">
             <label class="form-label">Prix / nuit</label>
             <input type="number" step="0.01" name="price_per_night" class="form-control" value="{{ old('price_per_night', $room->price_per_night ?? '') }}">
         </div>
+        <div class="col-md-4">
+            <label class="form-label">Réduction <small class="text-muted">(ex&nbsp;: 25% Off)</small></label>
+            <input type="text" name="discount" class="form-control" value="{{ old('discount', $room->discount ?? '') }}" placeholder="Laisser vide pour masquer">
+        </div>
         <div class="col-12">
             <label class="form-label">Description</label>
             <textarea name="description" class="form-control js-tinymce-room" rows="10">{{ old('description', $room->description ?? '') }}</textarea>
+        </div>
+
+        {{-- ===== Politiques / Informations pratiques ===== --}}
+        <div class="col-12 mt-2">
+            <h6 class="fw-semibold border-bottom pb-2">Politiques &amp; informations pratiques</h6>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Check-in <small class="text-muted">(une règle par ligne)</small></label>
+            <textarea name="checkin_info" class="form-control" rows="4" placeholder="Check-in from 9:00 AM - anytime&#10;Early check-in subject to availability">{{ old('checkin_info', $room->checkin_info ?? '') }}</textarea>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Check-out <small class="text-muted">(une règle par ligne)</small></label>
+            <textarea name="checkout_info" class="form-control" rows="4" placeholder="Check-out before noon&#10;Express check-out">{{ old('checkout_info', $room->checkout_info ?? '') }}</textarea>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Instructions spéciales check-in</label>
+            <textarea name="special_instructions" class="form-control" rows="4" placeholder="Guests will receive an email 5 days before arrival...">{{ old('special_instructions', $room->special_instructions ?? '') }}</textarea>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Enfants &amp; lits supplémentaires</label>
+            <textarea name="children_policy" class="form-control" rows="4" placeholder="Children are welcome...">{{ old('children_policy', $room->children_policy ?? '') }}</textarea>
         </div>
         <div class="col-12">
             <label class="form-label">Equipements</label>
@@ -95,19 +120,32 @@
         </div>
         <div class="col-md-6">
             <label class="form-label">Image principale</label>
-            <div class="custom-file-upload">
-                <label for="main_image" class="file-upload-label">
-                    <i class="bi bi-cloud-arrow-up"></i>
-                    <span>{{ !empty($room->main_image) ? 'Changer l\'image principale' : 'Choisir une image...' }}</span>
-                    <small>PNG, JPG up to 5MB</small>
-                </label>
-                <input type="file" name="main_image" id="main_image" class="d-none custom-file-input">
-            </div>
-            @if(!empty($room->main_image))
-                <div class="mt-2">
-                    <img src="{{ asset('storage/' . $room->main_image) }}" alt="" style="max-height:120px;" class="rounded shadow-sm">
+            <div class="d-flex gap-3 align-items-start">
+                <div class="custom-file-upload flex-shrink-0" style="width: 220px;">
+                    <label for="main_image" class="file-upload-label">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                        <span>{{ !empty($room->main_image ?? null) ? 'Changer l\'image' : 'Choisir une image...' }}</span>
+                        <small>PNG, JPG – redimensionné à 1550×1080</small>
+                    </label>
+                    <input type="file" name="main_image" id="main_image" class="d-none custom-file-input" accept="image/*">
                 </div>
-            @endif
+                <div id="main-image-preview-wrap" class="flex-grow-1">
+                    @if(!empty($room->main_image ?? null))
+                        <div id="main-image-saved-wrap">
+                            <img id="main-image-saved" src="{{ media_url($room->main_image) }}" alt=""
+                                 style="width:100%;max-height:160px;object-fit:cover;" class="rounded shadow-sm">
+                            <div class="text-success small mt-1"><i class="bi bi-check-circle-fill"></i> Image actuelle</div>
+                        </div>
+                    @else
+                        <div id="main-image-saved-wrap" class="d-none"></div>
+                    @endif
+                    <div id="main-image-new-wrap" class="d-none">
+                        <img id="main-image-new" src="" alt=""
+                             style="width:100%;max-height:160px;object-fit:cover;" class="rounded shadow-sm">
+                        <div class="text-primary small mt-1"><i class="bi bi-check2-circle"></i> Nouvelle image sélectionnée – sera redimensionnée à 1550×1080 à l'enregistrement</div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-12">
             <label class="form-label">Galerie (plusieurs images)</label>
@@ -178,6 +216,26 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Aperçu image principale
+    const mainImageInput = document.getElementById('main_image');
+    if (mainImageInput) {
+        mainImageInput.addEventListener('change', function () {
+            const file = this.files[0];
+            const savedWrap = document.getElementById('main-image-saved-wrap');
+            const newWrap = document.getElementById('main-image-new-wrap');
+            const newImg = document.getElementById('main-image-new');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    newImg.src = e.target.result;
+                    if (savedWrap) savedWrap.classList.add('d-none');
+                    newWrap.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
 });
 </script>
 @endpush

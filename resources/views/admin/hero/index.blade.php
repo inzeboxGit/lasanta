@@ -66,8 +66,12 @@
                         <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="booking-labels-{{ $localeKey }}" role="tabpanel" aria-labelledby="booking-labels-{{ $localeKey }}-tab" tabindex="0">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label">Arrivée / Départ</label>
-                                    <input type="text" name="{{ $isFrench ? 'dates_label' : 'translations[' . $localeKey . '][dates_label]' }}" class="form-control" value="{{ $valueFor('dates_label') }}">
+                                    <label class="form-label">Check in</label>
+                                    <input type="text" name="{{ $isFrench ? 'check_in_label' : 'translations[' . $localeKey . '][check_in_label]' }}" class="form-control" value="{{ $valueFor('check_in_label') }}" placeholder="Arrivée">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Check out</label>
+                                    <input type="text" name="{{ $isFrench ? 'check_out_label' : 'translations[' . $localeKey . '][check_out_label]' }}" class="form-control" value="{{ $valueFor('check_out_label') }}" placeholder="Départ">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Adultes</label>
@@ -256,6 +260,57 @@ document.addEventListener('DOMContentLoaded', function () {
             preview.src = e.target.result;
             preview.style.display = 'block';
         };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+
+<div class="admin-card p-4 mt-4">
+    <h2 class="h5 mb-3">Section Booking Footer</h2>
+    <form action="{{ route('admin.hero.booking-footer.update') }}" method="post" enctype="multipart/form-data">
+        @csrf
+        @php
+            $bfImg = $bookingFooterSetting->header_image ?? 'img/rooms/01.jpg';
+            $bfSrc = str_starts_with($bfImg, 'img/')
+                ? asset('themes/lasanta/' . $bfImg)
+                : asset('storage/' . $bfImg);
+        @endphp
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Sous-titre</label>
+                <input type="text" name="subtitle" class="form-control"
+                       value="{{ old('subtitle', $bookingFooterSetting->subtitle ?? 'Hotel Experience') }}">
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Titre</label>
+                <input type="text" name="title" class="form-control"
+                       value="{{ old('title', $bookingFooterSetting->title ?? 'Booking Form') }}">
+            </div>
+            <div class="col-12">
+                <div class="form-label">Image d'arrière-plan</div>
+                <input type="file" name="header_image" id="booking_footer_header_image" class="form-control" accept="image/*">
+                <div class="mt-2">
+                    <img id="booking_footer_header_preview" src="{{ $bfSrc }}" alt=""
+                         class="rounded" style="max-height:140px;">
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('booking_footer_header_image');
+    const preview = document.getElementById('booking_footer_header_preview');
+    if (!input || !preview) return;
+    input.addEventListener('change', function (event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) { preview.src = e.target.result; };
         reader.readAsDataURL(file);
     });
 });

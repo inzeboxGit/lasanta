@@ -45,7 +45,6 @@ Route::get('/', function () {
         ->where('is_published', true)
         ->orderBy('sort_order')
         ->orderBy('id')
-        ->limit(4)
         ->get();
 
     $homeNews = \App\Models\News::where('status', 'published')
@@ -106,7 +105,7 @@ Route::get('/', function () {
         $testimonialSectionSetting->loadMissing('translations');
     }
 
-    $homeRooms = \App\Models\Room::with('translations')
+    $homeRooms = \App\Models\Room::with(['translations', 'amenities'])
         ->where('status', 'published')
         ->latest()
         ->limit(3)
@@ -185,6 +184,16 @@ Route::get('/', function () {
         'image' => '',
     ];
 
+    $promoHeaderSetting = (object) ['subtitle' => 'NOS OFFRES', 'title' => 'OFFRES SPÉCIALES', 'header_image' => ''];
+    if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
+        $promoHeaderSetting = \App\Models\PageHeaderSetting::firstOrCreate(
+            ['page' => 'home_promo_section'],
+            ['subtitle' => 'NOS OFFRES', 'title' => 'OFFRES SPÉCIALES', 'header_image' => '', 'hero_text' => '']
+        );
+    }
+
+    $homePromos = collect();
+
     if (\Illuminate\Support\Facades\Schema::hasTable('promo_section_settings')) {
         $promoSetting = \App\Models\PromoSectionSetting::query()
             ->where('section', 'home_promo')
@@ -196,9 +205,81 @@ Route::get('/', function () {
         if ($promoSetting instanceof \App\Models\PromoSectionSetting) {
             $promoSetting->loadMissing('translations');
         }
+
+        $homePromos = \App\Models\PromoSectionSetting::query()
+            ->where('section', 'home_promo')
+            ->where('is_enabled', true)
+            ->latest('id')
+            ->get()
+            ->each(fn ($p) => $p->loadMissing('translations'));
     }
 
-    return view('home', compact('heroSetting', 'installations', 'homeNews', 'localComodites', 'homeTestimonials', 'homeVideoSetting', 'testimonialSectionSetting', 'installationSectionSetting', 'aboutSectionSetting', 'promoSetting', 'homeRooms', 'appartmentPageSetting'));
+    $homeServices = collect();
+    if (\Illuminate\Support\Facades\Schema::hasTable('services')) {
+        $homeServices = \App\Models\Service::where('is_published', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+    }
+
+    $bookingFooterSetting = (object) [
+        'header_image' => 'img/rooms/01.jpg',
+        'subtitle'     => 'Hotel Experience',
+        'title'        => 'Booking Form',
+    ];
+    if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
+        $bookingFooterSetting = \App\Models\PageHeaderSetting::firstOrCreate(
+            ['page' => 'booking_footer'],
+            [
+                'header_image' => 'img/rooms/01.jpg',
+                'subtitle'     => 'Hotel Experience',
+                'title'        => 'Booking Form',
+                'hero_text'    => '',
+            ]
+        );
+    }
+
+    $localAmenitySectionSetting = (object) ['subtitle' => 'Nos activités', 'title' => 'Activités & Loisirs'];
+    if (\Illuminate\Support\Facades\Schema::hasTable('local_amenity_section_settings')) {
+        $localAmenitySectionSetting = \App\Models\LocalAmenitySectionSetting::firstOrCreate(
+            ['section' => 'home_activities'],
+            ['subtitle' => 'Nos activités', 'title' => 'Activités & Loisirs', 'header_image' => '', 'hero_text' => '']
+        );
+        $localAmenitySectionSetting->loadMissing('translations');
+    }
+
+    $newsSectionSetting = (object) ['subtitle' => 'Dernières nouvelles', 'title' => 'Actualités'];
+    if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
+        $newsSectionSetting = \App\Models\PageHeaderSetting::firstOrCreate(
+            ['page' => 'home_news_section'],
+            ['subtitle' => 'Dernières nouvelles', 'title' => 'Actualités', 'header_image' => '', 'hero_text' => '']
+        );
+    }
+
+    $homeFaqs = collect();
+    $faqSectionSetting = null;
+    if (\Illuminate\Support\Facades\Schema::hasTable('faqs')) {
+        $homeFaqs = \App\Models\Faq::where('is_published', true)
+            ->with('translations')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+    }
+    if (\Illuminate\Support\Facades\Schema::hasTable('faq_section_settings')) {
+        $faqSectionSetting = \App\Models\FaqSectionSetting::firstOrCreate(
+            ['id' => 1],
+            [
+                'subtitle'     => 'Questions populaires',
+                'title'        => 'Foire aux questions',
+                'description'  => '',
+                'button_label' => 'Toutes les questions',
+                'button_link'  => '#',
+            ]
+        );
+        $faqSectionSetting->loadMissing('translations');
+    }
+
+    return themed_view('home', compact('heroSetting', 'installations', 'homeNews', 'localComodites', 'homeTestimonials', 'homeVideoSetting', 'testimonialSectionSetting', 'installationSectionSetting', 'aboutSectionSetting', 'promoSetting', 'homeRooms', 'appartmentPageSetting', 'homePromos', 'homeServices', 'bookingFooterSetting', 'localAmenitySectionSetting', 'promoHeaderSetting', 'newsSectionSetting', 'homeFaqs', 'faqSectionSetting'));
 });
 
 Route::get('/contacts', function () {
@@ -231,7 +312,21 @@ Route::get('/contacts', function () {
         $contactPageSetting->loadMissing('translations');
     }
 
-    return view('contact', compact('contactPageSetting', 'rooms'));
+    $homeFaqs = collect();
+    $faqSectionSetting = null;
+    if (\Illuminate\Support\Facades\Schema::hasTable('faqs')) {
+        $homeFaqs = \App\Models\Faq::where('is_published', true)
+            ->with('translations')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+    }
+    if (\Illuminate\Support\Facades\Schema::hasTable('faq_section_settings')) {
+        $faqSectionSetting = \App\Models\FaqSectionSetting::find(1);
+        $faqSectionSetting?->loadMissing('translations');
+    }
+
+    return themed_view('contact', compact('contactPageSetting', 'rooms', 'homeFaqs', 'faqSectionSetting'));
 });
 Route::post('/contacts', [\App\Http\Controllers\ContactController::class, 'send'])->name('contact.send');
 
@@ -258,7 +353,7 @@ Route::get('/termsOfUse', function () {
         $termsHtml = $termsPage->t('body', $locale) ?: $termsHtml;
     }
 
-    return view('terms-of-use', compact('termsHtml', 'termsPage'));
+    return themed_view('terms-of-use', compact('termsHtml', 'termsPage'));
 })->name('termsOfUse.index');
 
 Route::get('/privacy', function () {
@@ -284,7 +379,7 @@ Route::get('/privacy', function () {
         $privacyHtml = $privacyPage->t('body', $locale) ?: $privacyHtml;
     }
 
-    return view('privacy', compact('privacyHtml', 'privacyPage'));
+    return themed_view('privacy', compact('privacyHtml', 'privacyPage'));
 })->name('privacy.index');
 
 Route::get('/conditions', function () {
@@ -347,30 +442,52 @@ Route::get('/restaurant', function () {
         );
         $aboutSectionSetting->loadMissing('translations');
     }
-    // test
-    $restaurantExtraTextSectionSetting = (object) [
-        'small_title' => '',
-        'description' => '',
+    $extraTextSectionSetting = null;
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
+        $extraTextSectionSetting = \App\Models\AboutSectionSetting::where('section', 'restaurant_after_about')->first();
+        if ($extraTextSectionSetting) {
+            $extraTextSectionSetting->loadMissing('translations');
+        }
+    }
+
+    $restaurantInfoSectionSetting = (object) [
+        'small_title' => 'Hours',
+        'title' => 'Dress Code',
+        'lead' => "Breakfast: 7.00 am - 11.00 am (daily)\nLunch: 12.00 noon - 2.00 pm (daily)\nDinner: open from 6.30 pm, last order at 10.00 pm (daily)",
+        'description' => 'Smart casual (no shorts, hats, or sandals permitted).',
+        'signature' => 'Terrace',
+        'main_image' => 'Open for drinks only.',
     ];
 
     if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
-        $restaurantExtraTextSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
-            ['section' => 'restaurant_after_about'],
+        $restaurantInfoSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
+            ['section' => 'restaurant_info_block'],
             [
-                'small_title' => '',
-                'title' => '',
-                'lead' => '',
-                'description' => '',
-                'signature' => '',
-                'main_image' => '',
+                'small_title' => 'Hours',
+                'title' => 'Dress Code',
+                'lead' => "Breakfast: 7.00 am - 11.00 am (daily)\nLunch: 12.00 noon - 2.00 pm (daily)\nDinner: open from 6.30 pm, last order at 10.00 pm (daily)",
+                'description' => 'Smart casual (no shorts, hats, or sandals permitted).',
+                'signature' => 'Terrace',
+                'main_image' => 'Open for drinks only.',
                 'overlay_image' => '',
+                'third_image' => '',
             ]
         );
-        $restaurantExtraTextSectionSetting->loadMissing('translations');
+        $restaurantInfoSectionSetting->loadMissing('translations');
     }
 
-    return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting', 'restaurantExtraTextSectionSetting'));
-})->name('about.index');
+    $restaurantGallerySetting = (object) ['small_title' => 'Image Gallery', 'title' => 'Restaurant Gallery', 'gallery' => []];
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings') &&
+        \Illuminate\Support\Facades\Schema::hasColumn('about_section_settings', 'gallery')) {
+        $restaurantGallerySetting = \App\Models\AboutSectionSetting::firstOrCreate(
+            ['section' => 'restaurant_gallery'],
+            ['small_title' => 'Image Gallery', 'title' => 'Restaurant Gallery', 'gallery' => []]
+        );
+    }
+
+    return themed_view('restaurant', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting', 'extraTextSectionSetting', 'restaurantInfoSectionSetting', 'restaurantGallerySetting'));
+})->name('restaurant.index');
 
 Route::get('/piscine', function () {
     $localComodites = collect();
@@ -443,8 +560,95 @@ Route::get('/piscine', function () {
         $restaurantExtraTextSectionSetting->loadMissing('translations');
     }
 
-    return view('about', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting', 'restaurantExtraTextSectionSetting'));
+    $secondaryExtraSectionSetting = (object) [
+        'title' => '',
+        'description' => '',
+        'main_image' => '',
+        'overlay_image' => '',
+    ];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
+        $secondaryExtraSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
+            ['section' => 'pool_bottom_section'],
+            [
+                'small_title' => '',
+                'title' => '',
+                'lead' => '',
+                'description' => '',
+                'signature' => '',
+                'main_image' => '',
+                'overlay_image' => '',
+                'third_image' => '',
+            ]
+        );
+        $secondaryExtraSectionSetting->loadMissing('translations');
+    }
+
+    $poolInfoSectionSetting = (object) [
+        'small_title' => 'Horaires',
+        'title'       => 'Règles',
+        'lead'        => "Ouverture : 8h00 – 20h00 (tous les jours)\nFermeture hivernale : octobre – avril",
+        'description' => "Respectez les règles d'hygiène et de sécurité affichées au bord de la piscine.",
+        'signature'   => 'Services inclus',
+        'main_image'  => 'Accès piscine inclus dans le séjour. Transats et parasols disponibles.',
+    ];
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
+        $poolInfoSectionSetting = \App\Models\AboutSectionSetting::firstOrCreate(
+            ['section' => 'pool_info_block'],
+            [
+                'small_title' => 'Horaires',
+                'title'       => 'Règles',
+                'lead'        => "Ouverture : 8h00 – 20h00 (tous les jours)\nFermeture hivernale : octobre – avril",
+                'description' => "Respectez les règles d'hygiène et de sécurité affichées au bord de la piscine.",
+                'signature'   => 'Services inclus',
+                'main_image'  => 'Accès piscine inclus dans le séjour. Transats et parasols disponibles.',
+            ]
+        );
+        $poolInfoSectionSetting->loadMissing('translations');
+    }
+
+    $poolGallerySetting = (object) ['small_title' => 'Galerie Photos', 'title' => 'Piscine Gallery', 'gallery' => []];
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings') &&
+        \Illuminate\Support\Facades\Schema::hasColumn('about_section_settings', 'gallery')) {
+        $poolGallerySetting = \App\Models\AboutSectionSetting::firstOrCreate(
+            ['section' => 'pool_gallery'],
+            ['small_title' => 'Galerie Photos', 'title' => 'Piscine Gallery', 'gallery' => []]
+        );
+    }
+
+    return themed_view('pool', compact('aboutSectionSetting', 'localComodites', 'localAmenitySectionSetting', 'restaurantExtraTextSectionSetting', 'secondaryExtraSectionSetting', 'poolInfoSectionSetting', 'poolGallerySetting'));
 })->name('pool.index');
+
+Route::get('/activites', function () {
+    $installations = \App\Models\Amenity::whereIn('scope', ['home', 'both'])
+        ->where('is_published', true)
+        ->orderBy('sort_order')
+        ->orderBy('title')
+        ->get();
+
+    $activitesAboutSetting = (object) [
+        'small_title' => 'Détente & Loisirs',
+        'title' => 'À propos de nos activités',
+        'description' => '',
+        'main_image' => '',
+        'overlay_image' => '',
+        'third_image' => '',
+    ];
+    $activitesGallerySetting = (object) ['small_title' => 'Espace Loisirs', 'title' => 'Galerie des Activités'];
+
+    if (\Illuminate\Support\Facades\Schema::hasTable('about_section_settings')) {
+        $activitesAboutSetting = \App\Models\AboutSectionSetting::firstOrCreate(
+            ['section' => 'activites_about'],
+            ['small_title' => 'Détente & Loisirs', 'title' => 'À propos de nos activités']
+        );
+        $activitesGallerySetting = \App\Models\AboutSectionSetting::firstOrCreate(
+            ['section' => 'activites_gallery'],
+            ['small_title' => 'Espace Loisirs', 'title' => 'Galerie des Activités']
+        );
+    }
+
+    return themed_view('activites', compact('installations', 'activitesAboutSetting', 'activitesGallerySetting'));
+})->name('activites.index');
 
 Route::get('/appartements', function () {
     $rooms = \App\Models\Room::with('amenities.translations', 'translations')
@@ -457,7 +661,6 @@ Route::get('/appartements', function () {
         ->where('is_published', true)
         ->orderBy('sort_order')
         ->orderBy('id')
-        ->limit(4)
         ->get();
 
     $installationSectionSetting = (object) [
@@ -494,7 +697,38 @@ Route::get('/appartements', function () {
         $appartmentPageSetting->loadMissing('translations');
     }
 
-    return view('rooms', compact('rooms', 'appartmentPageSetting', 'installations', 'installationSectionSetting'));
+    $homeFaqs = collect();
+    $faqSectionSetting = null;
+    if (\Illuminate\Support\Facades\Schema::hasTable('faqs')) {
+        $homeFaqs = \App\Models\Faq::where('is_published', true)
+            ->with('translations')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
+    }
+    if (\Illuminate\Support\Facades\Schema::hasTable('faq_section_settings')) {
+        $faqSectionSetting = \App\Models\FaqSectionSetting::find(1);
+        $faqSectionSetting?->loadMissing('translations');
+    }
+
+    $bookingFooterSetting = (object) [
+        'header_image' => 'img/rooms/01.jpg',
+        'subtitle'     => 'Hotel Experience',
+        'title'        => 'Booking Form',
+    ];
+    if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
+        $bookingFooterSetting = \App\Models\PageHeaderSetting::firstOrCreate(
+            ['page' => 'booking_footer'],
+            [
+                'header_image' => 'img/rooms/01.jpg',
+                'subtitle'     => 'Hotel Experience',
+                'title'        => 'Booking Form',
+                'hero_text'    => '',
+            ]
+        );
+    }
+
+    return themed_view('rooms', compact('rooms', 'appartmentPageSetting', 'installations', 'installationSectionSetting', 'homeFaqs', 'faqSectionSetting', 'bookingFooterSetting'));
 })->name('appartements.index');
 
 Route::get('/news', [\App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
@@ -517,12 +751,18 @@ Route::prefix('admin')->group(function () {
         Route::post('rooms/{room}/gallery/delete', [\App\Http\Controllers\Admin\RoomController::class, 'deleteGalleryImage'])->name('admin.rooms.gallery.delete');
         Route::post('rooms/page-settings', [\App\Http\Controllers\Admin\RoomController::class, 'updatePageSettings'])->name('admin.rooms.page-settings.update');
         Route::resource('amenities', \App\Http\Controllers\Admin\AmenityController::class)->names('admin.amenities');
+        Route::post('amenities/activites-about', [\App\Http\Controllers\Admin\AmenityController::class, 'updateActivitesAbout'])->name('admin.amenities.activites-about.update');
+        Route::post('amenities/activites-gallery', [\App\Http\Controllers\Admin\AmenityController::class, 'updateActivitesGallery'])->name('admin.amenities.activites-gallery.update');
         Route::resource('installations', \App\Http\Controllers\Admin\InstallationController::class)->names('admin.installations');
         Route::post('installations/section-settings', [\App\Http\Controllers\Admin\InstallationController::class, 'updateSectionSettings'])->name('admin.installations.section-settings.update');
         Route::resource('pool', \App\Http\Controllers\Admin\PoolAmenityController::class)->names('admin.pool');
         Route::post('pool/section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateSectionSettings'])->name('admin.pool.section-settings.update');
         Route::post('pool/about-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateAboutSectionSettings'])->name('admin.pool.about-section-settings.update');
         Route::post('pool/extra-text-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateExtraTextSectionSettings'])->name('admin.pool.extra-text-section-settings.update');
+        Route::post('pool/secondary-extra-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateSecondaryExtraSectionSettings'])->name('admin.pool.secondary-extra-section-settings.update');
+        Route::post('pool/info-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updatePoolInfoSectionSettings'])->name('admin.pool.info-section.update');
+        Route::post('pool/gallery-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateGallerySectionSettings'])->name('admin.pool.gallery-section.update');
+        Route::post('pool/gallery-section-settings/remove-image', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'removeGalleryImage'])->name('admin.pool.gallery-image.remove');
         Route::get('contact', [\App\Http\Controllers\Admin\ContactPageController::class, 'index'])->name('admin.contact.index');
         Route::post('contact', [\App\Http\Controllers\Admin\ContactPageController::class, 'update'])->name('admin.contact.update');
         Route::get('maintenance', [\App\Http\Controllers\Admin\MaintenanceController::class, 'index'])->name('admin.maintenance.index');
@@ -535,15 +775,25 @@ Route::prefix('admin')->group(function () {
         Route::get('hero', [\App\Http\Controllers\Admin\HomeHeroController::class, 'index'])->name('admin.hero.index');
         Route::post('hero', [\App\Http\Controllers\Admin\HomeHeroController::class, 'update'])->name('admin.hero.update');
         Route::post('hero/video-section', [\App\Http\Controllers\Admin\HomeHeroController::class, 'updateVideoSection'])->name('admin.hero.video-section.update');
+        Route::post('hero/booking-footer', [\App\Http\Controllers\Admin\HomeHeroController::class, 'updateBookingFooter'])->name('admin.hero.booking-footer.update');
+        Route::get('services', [\App\Http\Controllers\Admin\ServiceController::class, 'index'])->name('admin.services.index');
+        Route::post('services', [\App\Http\Controllers\Admin\ServiceController::class, 'store'])->name('admin.services.store');
+        Route::put('services/{service}', [\App\Http\Controllers\Admin\ServiceController::class, 'update'])->name('admin.services.update');
+        Route::delete('services/{service}', [\App\Http\Controllers\Admin\ServiceController::class, 'destroy'])->name('admin.services.destroy');
         Route::get('promo', [\App\Http\Controllers\Admin\PromoController::class, 'index'])->name('admin.promo.index');
         Route::post('promo', [\App\Http\Controllers\Admin\PromoController::class, 'store'])->name('admin.promo.store');
+        Route::post('promo/section', [\App\Http\Controllers\Admin\PromoController::class, 'updateSection'])->name('admin.promo.section.update');
         Route::put('promo/{promo}', [\App\Http\Controllers\Admin\PromoController::class, 'update'])->name('admin.promo.update');
         Route::delete('promo/{promo}', [\App\Http\Controllers\Admin\PromoController::class, 'destroy'])->name('admin.promo.destroy');
         Route::resource('comodites', \App\Http\Controllers\Admin\LocalAmenityController::class)->names('admin.comodites');
+        Route::post('comodites/section-settings', [\App\Http\Controllers\Admin\LocalAmenityController::class, 'updateSectionSettings'])->name('admin.comodites.section-settings.update');
         Route::resource('restaurant', \App\Http\Controllers\Admin\RestaurantAmenityController::class)->names('admin.restaurant');
         Route::post('restaurant/section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateSectionSettings'])->name('admin.restaurant.section-settings.update');
         Route::post('restaurant/about-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateAboutSectionSettings'])->name('admin.restaurant.about-section-settings.update');
         Route::post('restaurant/extra-text-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateExtraTextSectionSettings'])->name('admin.restaurant.extra-text-section-settings.update');
+        Route::post('restaurant/info-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateRestaurantInfoSectionSettings'])->name('admin.restaurant.info-section.update');
+        Route::post('restaurant/gallery-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateGallerySectionSettings'])->name('admin.restaurant.gallery-section.update');
+        Route::post('restaurant/gallery-section-settings/remove-image', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'removeGalleryImage'])->name('admin.restaurant.gallery-image.remove');
         Route::get('settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('admin.settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('admin.settings.update');
         Route::get('legal', [\App\Http\Controllers\Admin\LegalPageController::class, 'index'])->name('admin.legal.index');
@@ -554,6 +804,12 @@ Route::prefix('admin')->group(function () {
         Route::post('testimonials/section-settings', [\App\Http\Controllers\Admin\TestimonialController::class, 'updateSectionSettings'])->name('admin.testimonials.section-settings.update');
         Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->names('admin.news');
         Route::post('news/page-settings', [\App\Http\Controllers\Admin\NewsController::class, 'updatePageSettings'])->name('admin.news.page-settings.update');
+        Route::post('news/home-section', [\App\Http\Controllers\Admin\NewsController::class, 'updateHomeSectionSettings'])->name('admin.news.home-section.update');
+        Route::get('faqs', [\App\Http\Controllers\Admin\FaqController::class, 'index'])->name('admin.faqs.index');
+        Route::post('faqs', [\App\Http\Controllers\Admin\FaqController::class, 'store'])->name('admin.faqs.store');
+        Route::put('faqs/{faq}', [\App\Http\Controllers\Admin\FaqController::class, 'update'])->name('admin.faqs.update');
+        Route::delete('faqs/{faq}', [\App\Http\Controllers\Admin\FaqController::class, 'destroy'])->name('admin.faqs.destroy');
+        Route::post('faqs/section-settings', [\App\Http\Controllers\Admin\FaqController::class, 'updateSectionSettings'])->name('admin.faqs.section-settings.update');
     });
 });
 

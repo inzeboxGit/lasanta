@@ -5,6 +5,14 @@
 @section('content')
 <h1 class="h3 mb-4">Modifier une chambre</h1>
 
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2" role="alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>{{ session('success') }}</span>
+        <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
 @if($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
@@ -19,9 +27,14 @@
     @csrf
     @method('PUT')
     @include('admin.rooms.form')
-    <div class="mt-3">
+    <div class="mt-3 d-flex align-items-center gap-2 flex-wrap">
         <button class="btn btn-primary" type="submit">Enregistrer</button>
         <a href="{{ route('admin.rooms.index') }}" class="btn btn-outline-secondary">Annuler</a>
+        @if(!empty($nextRoom))
+            <a href="{{ route('admin.rooms.edit', $nextRoom) }}" class="btn btn-outline-primary ms-auto">
+                Modifier la suivante &rarr; <strong>{{ $nextRoom->title }}</strong>
+            </a>
+        @endif
     </div>
 </form>
 @endsection

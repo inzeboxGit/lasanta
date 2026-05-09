@@ -52,6 +52,6 @@ class MaintenanceModeGate
             return $next($request);
         }
 
-        return response()->view('maintenance', status: 503);
+        return response()->view(themed_view_name('maintenance'), status: 503);
     }
 }

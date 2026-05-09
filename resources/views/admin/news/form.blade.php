@@ -17,6 +17,10 @@
             <label class="form-label">Auteur</label>
             <input type="text" name="author" class="form-control" value="{{ old('author', $item->author ?? '') }}" placeholder="Admin">
         </div>
+        <div class="col-md-6">
+            <label class="form-label">Catégorie</label>
+            <input type="text" name="category" class="form-control" value="{{ old('category', $item->category ?? '') }}" placeholder="Ex: Événement, Offre...">
+        </div>
         <div class="col-md-3">
             <label class="form-label">Date</label>
             <input type="date" name="published_at" class="form-control" value="{{ old('published_at', optional($item?->published_at)->format('Y-m-d')) }}">

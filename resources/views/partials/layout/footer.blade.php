@@ -137,7 +137,7 @@
                     <ul>
                         <li><a href="{{ url('/') }}">{{ $t['home'] }}</a></li>
                         <li><a href="{{ url('/appartements') }}">{{ $t['apartments'] }}</a></li>
-                        <li><a href="{{ route('about.index') }}">{{ $t['restaurant'] }}</a></li>
+                        <li><a href="{{ route('restaurant.index') }}">{{ $t['restaurant'] }}</a></li>
                         <li><a href="{{ route('pool.index') }}">{{ $t['pool'] }}</a></li>
                         <li><a href="{{ url('/news') }}">{{ $t['news'] }}</a></li>
                         <li><a href="{{ url('/contacts') }}">{{ $t['contact_link'] }}</a></li>

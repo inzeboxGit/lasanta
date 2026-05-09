@@ -119,6 +119,7 @@ class TestimonialController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
+            'source' => ['nullable', 'string', 'max:255'],
             'photo' => ['nullable', 'image', 'max:5120'],
             'published_at' => ['nullable', 'date'],
             'sort_order' => ['nullable', 'integer', 'min:0'],

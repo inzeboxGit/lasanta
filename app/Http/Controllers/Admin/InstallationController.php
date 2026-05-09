@@ -45,6 +45,7 @@ class InstallationController extends Controller
         $data = $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
         ]);
 
         $setting = InstallationSectionSetting::firstOrCreate(
@@ -58,9 +59,10 @@ class InstallationController extends Controller
         $setting->update([
             'title' => $data['title'] ?? $setting->title,
             'subtitle' => $data['subtitle'] ?? $setting->subtitle,
+            'description' => $data['description'] ?? $setting->description,
         ]);
 
-        return redirect()->route('admin.installations.index')->with('success', 'Titre et sous-titre des installations mis à jour.');
+        return redirect()->route('admin.installations.index')->with('success', 'Titre, sous-titre et description des installations mis à jour.');
     }
 
     public function create()

@@ -103,7 +103,7 @@
 </div>
 
 <div class="mt-3">
-    {{ $testimonials->links() }}
+    {{ $testimonials->links('pagination::bootstrap-5') }}
 </div>
 
 <script>

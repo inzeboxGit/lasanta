@@ -5,7 +5,8 @@
         'fr' => [
             'small' => '',
             'title' => '',
-            'dates_label' => ' / Départ',
+            'check_in_label'  => 'Arrivée',
+            'check_out_label' => 'Départ',
             'adults_label' => 'Adultes',
             'children_label' => 'Enfants',
             'search_label' => 'Rechercher',
@@ -13,7 +14,8 @@
         'en' => [
             'small' => '',
             'title' => '',
-            'dates_label' => 'Check-in / Check-out',
+            'check_in_label'  => 'Check in',
+            'check_out_label' => 'Check out',
             'adults_label' => 'Adults',
             'children_label' => 'Children',
             'search_label' => 'Search',
@@ -21,7 +23,8 @@
         'de' => [
             'small' => '',
             'title' => '',
-            'dates_label' => 'Anreise / Abreise',
+            'check_in_label'  => 'Anreise',
+            'check_out_label' => 'Abreise',
             'adults_label' => 'Erwachsene',
             'children_label' => 'Kinder',
             'search_label' => 'Suchen',
@@ -29,7 +32,8 @@
         'it' => [
             'small' => '',
             'title' => '',
-            'dates_label' => 'Arrivo / Partenza',
+            'check_in_label'  => 'Arrivo',
+            'check_out_label' => 'Partenza',
             'adults_label' => 'Adulti',
             'children_label' => 'Bambini',
             'search_label' => 'Cerca',
@@ -38,7 +42,7 @@
     $ui = $defaultLabels[$locale] ?? $defaultLabels['en'];
 
     if (isset($heroSetting) && method_exists($heroSetting, 't')) {
-        foreach (['dates_label', 'adults_label', 'children_label', 'search_label'] as $field) {
+        foreach (['check_in_label', 'check_out_label', 'adults_label', 'children_label', 'search_label'] as $field) {
             $translatedValue = $heroSetting->t($field, $locale);
             if (!empty($translatedValue)) {
                 $ui[$field] = $translatedValue;
@@ -113,7 +117,7 @@
                             <div class="col-lg-4 ">
                                 <div class="form-group">
                                     <input class="form-control" type="text" name="dates" id="dates"
-                                        placeholder="{{ $ui['dates_label'] }}" readonly="readonly">
+                                        placeholder="{{ $ui['check_in_label'] }} / {{ $ui['check_out_label'] }}" readonly="readonly">
                                     <i class="bi bi-calendar2"></i>
                                 </div>
                             </div>
