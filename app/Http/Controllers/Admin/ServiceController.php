@@ -54,6 +54,10 @@ class ServiceController extends Controller
             Storage::disk('public')->delete($service->image);
         }
 
+        if (!empty($service->pdf_file)) {
+            Storage::disk('public')->delete($service->pdf_file);
+        }
+
         $service->delete();
 
         return redirect()->route('admin.services.index')->with('success', 'Service supprimé.');
@@ -72,6 +76,7 @@ class ServiceController extends Controller
             'sort_order'  => ['nullable', 'integer', 'min:0'],
             'is_published'=> ['nullable'],
             'image'       => ['nullable', 'image', 'max:5120'],
+            'pdf_file'    => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
         ]);
     }
 
@@ -91,13 +96,24 @@ class ServiceController extends Controller
             $data['image'] = $filename;
         }
 
+        if ($request->hasFile('pdf_file')) {
+            if (!empty($service->pdf_file)) {
+                Storage::disk('public')->delete($service->pdf_file);
+            }
+            $pdfPath = $request->file('pdf_file')->store('services/pdf', 'public');
+            $data['pdf_file'] = $pdfPath;
+            // Auto-set button_link to the PDF download URL
+            $data['button_link'] = Storage::disk('public')->url($pdfPath);
+        }
+
         $service->fill([
             'tab_key'     => $data['tab_key'],
             'subtitle'    => $data['subtitle'] ?? '',
             'title'       => $data['title'],
             'description' => $data['description'] ?? '',
-            'button_link' => $data['button_link'] ?? '',
+            'button_link' => $data['button_link'] ?? ($service->button_link ?? ''),
             'button_text' => $data['button_text'] ?? '',
+            'pdf_file'    => $data['pdf_file'] ?? ($service->pdf_file ?? ''),
             'icon'        => $data['icon'] ?? '',
             'sort_order'  => $data['sort_order'] ?? 0,
             'is_published'=> !empty($data['is_published']),

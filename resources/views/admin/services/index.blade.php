@@ -183,9 +183,22 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Lien du bouton</label>
-                <input type="text" name="button_link" class="form-control"
+                <input type="text" name="button_link" id="svc_button_link" class="form-control"
                        value="{{ old('button_link', $s?->button_link ?? '') }}"
                        placeholder="https://... ou /restaurant">
+            </div>
+
+            {{-- PDF --}}
+            <div class="col-md-6">
+                <label class="form-label">PDF à télécharger <small class="text-muted">(optionnel — remplace automatiquement le lien du bouton)</small></label>
+                <input type="file" name="pdf_file" id="svc_pdf_file" class="form-control" accept="application/pdf">
+                @if($isEditing && !empty($s->pdf_file))
+                    <div class="mt-2 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-file-pdf text-danger"></i>
+                        <a href="{{ Storage::disk('public')->url($s->pdf_file) }}" download
+                           class="text-decoration-none small">Télécharger le PDF actuel</a>
+                    </div>
+                @endif
             </div>
 
             {{-- Icône FontAwesome – sélecteur visuel --}}
@@ -317,6 +330,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     imgPreview.classList.remove('d-none');
                 };
                 reader.readAsDataURL(this.files[0]);
+            }
+        });
+    }
+
+    // PDF → auto-fill button_link with filename hint
+    const pdfInput      = document.getElementById('svc_pdf_file');
+    const btnLinkInput  = document.getElementById('svc_button_link');
+    if (pdfInput && btnLinkInput) {
+        pdfInput.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                btnLinkInput.value = '(PDF : ' + this.files[0].name + ')';
             }
         });
     }

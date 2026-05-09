@@ -18,6 +18,7 @@ class Service extends Model
         'image',
         'button_link',
         'button_text',
+        'pdf_file',
         'icon',
         'sort_order',
         'is_published',

@@ -239,6 +239,10 @@
         <div class="admin-card p-4 mb-4">
             <h2 class="h5 mb-3">{{ $pageMeta['restaurant_info_section']['title'] }}</h2>
             <form action="{{ route($pageMeta['restaurant_info_section']['route']) }}" method="post">
+                @csrf
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Titre réservation</label>
                         <input type="text" name="small_title" class="form-control"
                             value="{{ old('small_title', $restaurantInfoSectionSetting->small_title ?? '') }}">
                     </div>
