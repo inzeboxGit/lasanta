@@ -537,10 +537,10 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         return [
             'small_title' => $this->aboutSectionConfig['small_title'] ?? 'À PROPOS DE NOUS',
-            'title' => $this->aboutSectionConfig['title'] ?? 'La Résidence Bella Vista',
+            'title' => $this->aboutSectionConfig['title'],
             'lead' => $this->aboutSectionConfig['lead'] ?? 'Une conception du tourisme...',
             'description' => $this->aboutSectionConfig['description'] ?? "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
-            'signature' => $this->aboutSectionConfig['signature'] ?? 'L’équipe du Bella Vista',
+            'signature' => $this->aboutSectionConfig['signature'] ?? 'Hotel La Santa',
             'main_image' => $this->aboutSectionConfig['main_image'] ?? 'img/home_2.jpg',
             'overlay_image' => $this->aboutSectionConfig['overlay_image'] ?? 'img/home_1.jpg',
         ];
@@ -564,7 +564,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         return [
             'header_image' => $this->sectionSettingConfig['header_image'] ?? 'img/home_2.jpg',
-            'subtitle' => $this->sectionSettingConfig['subtitle'] ?? 'Residence Bella Vista',
+            'subtitle' => $this->sectionSettingConfig['subtitle'] ?? ' Hotel La Santa',
             'title' => $this->sectionSettingConfig['title'] ?? $this->pageTitle,
             'hero_text' => $this->sectionSettingConfig['hero_text'] ?? null,
         ];

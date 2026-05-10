@@ -97,7 +97,7 @@ class ContactPageController extends Controller
             'page' => 'contact',
             'subtitle' => '',
             'title' => '',
-            'availability_small' => 'Residence Bella Vista',
+            'availability_small' => ' Hotel La Santa',
             'availability_title' => 'Disponibilité',
             'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
             'info_booking_label' => 'Infos et réservations',

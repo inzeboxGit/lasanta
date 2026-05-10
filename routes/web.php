@@ -132,10 +132,10 @@ Route::get('/', function () {
 
     $aboutSectionSetting = (object) [
         'small_title' => 'À PROPOS DE NOUS',
-        'title' => 'La Résidence Bella Vista',
+        'title' => 'La Résidence Hotel La Santa',
         'lead' => 'Une conception du tourisme...',
         'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
-        'signature' => 'L’équipe du Bella Vista',
+        'signature' => 'L’équipe du Hotel La Santa',
         'main_image' => 'img/home_2.jpg',
         'overlay_image' => 'img/home_1.jpg',
     ];
@@ -145,10 +145,10 @@ Route::get('/', function () {
             ['section' => 'home_about'],
             [
                 'small_title' => 'À PROPOS DE NOUS',
-                'title' => 'La Résidence Bella Vista',
+                'title' => 'La Résidence Hotel La Santa',
                 'lead' => 'Une conception du tourisme...',
                 'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
-                'signature' => 'L’équipe du Bella Vista',
+                'signature' => 'L’équipe du Hotel La Santa',
                 'main_image' => 'img/home_2.jpg',
                 'overlay_image' => 'img/home_1.jpg',
             ]
@@ -157,7 +157,7 @@ Route::get('/', function () {
     }
 
     $installationSectionSetting = (object) [
-        'subtitle' => 'RÉsidence Bella vista',
+        'subtitle' => 'RÉsidence Hotel La Santa',
         'title' => 'Installations principales',
     ];
 
@@ -165,7 +165,7 @@ Route::get('/', function () {
         $installationSectionSetting = \App\Models\InstallationSectionSetting::firstOrCreate(
             ['section' => 'home_installations'],
             [
-                'subtitle' => 'RÉsidence Bella vista',
+                'subtitle' => 'RÉsidence Hotel La Santa',
                 'title' => 'Installations principales',
             ]
         );
@@ -292,7 +292,7 @@ Route::get('/contacts', function () {
         'header_image' => 'img/hero_home_2.jpg',
         'subtitle' => 'Expérience hôtelière',
         'title' => 'Contact',
-        'availability_small' => 'Residence Bella Vista',
+        'availability_small' => ' Hotel La Santa',
         'availability_title' => 'Disponibilité',
         'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
     ];
@@ -304,7 +304,7 @@ Route::get('/contacts', function () {
                 'header_image' => 'img/hero_home_2.jpg',
                 'subtitle' => 'Expérience hôtelière',
                 'title' => 'Contact',
-                'availability_small' => 'Residence Bella Vista',
+                'availability_small' => ' Hotel La Santa',
                 'availability_title' => 'Disponibilité',
                 'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
             ]
@@ -502,7 +502,7 @@ Route::get('/piscine', function () {
 
     $localAmenitySectionSetting = (object) [
         'header_image' => 'img/home_2.jpg',
-        'subtitle' => 'RÉsidence Bella vista',
+        'subtitle' => 'RÉsidence Hotel La Santa',
         'title' => 'Piscine',
     ];
 
@@ -511,7 +511,7 @@ Route::get('/piscine', function () {
             ['section' => 'about_pool_amenities'],
             [
                 'header_image' => 'img/home_2.jpg',
-                'subtitle' => 'RÉsidence Bella vista',
+                'subtitle' => 'RÉsidence Hotel La Santa',
                 'title' => 'Piscine',
             ]
         );
@@ -520,7 +520,7 @@ Route::get('/piscine', function () {
 
     $aboutSectionSetting = (object) [
         'small_title' => 'À PROPOS DE LA PISCINE',
-        'title' => 'La Piscine Bella Vista',
+        'title' => 'La Piscine Hotel La Santa',
         'lead' => 'Un espace de détente ouvert sur la résidence.',
         'description' => "Personnalisez ici le texte de présentation de la piscine, son ambiance et ses avantages pour les visiteurs.",
         'signature' => 'L’équipe de la Piscine',
@@ -533,7 +533,7 @@ Route::get('/piscine', function () {
             ['section' => 'pool_about'],
             [
                 'small_title' => 'À PROPOS DE LA PISCINE',
-                'title' => 'La Piscine Bella Vista',
+                'title' => 'La Piscine Hotel La Santa',
                 'lead' => 'Un espace de détente ouvert sur la résidence.',
                 'description' => "Personnalisez ici le texte de présentation de la piscine, son ambiance et ses avantages pour les visiteurs.",
                 'signature' => 'L’équipe de la Piscine',
@@ -664,7 +664,7 @@ Route::get('/appartements', function () {
         ->get();
 
     $installationSectionSetting = (object) [
-        'subtitle' => 'RÉsidence Bella vista',
+        'subtitle' => 'RÉsidence Hotel La Santa',
         'title' => 'Installations principales',
     ];
 
@@ -672,7 +672,7 @@ Route::get('/appartements', function () {
         $installationSectionSetting = \App\Models\InstallationSectionSetting::firstOrCreate(
             ['section' => 'home_installations'],
             [
-                'subtitle' => 'RÉsidence Bella vista',
+                'subtitle' => 'RÉsidence Hotel La Santa',
                 'title' => 'Installations principales',
             ]
         );

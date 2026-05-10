@@ -23,9 +23,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $siteSetting = (object) [
-            'site_name' => 'Residence Bella Vista',
+            'site_name' => ' Hotel La Santa',
             'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
-            'email' => 'info@residence-bellavista.com',
+            'email' => 'info@-bellavista.com',
             'use_site_email_for_contact' => true,
             'contact_recipient_email' => null,
             'phone_primary' => '04 95 00 00 00',
@@ -44,9 +44,9 @@ class AppServiceProvider extends ServiceProvider
         try {
             if (Schema::hasTable('site_settings')) {
                 $defaults = [
-                    'site_name' => 'Residence Bella Vista',
+                    'site_name' => ' Hotel La Santa',
                     'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
-                    'email' => 'info@residence-bellavista.com',
+                    'email' => 'info@-bellavista.com',
                     'use_site_email_for_contact' => true,
                     'contact_recipient_email' => null,
                     'phone_primary' => '04 95 00 00 00',

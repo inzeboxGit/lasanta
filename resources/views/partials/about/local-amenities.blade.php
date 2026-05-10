@@ -2,7 +2,7 @@
 $locale = app()->getLocale();
 $labels = [
 'fr' => [
-'subtitle' => 'Résidence Bella Vista',
+'subtitle' => 'Résidence Hotel La Santa',
 'title' => 'Commodités locales',
 'desc' => 'Découvrez les restaurants, la nature et la culture autour de la résidence.',
 'empty_title' => 'Commodités locales',
@@ -10,15 +10,15 @@ $labels = [
 'fallback_alt' => 'Commodité locale',
 ],
 'en' => [
-'subtitle' => 'Residence Bella Vista',
+'subtitle' => ' Hotel La Santa',
 'title' => 'Local amenities',
-'desc' => 'Discover restaurants, nature, and culture around the residence.',
+'desc' => 'Discover restaurants, nature, and culture around the .',
 'empty_title' => 'Local amenities',
 'empty_desc' => 'No local amenity published at the moment.',
 'fallback_alt' => 'Local amenity',
 ],
 'de' => [
-'subtitle' => 'Residence Bella Vista',
+'subtitle' => ' Hotel La Santa',
 'title' => 'Lokale Annehmlichkeiten',
 'desc' => 'Entdecken Sie Restaurants, Natur und Kultur rund um die Residenz.',
 'empty_title' => 'Lokale Annehmlichkeiten',
@@ -26,7 +26,7 @@ $labels = [
 'fallback_alt' => 'Lokale Annehmlichkeit',
 ],
 'it' => [
-'subtitle' => 'Residence Bella Vista',
+'subtitle' => ' Hotel La Santa',
 'title' => 'Servizi locali',
 'desc' => 'Scopri ristoranti, natura e cultura nei dintorni della residenza.',
 'empty_title' => 'Servizi locali',

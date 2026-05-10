@@ -72,7 +72,7 @@ return new class extends Migration
         DB::table('local_amenity_section_settings')->insert([
             'section' => 'about_pool_amenities',
             'header_image' => $restaurantSection?->header_image ?? 'img/home_2.jpg',
-            'subtitle' => $restaurantSection?->subtitle ?? 'RÉsidence Bella vista',
+            'subtitle' => $restaurantSection?->subtitle ?? 'RÉsidence Hotel La Santa',
             'title' => 'Piscine',
             'created_at' => $restaurantSection?->created_at ?? now(),
             'updated_at' => $restaurantSection?->updated_at ?? now(),

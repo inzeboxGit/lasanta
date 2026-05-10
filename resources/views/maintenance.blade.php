@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Site en maintenance | {{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Residence Bella Vista') }}</title>
+    <title>Site en maintenance | {{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? ' Hotel La Santa') }}</title>
     <link rel="shortcut icon" href="{{ theme_asset('favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{{ theme_asset('img/apple-touch-icon-57x57-precomposed.png') }}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{{ theme_asset('img/apple-touch-icon-72x72-precomposed.png') }}">
@@ -29,7 +29,7 @@
     @endphp
     <main class="maintenance-shell">
         <div class="maintenance-card">
-            <img src="{{ theme_asset('img/logo_sticky.png') }}" alt="Residence Bella Vista">
+            <img src="{{ theme_asset('img/logo.png') }}" alt=" Hotel La Santa">
             <span class="dashboard-eyebrow">Maintenance</span>
             <h1>Site en maintenance</h1>
             <p>{!! nl2br(e($maintenanceMessage)) !!}</p>

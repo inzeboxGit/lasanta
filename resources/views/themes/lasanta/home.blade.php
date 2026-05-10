@@ -38,7 +38,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-12 text-center">
                 <div class="subtitle">{{ method_exists($heroSetting, 't') ? $heroSetting->t('small_title') : ($heroSetting->small_title ?? 'Expérience hôtelière') }}</div>
-                <div class="title">{{ method_exists($heroSetting, 't') ? $heroSetting->t('title') : ($heroSetting->title ?? 'Residence Lasanta') }}</div>
+                <div class="title">{{ method_exists($heroSetting, 't') ? $heroSetting->t('title') : ($heroSetting->title ?? ' Lasanta') }}</div>
                 <div class="mt-20"></div>
                 <!-- <a href="about.html" class="button-3 mb-15">About Hotel</a> -->
                 <a href="{{ $heroButtonLink }}" class="button-3 mb-15" target="{{ $heroButtonTarget }}"

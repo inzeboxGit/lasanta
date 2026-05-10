@@ -79,7 +79,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="">
-    <meta name="author" content="residencebellavista.fr">
+    <meta name="author" content="bellavista.fr">
     <title>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? '') }}
     </title>
 
@@ -124,13 +124,13 @@
                 <div class="col-4">
                     <a href="{{ url('/') }}" class="logo_normal"><img src="{{ theme_asset('img/logo.png') }}" width="135"
                             alt=""></a>
-                    <a href="{{ url('/') }}" class="logo_sticky"><img src="{{ theme_asset('img/logo_sticky.png') }}"
+                    <a href="{{ url('/') }}" class="logo_sticky"><img src="{{ theme_asset('img/logo.png') }}"
                             width="155" alt=""></a>
                 </div>
                 <div class="col-8">
                     <div class="main-menu">
                         <a href="#" class="closebt open_close_menu"><i class="bi bi-x"></i></a>
-                        <div class="logo_panel"><img src="{{ theme_asset('img/logo_sticky.png') }}" width="155" alt=""></div>
+                        <div class="logo_panel"><img src="{{ theme_asset('img/logo.png') }}" width="155" alt=""></div>
                         @include('partials.layout.nav')
                     </div>
                     <div class="hamburger_2 open_close_menu float-end">

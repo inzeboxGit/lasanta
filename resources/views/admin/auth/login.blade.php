@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Connexion admin | Residence Bella Vista</title>
+    <title>Connexion admin |  Hotel La Santa</title>
     <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{{ asset('img/apple-touch-icon-57x57-precomposed.png') }}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{{ asset('img/apple-touch-icon-72x72-precomposed.png') }}">
@@ -17,9 +17,9 @@
     <main class="admin-auth__shell">
         <div class="admin-auth__card">
             <a href="{{ url('/') }}" class="admin-brand admin-auth__brand">
-                <img src="{{ asset('img/logo_sticky.png') }}" alt="Residence Bella Vista">
+                <img src="{{ asset('img/logo.png') }}" alt=" Hotel La Santa">
                 <div class="admin-brand__copy">
-                    <strong>Residence Bella Vista</strong>
+                    <strong> Hotel La Santa</strong>
                     <span>Connexion administration</span>
                 </div>
             </a>

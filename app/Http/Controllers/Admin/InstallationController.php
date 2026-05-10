@@ -19,7 +19,7 @@ class InstallationController extends Controller
             ->paginate(15);
 
         $sectionSetting = (object) [
-            'subtitle' => 'RÉsidence Bella vista',
+            'subtitle' => 'RÉsidence Hotel La Santa',
             'title' => 'Installations principales',
         ];
 
@@ -27,7 +27,7 @@ class InstallationController extends Controller
             $sectionSetting = InstallationSectionSetting::firstOrCreate(
                 ['section' => 'home_installations'],
                 [
-                    'subtitle' => 'RÉsidence Bella vista',
+                    'subtitle' => 'RÉsidence Hotel La Santa',
                     'title' => 'Installations principales',
                 ]
             );
@@ -51,7 +51,7 @@ class InstallationController extends Controller
         $setting = InstallationSectionSetting::firstOrCreate(
             ['section' => 'home_installations'],
             [
-                'subtitle' => 'RÉsidence Bella vista',
+                'subtitle' => 'RÉsidence Hotel La Santa',
                 'title' => 'Installations principales',
             ]
         );

@@ -44,7 +44,7 @@
         <div class="dashboard-hero__copy">
             <span class="dashboard-eyebrow">Administration</span>
             <h1>Tableau de bord</h1>
-            <p>Une vue d'ensemble claire du contenu Residence Bella Vista, avec les accès rapides aux sections qui bougent le plus.</p>
+            <p>Une vue d'ensemble claire du contenu  Hotel La Santa, avec les accès rapides aux sections qui bougent le plus.</p>
         </div>
         <div class="dashboard-hero__meta">
             <div class="dashboard-meta-card">

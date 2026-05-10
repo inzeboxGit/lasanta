@@ -28,9 +28,9 @@ class PoolAmenityController extends AbstractLocalAmenityController
         'section' => 'about_pool_amenities',
         'panel_title' => 'Paramètres de la page Piscine',
         'header_image' => 'img/home_2.jpg',
-        'subtitle' => 'RÉsidence Bella vista',
+        'subtitle' => 'RÉsidence Hotel La Santa',
         'title' => 'Piscine',
-        'hero_text' => 'Une parenthèse de détente à la Résidence Bella Vista.',
+        'hero_text' => 'Une parenthèse de détente à la Résidence Hotel La Santa.',
         'supports_hero_text' => true,
     ];
     //upload piscine about section config
@@ -38,7 +38,7 @@ class PoolAmenityController extends AbstractLocalAmenityController
         'section' => 'pool_about',
         'panel_title' => 'Section À propos Piscine',
         'small_title' => 'À PROPOS DE LA PISCINE',
-        'title' => 'La Piscine Bella Vista',
+        'title' => 'La Piscine Hotel La Santa',
         'lead' => 'Un espace de détente ouvert sur la résidence.',
         'description' => "Personnalisez ici le texte de présentation de la piscine, son ambiance et ses avantages pour les visiteurs.",
         'signature' => 'L’équipe de la Piscine',

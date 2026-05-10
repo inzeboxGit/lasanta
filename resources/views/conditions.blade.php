@@ -16,10 +16,10 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="title mb-4">
-                    <small>RÉsidence Bella vista</small>
+                    <small>RÉsidence Hotel La Santa</small>
                     <h2>Conditions générales d’utilisation</h2>
                 </div>
-                <p>Ce site est édité pour présenter les appartements, services et informations de la Résidence Bella Vista. En naviguant sur ce site, vous acceptez les présentes conditions d’utilisation.</p>
+                <p>Ce site est édité pour présenter les appartements, services et informations de la Résidence Hotel La Santa. En naviguant sur ce site, vous acceptez les présentes conditions d’utilisation.</p>
                 <p>Les informations affichées (descriptions, photos, tarifs, disponibilités) sont fournies à titre indicatif et peuvent être modifiées sans préavis. Nous nous efforçons de maintenir ces informations à jour.</p>
                 <p>La reproduction, la copie ou l’utilisation du contenu (textes, visuels, éléments graphiques) sans autorisation préalable est interdite.</p>
                 <p>Pour toute demande relative à vos données, à une réservation ou à une information légale, vous pouvez nous contacter via la page Contact.</p>

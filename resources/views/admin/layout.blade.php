@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Admin') | Residence Bella Vista</title>
+    <title>@yield('title', 'Admin') |  Hotel La Santa</title>
 
     <!-- Favicons -->
     <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" type="image/x-icon">
@@ -95,9 +95,9 @@
     <div class="admin-app">
         <aside class="admin-sidebar">
             <a href="{{ url('/admin') }}" class="admin-brand">
-                <img src="{{ asset('img/logo_sticky.png') }}" alt="Residence Bella Vista">
+                <img src="{{ asset('img/logo.png') }}" alt=" Hotel La Santa">
                 <div class="admin-brand__copy">
-                    <strong>Residence Bella Vista</strong>
+                    <strong> Hotel La Santa</strong>
                     <span>Back-office</span>
                 </div>
             </a>
@@ -153,7 +153,7 @@
                 <div class="admin-topbar__right">
                     <a href="{{ url('/') }}" class="admin-topbar__site" target="_blank" rel="noopener">
                         <i class="bi bi-box-arrow-up-right"></i>
-                        <span>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Residence Bella Vista') }}</span>
+                        <span>{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? ' Hotel La Santa') }}</span>
                     </a>
                     <form action="{{ route('admin.logout') }}" method="post" class="admin-topbar__logout">
                         @csrf
@@ -172,7 +172,7 @@
     </div>
 
     <footer class="admin-footer">
-        © {{ date('Y') }} Residence Bella Vista
+        © {{ date('Y') }}  Hotel La Santa
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

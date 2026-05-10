@@ -15,22 +15,22 @@ class NewsSeeder extends Seeder
                 'title' => 'Nos soirées musicales',
                 'published_at' => '2025-12-11',
                 'excerpt' => 'Un moment à vivre intensément...',
-                'body' => "Retrouvez nos soirées musicales dans une ambiance conviviale et chaleureuse à la Résidence Bella Vista.",
-                'author' => 'Bella Vista',
+                'body' => "Retrouvez nos soirées musicales dans une ambiance conviviale et chaleureuse à la Résidence Hotel La Santa.",
+                'author' => 'Hotel La Santa',
             ],
             [
                 'title' => "FIERA DI L'ALIVU",
                 'published_at' => '2025-12-24',
                 'excerpt' => "A Fiera di l'Alivu, une manifestation rurale et identitaire de renom et de qualité.",
                 'body' => "Nous mettons en avant cet événement emblématique qui valorise le terroir, les producteurs et la culture locale.",
-                'author' => 'Bella Vista',
+                'author' => 'Hotel La Santa',
             ],
             [
                 'title' => 'Il est des instants où le temps se fait douceur',
                 'published_at' => '2025-12-21',
                 'excerpt' => 'Rituels de soins',
                 'body' => "Découvrez nos instants bien-être et nos rituels de soins pour un moment de détente.",
-                'author' => 'Bella Vista',
+                'author' => 'Hotel La Santa',
             ],
         ];
 
