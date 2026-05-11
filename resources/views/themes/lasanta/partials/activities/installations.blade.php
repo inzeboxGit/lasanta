@@ -55,8 +55,8 @@
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col-lg-4 col-md-12 mb-30">
-                <div class="section-subtitle">{{ $subtitle }}</div>
-                <div class="section-title">{{ $title }}</div>
+                <div class="section-subtitle brown">{{ $subtitle }}</div>
+                <div class="section-title black">{{ $title }}</div>
                 <p class="mb-25">{{ $description }}</p>
                 <a href="{{ route('appartements.index') }}" class="button-3">{{ $buttonLabel }}</a>
             </div>
