@@ -59,7 +59,7 @@
                         ['label' => 'Services (Equipements)', 'route' => route('admin.installations.index'), 'active' => request()->routeIs('admin.installations.*'), 'icon' => 'icon-hotel-reception'],
                         ['label' => 'Offres spéciales', 'route' => route('admin.promo.index'), 'active' => request()->routeIs('admin.promo.*'), 'icon' => 'bi-ticket-perforated'],
                         ['label' => 'Services', 'route' => route('admin.services.index'), 'active' => request()->routeIs('admin.services.*'), 'icon' => 'bi-grid-3x2-gap'],
-                        ['label' => 'Activités', 'route' => route('admin.comodites.index'), 'active' => request()->routeIs('admin.comodites.*'), 'icon' => 'bi-geo-alt'],
+                        //['label' => 'Activités', 'route' => route('admin.comodites.index'), 'active' => request()->routeIs('admin.comodites.*'), 'icon' => 'bi-geo-alt'],
                         ['label' => 'Témoignages', 'route' => route('admin.testimonials.index'), 'active' => request()->routeIs('admin.testimonials.*'), 'icon' => 'bi-chat-quote'],
                     ],
                 ],

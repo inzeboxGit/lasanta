@@ -13,7 +13,7 @@ return [
         'home_hero' => [
             'label' => 'Accueil - Hero',
             'class' => \App\Models\HomeHeroSetting::class,
-            'fields' => ['small_title', 'title', 'dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'search_label'],
+            'fields' => ['small_title', 'title', 'dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'rooms_label', 'search_label', 'button_text'],
             'display_field' => 'section',
         ],
         'about_section' => [

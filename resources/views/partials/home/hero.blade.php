@@ -42,7 +42,7 @@
     $ui = $defaultLabels[$locale] ?? $defaultLabels['en'];
 
     if (isset($heroSetting) && method_exists($heroSetting, 't')) {
-        foreach (['check_in_label', 'check_out_label', 'adults_label', 'children_label', 'search_label'] as $field) {
+        foreach (['dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'search_label'] as $field) {
             $translatedValue = $heroSetting->t($field, $locale);
             if (!empty($translatedValue)) {
                 $ui[$field] = $translatedValue;
@@ -116,8 +116,9 @@
                         <div class="row g-0 booking_form">
                             <div class="col-lg-4 ">
                                 <div class="form-group">
+                                    <label class="visually-hidden">{{ $ui['dates_label'] }}</label>
                                     <input class="form-control" type="text" name="dates" id="dates"
-                                        placeholder="{{ $ui['check_in_label'] }} / {{ $ui['check_out_label'] }}" readonly="readonly">
+                                        placeholder="{{ $ui['dates_label'] ?: ($ui['check_in_label'] . ' / ' . $ui['check_out_label']) }}" readonly="readonly">
                                     <i class="bi bi-calendar2"></i>
                                 </div>
                             </div>

@@ -65,6 +65,10 @@
                         @endphp
                         <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="booking-labels-{{ $localeKey }}" role="tabpanel" aria-labelledby="booking-labels-{{ $localeKey }}-tab" tabindex="0">
                             <div class="row g-3">
+                                <!-- <div class="col-md-12">
+                                    <label class="form-label">Dates</label>
+                                    <input type="text" name="{{ $isFrench ? 'dates_label' : 'translations[' . $localeKey . '][dates_label]' }}" class="form-control" value="{{ $valueFor('dates_label') }}" placeholder="Arrivée / Départ">
+                                </div> -->
                                 <div class="col-md-6">
                                     <label class="form-label">Check in</label>
                                     <input type="text" name="{{ $isFrench ? 'check_in_label' : 'translations[' . $localeKey . '][check_in_label]' }}" class="form-control" value="{{ $valueFor('check_in_label') }}" placeholder="Arrivée">
@@ -82,6 +86,10 @@
                                     <input type="text" name="{{ $isFrench ? 'children_label' : 'translations[' . $localeKey . '][children_label]' }}" class="form-control" value="{{ $valueFor('children_label') }}">
                                 </div>
                                 <div class="col-md-6">
+                                    <label class="form-label">Chambres</label>
+                                    <input type="text" name="{{ $isFrench ? 'rooms_label' : 'translations[' . $localeKey . '][rooms_label]' }}" class="form-control" value="{{ $valueFor('rooms_label') }}" placeholder="Chambres">
+                                </div>
+                                <div class="col-md-6">
                                     <label class="form-label">Rechercher</label>
                                     <input type="text" name="{{ $isFrench ? 'search_label' : 'translations[' . $localeKey . '][search_label]' }}" class="form-control" value="{{ $valueFor('search_label') }}">
                                 </div>
@@ -97,6 +105,10 @@
             <div class="col-md-8">
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $heroSetting->title ?? '') }}">
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Texte du bouton</label>
+                <input type="text" name="button_text" class="form-control" value="{{ old('button_text', $heroSetting->button_text ?? '') }}" placeholder="Découvrir Le Domaine">
             </div>
             <div class="col-md-8">
                 <label class="form-label">Lien du bouton Reserver</label>

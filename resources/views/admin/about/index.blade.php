@@ -73,22 +73,22 @@
             @endphp
 
             <div class="row g-3">
-                <div class="col-md-4">
+                <div class="col-12">
                     <label class="form-label">Petit titre</label>
                     <input type="text" name="small_title" class="form-control"
                         value="{{ old('small_title', $aboutSetting->small_title ?? '') }}">
                 </div>
-                <div class="col-md-4">
+                <div class="col-12">
                     <label class="form-label">Titre</label>
                     <input type="text" name="title" class="form-control"
                         value="{{ old('title', $aboutSetting->title ?? '') }}">
                 </div>
-                <div class="col-md-4">
+                <div class="col-12">
                     <label class="form-label">Lead</label>
                     <input type="text" name="lead" class="form-control"
                         value="{{ old('lead', $aboutSetting->lead ?? '') }}">
                 </div>
-                <div class="col-md-8">
+                <div class="col-12">
                     <label class="form-label">Description</label>
                     @php
                         $aboutDescription = old('description', $aboutSetting->description ?? '');
@@ -114,12 +114,12 @@
                     <textarea name="description" id="about_description" class="form-control d-none"
                         rows="5">{{ $aboutDescription }}</textarea>
                 </div>
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                     <label class="form-label">Signature</label>
                     <input type="text" name="signature" class="form-control"
                         value="{{ old('signature', $aboutSetting->signature ?? '') }}">
-                </div>
-                <div class="col-md-6">
+                </div> -->
+                <div class="col-12">
                     <label class="form-label">Image principale 600, 750</label>
                     <input type="file" name="main_image" id="about_main_image" class="form-control" accept="image/*">
                     <div class="form-text">L'image sera recadrée automatiquement en 600x750 exact.</div>
@@ -128,7 +128,7 @@
                             style="max-height:100px;{{ empty($mainSrc) ? 'display:none;' : '' }}">
                     </div>
                 </div>
-                <div class="col-md-6">
+                <!-- <div class="col-md-6">
                     <label class="form-label">Image superposée</label>
                     <input type="file" name="overlay_image" id="about_overlay_image" class="form-control" accept="image/*">
                     <div class="form-text">Même règle : recadrage automatique en 600x750 exact.</div>
@@ -136,7 +136,7 @@
                         <img id="about_overlay_preview" src="{{ $overlaySrc ?? '' }}" alt="" class="rounded"
                             style="max-height:100px;{{ empty($overlaySrc) ? 'display:none;' : '' }}">
                     </div>
-                </div>
+                </div> -->
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Mettre à jour</button>
                 </div>

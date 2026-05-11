@@ -12,7 +12,9 @@
         'de' => 'Entdecken Sie das Anwesen',
         'it' => 'Scopri la Tenuta',
     ];
-    $heroButtonLabel = $heroButtonLabels[$locale] ?? $heroButtonLabels['en'];
+    $heroButtonLabel = method_exists($heroSetting, 't')
+        ? ($heroSetting->t('button_text', $locale) ?: ($heroSetting->button_text ?? ($heroButtonLabels[$locale] ?? $heroButtonLabels['en'])))
+        : (($heroSetting->button_text ?? '') ?: ($heroButtonLabels[$locale] ?? $heroButtonLabels['en']));
     $aboutMain = media_url($aboutSectionSetting->main_image ?? null, 'themes/lasanta/img/spa/12.jpg');
     $aboutSmallTitle = method_exists($aboutSectionSetting, 't')
         ? ($aboutSectionSetting->t('small_title') ?: 'À PROPOS DE I LASANTA')
@@ -32,6 +34,24 @@
     $apartmentsTitle = method_exists($appartmentPageSetting, 't')
         ? ($appartmentPageSetting->t('title') ?: 'Nos appartements')
         : ($appartmentPageSetting->title ?? 'Nos appartements');
+
+    $uiDefaults = [
+        'fr' => ['check_in_label' => 'Arrivée', 'check_out_label' => 'Départ', 'adults_label' => 'Adultes', 'adult_s' => 'Adulte', 'children_label' => 'Enfants', 'child_s' => 'Enfant', 'rooms_label' => 'Chambres', 'room_s' => 'Chambre', 'search_label' => 'Rechercher', 'dates_label' => 'Arrivée / Départ'],
+        'en' => ['check_in_label' => 'Check in', 'check_out_label' => 'Check out', 'adults_label' => 'Adults', 'adult_s' => 'Adult', 'children_label' => 'Children', 'child_s' => 'Child', 'rooms_label' => 'Rooms', 'room_s' => 'Room', 'search_label' => 'Search', 'dates_label' => 'Check in / Check out'],
+        'de' => ['check_in_label' => 'Anreise', 'check_out_label' => 'Abreise', 'adults_label' => 'Erwachsene', 'adult_s' => 'Erwachsener', 'children_label' => 'Kinder', 'child_s' => 'Kind', 'rooms_label' => 'Zimmer', 'room_s' => 'Zimmer', 'search_label' => 'Suchen', 'dates_label' => 'Anreise / Abreise'],
+        'it' => ['check_in_label' => 'Arrivo', 'check_out_label' => 'Partenza', 'adults_label' => 'Adulti', 'adult_s' => 'Adulto', 'children_label' => 'Bambini', 'child_s' => 'Bambino', 'rooms_label' => 'Camere', 'room_s' => 'Camera', 'search_label' => 'Cerca', 'dates_label' => 'Arrivo / Partenza'],
+    ];
+    $ui = $uiDefaults[$locale] ?? $uiDefaults['en'];
+    if (isset($heroSetting) && method_exists($heroSetting, 't')) {
+        foreach (['dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'rooms_label', 'search_label'] as $_f) {
+            $v = $heroSetting->t($_f, $locale);
+            if (!empty($v)) $ui[$_f] = $v;
+        }
+    } elseif (isset($heroSetting)) {
+        foreach (['dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'rooms_label', 'search_label'] as $_f) {
+            if (!empty($heroSetting->{$_f} ?? null)) $ui[$_f] = $heroSetting->{$_f};
+        }
+    }
 @endphp
 <section class="banner-header full-height valign bg-img" data-overlay-dark="5" data-background="{{ $heroImage }}">
     <div class="container">
@@ -49,7 +69,10 @@
         </div>
     </div>
 </section>
-
+<!-- 
+php artisan migrate --path=database/migrations/2026_05_11_000000_add_rooms_label_to_home_hero_settings_table.php --force 
+php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text_to_home_hero_settings_table.php --force 
+-->
 <!-- Booking Search -->
 <div class="booking-wrapper">
     <div class="container">
@@ -57,62 +80,62 @@
             <form action="booking-system.html" class="form1 clearfix">
                 <div class="col1 c1">
                     <div class="input1_wrapper border-l border-b border-t border-r br-5005">
-                        <label>Check in</label>
+                        <label>{{ $ui['check_in_label'] }}</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" placeholder="Check in">
+                            <input type="text" class="form-control input datepicker" placeholder="{{ $ui['check_in_label'] }}">
                         </div>
                     </div>
                 </div>
                 <div class="col1 c2">
                     <div class="input1_wrapper border-l border-b border-t border-r">
-                        <label>Check out</label>
+                        <label>{{ $ui['check_out_label'] }}</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" placeholder="Check out">
+                            <input type="text" class="form-control input datepicker" placeholder="{{ $ui['check_out_label'] }}">
                         </div>
                     </div>
                 </div>
                 <div class="col2 c3">
                     <div class="select1_wrapper border-l border-b border-t border-r">
-                        <label>Adults</label>
+                        <label>{{ $ui['adults_label'] }}</label>
                         <div class="select1_inner">
                             <select class="select2 select" style="width: 100%">
-                                <option value="1">1 Adult</option>
-                                <option value="2">2 Adults</option>
-                                <option value="3">3 Adults</option>
-                                <option value="4">4 Adults</option>
+                                <option value="1">1 {{ $ui['adult_s'] ?? $ui['adults_label'] }}</option>
+                                <option value="2">2 {{ $ui['adults_label'] }}</option>
+                                <option value="3">3 {{ $ui['adults_label'] }}</option>
+                                <option value="4">4 {{ $ui['adults_label'] }}</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col2 c4">
                     <div class="select1_wrapper border-l border-b border-t  border-r">
-                        <label>Children</label>
+                        <label>{{ $ui['children_label'] }}</label>
                         <div class="select1_inner">
                             <select class="select2 select" style="width: 100%">
-                                <option value="1">Children</option>
-                                <option value="1">1 Child</option>
-                                <option value="2">2 Children</option>
-                                <option value="3">3 Children</option>
-                                <option value="4">4 Children</option>
+                                <option value="0">0 {{ $ui['children_label'] }}</option>
+                                <option value="1">1 {{ $ui['child_s'] ?? $ui['children_label'] }}</option>
+                                <option value="2">2 {{ $ui['children_label'] }}</option>
+                                <option value="3">3 {{ $ui['children_label'] }}</option>
+                                <option value="4">4 {{ $ui['children_label'] }}</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col2 c5">
                     <div class="select1_wrapper border-l border-b border-t  border-r">
-                        <label>Rooms</label>
+                        <label>{{ $ui['rooms_label'] }}</label>
                         <div class="select1_inner">
                             <select class="select2 select" style="width: 100%">
-                                <option value="1">1 Room</option>
-                                <option value="2">2 Rooms</option>
-                                <option value="3">3 Rooms</option>
-                                <option value="4">4 Rooms</option>
+                                <option value="1">1 {{ $ui['room_s'] ?? $ui['rooms_label'] }}</option>
+                                <option value="2">2 {{ $ui['rooms_label'] }}</option>
+                                <option value="3">3 {{ $ui['rooms_label'] }}</option>
+                                <option value="4">4 {{ $ui['rooms_label'] }}</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="col3 c6">
-                    <button type="submit" class="btn-form1-submit">Check Now</button>
+                    <button type="submit" class="btn-form1-submit">{{ $ui['search_label'] }}</button>
                 </div>
             </form>
         </div>
