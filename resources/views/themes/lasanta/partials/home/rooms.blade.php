@@ -30,10 +30,14 @@
 <!-- Rooms 1 -->
 <section class="rooms1 section-padding bg-darkgray">
     <div class="container">
-        <div class="row mb-30 align-items-center">
-            <div class="col-md-5 text-left">
-                <div class="section-subtitle">{{ $apartmentsSubtitle }}</div>
-                <div class="section-title white mb-0">{{ $apartmentsTitle }}</div>
+        <div class="row mb-30">
+            <div class="col-12 text-center">
+                <div class="section-subtitle brown">{{ $apartmentsSubtitle }}</div>
+                @php
+                    $safeTitle = e($apartmentsTitle);
+                    $titleHtml = str_replace('&amp;', '<span class="brown">&</span>', $safeTitle);
+                @endphp
+                <div class="section-title white mb-0">{!! $titleHtml !!}</div>
             </div>
             <!-- <div class="col-md-5">
                 <p>The experience elementum sesue the aucan vestibulum usto sapien rutrum volutan donec fermen lorem ipsum quisque sodales miss in the varius drana miss.</p>

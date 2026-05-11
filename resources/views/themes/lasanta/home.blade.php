@@ -147,9 +147,9 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-md-12 mb-15">
-                <div class="section-subtitle">{{ $aboutSmallTitle }}</div>
-                <div class="section-title">{{ $aboutTitle }}</div>
-                <p class="mb-15">{!! $aboutDescription !!}</p>
+                <div class="section-subtitle brown">{{ $aboutSmallTitle }}</div>
+                <div class="section-title black">{{ $aboutTitle }}</div>
+                <p class="mb-15 grey">{!! $aboutDescription !!}</p>
                 <a href="{{ route('restaurant.index') }}" class="button-3 mb-15">Découvrir Le Domaine</a>
                 <!-- @if(!empty($siteSetting->phone_primary ?? null))
                     <div class="phone">
@@ -177,9 +177,9 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
 ])
 
 <!-- Services -->
-<!-- @include('themes.lasanta.partials.home.services', [
+@include('themes.lasanta.partials.home.services', [
     'homeServices' => $homeServices ?? collect(),
-]) -->
+])
 
 
 <!-- Offres Spéciales -->

@@ -36,13 +36,38 @@
                     </div>
                     <div class="col-lg-5 offset-lg-1 col-md-12">
                         @if($svcSubtitle)
-                        <div class="section-subtitle">{{ $svcSubtitle }}</div>
+                        <div class="section-subtitle brown">{{ $svcSubtitle }}</div>
                         @endif
                         <div class="section-title">{{ $svcTitle }}</div>
                         @if($svcDescription)
-                        <p class="mb-25">{{ $svcDescription }}</p>
+                            @php
+                                $lines = preg_split('/\r?\n/', $svcDescription);
+                                $list = [];
+                                $text = [];
+                                foreach ($lines as $line) {
+                                    if (preg_match('/^\s*(Petit Dejeuner|Repas|Diner)\s*:/iu', $line)) {
+                                        $list[] = trim($line);
+                                    } elseif (trim($line) !== '') {
+                                        $text[] = trim($line);
+                                    }
+                                }
+                            @endphp
+                            @if($text)
+                                <p class="mb-25">{!! implode('<br>', array_map('e', $text)) !!}</p>
+                            @endif
+                            @if($list)
+                                <ul class="service-hours-list" style="list-style:none;padding:0;margin:0;">
+                                    @foreach($list as $item)
+                                        <li style="display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;">
+                                            <span style="color:#b08c5a;font-size:1.0em;line-height:-0.8;"><i class="fa-light fa-check"></i></span>
+                                            <span>{{ $item }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         @endif
                         @if($svc->button_link && $svcButtonText)
+                        <div class="mb-25"></div>
                         <a href="{{ $svc->button_link }}" class="button-3">
                             @if($svc->icon)<i class="{{ $svc->icon }}"></i> @endif{{ $svcButtonText }}
                         </a>

@@ -1,72 +1,138 @@
 @php
-    $translatedAddress = method_exists($siteSetting, 't') ? $siteSetting->t('address') : ($siteSetting->address ?? '');
-    $siteName = method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Lasanta');
+$footerLocale = app()->getLocale();
+// Navigation labels (copied from nav.blade.php for cohérence)
+$footerNavLabels = [
+    'fr' => [
+        'home' => 'Accueil',
+        'appartement' => 'Nos chambres',
+        'auberge' => 'Restaurant',
+        'piscine' => 'Piscine',
+        'news' => 'Actualités',
+        'contact' => 'Contact',
+    ],
+    'en' => [
+        'home' => 'Home',
+        'appartement' => 'Our Rooms',
+        'auberge' => 'Restaurant',
+        'piscine' => 'Pool',
+        'news' => 'News',
+        'contact' => 'Contact',
+    ],
+    'de' => [
+        'home' => 'Startseite',
+        'appartement' => 'Unsere Zimmer',
+        'auberge' => 'Restaurant',
+        'piscine' => 'Pool',
+        'news' => 'Neuigkeiten',
+        'contact' => 'Kontakt',
+    ],
+    'it' => [
+        'home' => 'Home',
+        'appartement' => 'Le nostre camere',
+        'auberge' => 'Ristorante',
+        'piscine' => 'Piscina',
+        'news' => 'News',
+        'contact' => 'Contatti',
+    ],
+];
+$footerNav = $footerNavLabels[$footerLocale] ?? $footerNavLabels['en'];
+@endphp
+@php
+$footerTranslations = [
+    'fr' => [
+        'contact_us' => 'Contact',
+        'subscribe' => 'S’abonner',
+        'subscribe_text' => 'Pour être informé de nos services, inscrivez-vous et nous vous enverrons une notification par email.',
+    ],
+    'en' => [
+        'contact_us' => 'Contact us',
+        'subscribe' => 'Subscribe',
+        'subscribe_text' => 'Want to be notified about our services. Just sign up and we\'ll send you a notification by email.',
+    ],
+    'de' => [
+        'contact_us' => 'Kontakt',
+        'subscribe' => 'Abonnieren',
+        'subscribe_text' => 'Möchten Sie über unsere Dienstleistungen informiert werden? Melden Sie sich einfach an und wir senden Ihnen eine Benachrichtigung per E-Mail.',
+    ],
+    'it' => [
+        'contact_us' => 'Contattaci',
+        'subscribe' => 'Iscriviti',
+        'subscribe_text' => 'Vuoi essere informato sui nostri servizi? Iscriviti e ti invieremo una notifica via email.',
+    ],
+];
+$footerLocale = app()->getLocale();
+$ft = $footerTranslations[$footerLocale] ?? $footerTranslations['en'];
 @endphp
 <footer class="footer">
-    <div class="top">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-30">
-                    <div class="item">
-                        <div class="logo"><img src="{{ theme_asset('img/logo.png') }}" alt="{{ $siteName }}"></div>
-                        <p>{{ $siteName }}</p>
-                        <div class="social-icons">
+    <!-- top -->
+    <div class="top" bis_skin_checked="1">
+        <div class="container" bis_skin_checked="1">
+            <div class="row" bis_skin_checked="1">
+                <div class="col-md-4 mb-30" bis_skin_checked="1">
+                    <div class="item" bis_skin_checked="1">
+                        <div class="logo" bis_skin_checked="1"><img src="img/logo.png" alt=""></div>
+                        @php
+                            $aboutExcerpt = null;
+                            try {
+                                $about = \App\Models\AboutSectionSetting::first();
+                                if ($about) {
+                                    $aboutExcerpt = Str::limit(strip_tags($about->description ?? ''), 120);
+                                }
+                            } catch (Exception $e) {
+                                $aboutExcerpt = null;
+                            }
+                        @endphp
+                        <p>{{ $aboutExcerpt ?: '...' }}</p>
+                        <div class="social-icons" bis_skin_checked="1">
                             <ul class="list-inline">
-                                @if(!empty($siteSetting->instagram_url))
-                                    <li><a href="{{ $siteSetting->instagram_url }}" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a></li>
-                                @endif
-                                @if(!empty($siteSetting->twitter_url))
-                                    <li><a href="{{ $siteSetting->twitter_url }}" target="_blank" rel="noopener"><i class="fa-brands fa-twitter"></i></a></li>
-                                @endif
-                                @if(!empty($siteSetting->facebook_url))
-                                    <li><a href="{{ $siteSetting->facebook_url }}" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i></a></li>
-                                @endif
+                                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 offset-md-1 mb-30">
-                    <div class="item">
-                        <h3>Contact</h3>
-                        <p>{{ $translatedAddress }}</p>
-                        @if(!empty($siteSetting->phone_primary))
-                            <div class="phone"><a href="tel:{{ preg_replace('/\s+/', '', (string) $siteSetting->phone_primary) }}">{{ $siteSetting->phone_primary }}</a></div>
-                        @endif
-                        @if(!empty($siteSetting->email))
-                            <div class="mail"><a href="mailto:{{ $siteSetting->email }}">{{ $siteSetting->email }}</a></div>
-                        @endif
+                <div class="col-md-3 offset-md-1 mb-30" bis_skin_checked="1">
+                    <div class="item" bis_skin_checked="1">
+                        <h3>{{ $ft['contact_us'] }}</h3>
+                        <p>0665 Broadway st.<br>10234 NY, USA</p>
+                        <div class="phone" bis_skin_checked="1"><a href="tel:+410315520900">+1 123 567 8910</a></div>
+                        <div class="mail" bis_skin_checked="1"><a href="mailto:hi@rixoshotel.com">hi@rixoshotel.com</a></div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-30">
-                    <div class="item">
-                        <h3>Navigation</h3>
-                        <div class="links">
-                            <ul>
-                                <li><a href="{{ url('/') }}">Accueil</a></li>
-                                <li><a href="{{ route('appartements.index') }}">Appartements</a></li>
-                                <li><a href="{{ route('restaurant.index') }}">Restaurant</a></li>
-                                <li><a href="{{ route('news.index') }}">Actualités</a></li>
-                                <li><a href="{{ url('/contacts') }}">Contact</a></li>
-                            </ul>
+                <div class="col-md-4 mb-30" bis_skin_checked="1">
+                    <div class="item" bis_skin_checked="1">
+                        <h3>{{ $ft['subscribe'] }}</h3>
+                        <p>{{ $ft['subscribe_text'] }}</p>
+                        <div class="newsletter" bis_skin_checked="1">
+                            <form action="#">
+                                <input type="email" placeholder="Email Address" required="">
+                                <button type="submit"><i class="fa-light fa-arrow-right"></i></button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="bottom">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-12">
-                    <div class="links">
+    <!-- bottom -->
+    <div class="bottom" bis_skin_checked="1">
+        <div class="container" bis_skin_checked="1">
+            <div class="row" bis_skin_checked="1">
+                <div class="col-lg-8 col-md-12" bis_skin_checked="1">
+                    <div class="links" bis_skin_checked="1">
                         <ul>
-                            <li><a href="{{ route('termsOfUse.index') }}">Conditions</a></li>
-                            <li><a href="{{ route('privacy.index') }}">Mentions légales</a></li>
+                            <li><a href="{{ url('/') }}">{{ $footerNav['home'] }}</a></li>
+                            <li><a href="{{ route('appartements.index') }}">{{ $footerNav['appartement'] }}</a></li>
+                            <li><a href="{{ route('restaurant.index') }}">{{ $footerNav['auberge'] }}</a></li>
+                            <li><a href="{{ route('pool.index') }}">{{ $footerNav['piscine'] }}</a></li>
+                            <li><a href="{{ route('news.index') }}">{{ $footerNav['news'] }}</a></li>
+                            <li><a href="{{ url('/contacts') }}">{{ $footerNav['contact'] }}</a></li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-12 text-end">
-                    <p>Copyright {{ now()->year }} by {{ $siteName }}</p>
+                <div class="col-lg-4 col-md-12 text-end" bis_skin_checked="1">
+                    <p>Copyright 2026 </p>
                 </div>
             </div>
         </div>

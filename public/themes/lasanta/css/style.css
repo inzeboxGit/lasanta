@@ -46,7 +46,7 @@
 
 /* define color variable */
 :root {
-    --redbrown-color: #b55a3d;
+    /* --redbrown-color: #b55a3d; */
     --brownYellow-color: #BD945A; 
     /* #BD945A */
     --beig-color: #f4f1ed;
@@ -67,6 +67,10 @@
 
 .black{
     color: var(--black-color) !important;
+}
+
+.grey{
+    color: var(--grey-color) !important;
 }
 /* ======= Typography style ======= */
 html,
@@ -5426,7 +5430,7 @@ body.mfp-zoom-out-cur {
 .button-3 {
     display: inline-block;
     height: auto;
-    padding: 12px 27px;
+    padding: 5px 41px;
     border: 1px solid #BD945A;
     border-radius: 5px;
     background-color: #BD945A;

@@ -9,7 +9,12 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <div class="subtitle">{{ method_exists($appartmentPageSetting, 't') ? $appartmentPageSetting->t('subtitle') : ($appartmentPageSetting->subtitle ?? 'Expérience hôtelière') }}</div>
-                <div class="title">{{ method_exists($appartmentPageSetting, 't') ? $appartmentPageSetting->t('title') : ($appartmentPageSetting->title ?? 'Nos appartements') }}</div>
+                @php
+                    $rawTitle = method_exists($appartmentPageSetting, 't') ? $appartmentPageSetting->t('title') : ($appartmentPageSetting->title ?? 'Nos appartements');
+                    $safeTitle = e($rawTitle);
+                    $titleHtml = str_replace('&amp;', '<span class="brown">&</span>', $safeTitle);
+                @endphp
+                <div class="title">{!! $titleHtml !!}</div>
             </div>
         </div>
     </div>
