@@ -183,7 +183,7 @@
                 <div class="form-text">Si cette promo est activée, toutes les autres seront désactivées automatiquement.</div>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Sous-titre</label>
+                <label class="form-label">Promotion Discount</label>
                 <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $promoSetting->subtitle ?? '') }}">
             </div>
             <div class="col-md-8">

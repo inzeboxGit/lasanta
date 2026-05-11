@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+@php
+    $currentUrl = rtrim(request()->url(), '/');
+    $homeUrl = rtrim(url('/'), '/');
+    $isHomePage = $currentUrl === $homeUrl;
+
+    $showPromoModal = $isHomePage && isset($promoSetting) && ($promoSetting->is_enabled ?? false);
+@endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -14,6 +21,7 @@
     <link rel="stylesheet" href="{{ theme_asset('css/style.css') }}?v={{ time() }}">
     <link rel="stylesheet" href="{{ theme_asset('css/custom.css') }}?v={{ time() }}">
     {!! $siteSetting->custom_head_scripts ?? '' !!}
+    @stack('styles')
 </head>
 <body class="front-theme-{{ current_front_theme() }}">
     <div class="preloader">
@@ -37,6 +45,10 @@
 
     @yield('content')
 
+    @if($showPromoModal)
+        @include('themes.lasanta.partials.layout.home-advertise-modal')
+    @endif
+
     @include('themes.lasanta.partials.layout.footer')
 
     <script src="{{ theme_asset('js/jquery-3.7.1.min.js') }}?v={{ time() }}"></script>
@@ -55,6 +67,9 @@
     <script src="{{ theme_asset('js/select2.js') }}?v={{ time() }}"></script>
     <script src="{{ theme_asset('js/datepicker.js') }}?v={{ time() }}"></script>
     <script src="{{ theme_asset('js/custom.js') }}?v={{ time() }}"></script>
+    @if($showPromoModal)
+        <script src="{{ asset('js/modal_popup.js') }}?v={{ filemtime(public_path('js/modal_popup.js')) }}"></script>
+    @endif
     @stack('scripts')
 </body>
 </html>

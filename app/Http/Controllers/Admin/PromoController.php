@@ -179,6 +179,14 @@ class PromoController extends Controller
                 'image' => $data['image'] ?? ($setting->image ?? ''),
             ]);
             $setting->save();
+
+            if ($setting->is_enabled) {
+                PromoSectionSetting::query()
+                    ->where('section', $setting->section)
+                    ->whereKeyNot($setting->id)
+                    ->where('is_enabled', true)
+                    ->update(['is_enabled' => false]);
+            }
         });
     }
 

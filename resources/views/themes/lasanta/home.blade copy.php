@@ -160,7 +160,10 @@
 
 
 <!-- Offres Spéciales -->
-
+@include('themes.lasanta.partials.home.offres', [
+    'homePromos' => $homePromos ?? collect(),
+    'promoHeaderSetting' => $promoHeaderSetting ?? null,
+])
 
 <!-- Activities & Excursions -->
 @include('themes.lasanta.partials.activities.pricing', [

@@ -39,7 +39,9 @@
     }
 @endphp
 @php
-    $isHomePage = request()->url() === url('/');
+    $currentUrl = rtrim(request()->url(), '/');
+    $homeUrl = rtrim(url('/'), '/');
+    $isHomePage = $currentUrl === $homeUrl;
     $heroNavSetting = $heroSetting ?? null;
 
     if (!$heroNavSetting && \Illuminate\Support\Facades\Schema::hasTable('home_hero_settings')) {
@@ -61,16 +63,7 @@
 
     $heroButtonLink = $heroNavSetting->button_link ?? '';
     $heroButtonTarget = $heroNavSetting->button_target ?? '_self';
-    $today = now()->startOfDay();
-    $promoStartsAt = !empty($promoSetting->start_date ?? null)
-        ? \Illuminate\Support\Carbon::parse($promoSetting->start_date)->startOfDay()
-        : null;
-    $promoEndsAt = !empty($promoSetting->end_date ?? null)
-        ? \Illuminate\Support\Carbon::parse($promoSetting->end_date)->endOfDay()
-        : null;
-    $promoIsInDateRange = (!$promoStartsAt || $today->greaterThanOrEqualTo($promoStartsAt))
-        && (!$promoEndsAt || $today->lessThanOrEqualTo($promoEndsAt));
-    $showPromoModal = $isHomePage && isset($promoSetting) && ($promoSetting->is_enabled ?? false) && $promoIsInDateRange;
+    $showPromoModal = $isHomePage && isset($promoSetting) && ($promoSetting->is_enabled ?? false);
 @endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -148,7 +141,7 @@
     @include('partials.layout.footer')
 
     @if($showPromoModal)
-        @include('partials.layout.home-advertise-modal')
+        @include('themes.lasanta.partials.layout.home-advertise-modal')
     @endif
 
     <div class="progress-wrap">
