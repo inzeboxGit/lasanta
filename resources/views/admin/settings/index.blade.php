@@ -151,19 +151,19 @@
                 <p class="text-muted mb-0">Liens externes affichés dans le front.</p>
             </div>
             <div class="col-md-6">
-                <label class="form-label">Facebook</label>
+                <label class="form-label">Facebook (ajouter https://)</label>
                 <input type="text" name="facebook_url" class="form-control" value="{{ old('facebook_url', $siteSetting->facebook_url ?? '') }}" placeholder="https://facebook.com/...">
             </div>
             <div class="col-md-6">
-                <label class="form-label">Instagram</label>
+                <label class="form-label">Instagram (ajouter https://)</label>
                 <input type="text" name="instagram_url" class="form-control" value="{{ old('instagram_url', $siteSetting->instagram_url ?? '') }}" placeholder="https://instagram.com/...">
             </div>
             <!-- <div class="col-md-6">
-                <label class="form-label">WhatsApp</label>
+                <label class="form-label">WhatsApp (ajouter https://)</label>
                 <input type="text" name="whatsapp_url" class="form-control" value="{{ old('whatsapp_url', $siteSetting->whatsapp_url ?? '') }}" placeholder="https://wa.me/...">
             </div> -->
             <div class="col-md-6">
-                <label class="form-label">Twitter / X</label>
+                <label class="form-label">Twitter / X (ajouter https://)</label>
                 <input type="text" name="twitter_url" class="form-control" value="{{ old('twitter_url', $siteSetting->twitter_url ?? '') }}" placeholder="https://x.com/...">
             </div>
             <div class="col-12">
