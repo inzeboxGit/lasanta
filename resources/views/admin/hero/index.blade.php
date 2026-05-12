@@ -1,11 +1,11 @@
 @extends('admin.layout')
 
-@section('title', 'Hero accueil')
+@section('title', 'Header accueil')
 
 @section('content')
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h1 class="h3 mb-1">Hero accueil</h1>
+        <h1 class="h3 mb-1">Header accueil</h1>
         <div class="text-muted">Gerer le titre, le type de fond (video ou image) et l'affichage du formulaire sur la homepage</div>
     </div>
     <a href="{{ url('/') }}" class="btn btn-outline-secondary" target="_blank" rel="noopener">Voir la home</a>
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-<div class="admin-card p-4 mt-4">
+<!-- <div class="admin-card p-4 mt-4">
     <h2 class="h5 mb-3">Section image d'ambiance</h2>
     <form action="{{ route('admin.hero.video-section.update') }}" method="post" enctype="multipart/form-data">
         @csrf
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         </div>
     </form>
-</div>
+</div> -->
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <div class="admin-card p-4 mt-4">
-    <h2 class="h5 mb-3">Section Booking Footer</h2>
+    <h2 class="h5 mb-3">Section Footer</h2>
     <form action="{{ route('admin.hero.booking-footer.update') }}" method="post" enctype="multipart/form-data">
         @csrf
         @php

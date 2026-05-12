@@ -1,16 +1,15 @@
 @php
     $currentIcon = old('icon', $installation->icon ?? '');
     $iconOptions = [
-        'fa-thin fa-truck-plane',
-        'fa-thin fa-circle-parking',
-        'fa-thin fa-vacuum',
-        'fa-thin fa-water-ladder',
-        'fa-thin fa-wifi',
-        'fa-thin fa-mug-saucer',
-        'dosdan.png',
-        
+        'Aeroport' => 'fa-thin fa-truck-plane',
+        'Parking' => 'fa-thin fa-circle-parking',
+        'Piscine' => 'fa-thin fa-water-ladder',
+        'Wifi' => 'fa-thin fa-wifi',
+        'Cafe' => 'fa-thin fa-mug-saucer',
+        'Salle de sport' => 'fa-thin fa-dumbbell',
+        'Chambre' => 'fa-thin fa-bed-front',
     ];
-    $iconInList = in_array($currentIcon, $iconOptions, true);
+    $iconInList = in_array($currentIcon, array_values($iconOptions), true);
 @endphp
 
 <div class="admin-card p-4">
@@ -27,9 +26,9 @@
                     @if($currentIcon && !$iconInList)
                         <option value="{{ $currentIcon }}" selected>{{ $currentIcon }} (actuelle)</option>
                     @endif
-                    @foreach($iconOptions as $iconClass)
+                    @foreach($iconOptions as $iconLabel => $iconClass)
                         <option value="{{ $iconClass }}" {{ $currentIcon === $iconClass ? 'selected' : '' }}>
-                            {{ $iconClass }}
+                            {{ $iconLabel }}
                         </option>
                     @endforeach
                 </select>
@@ -65,17 +64,17 @@
             <div class="form-check mb-2">
                 <input class="form-check-input" type="checkbox" value="1" id="is_published" name="is_published" {{ old('is_published', $installation->is_published ?? true) ? 'checked' : '' }}>
                 <label class="form-check-label" for="is_published">
-                    Publiée sur la page d'accueil
+                    Publier sur la page d'accueil
                 </label>
             </div>
         </div>
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <label class="form-label">Portée</label>
             <select name="scope" class="form-select">
                 <option value="home" {{ old('scope', $installation->scope ?? 'home') === 'home' ? 'selected' : '' }}>Installations seulement</option>
                 <option value="both" {{ old('scope', $installation->scope ?? 'home') === 'both' ? 'selected' : '' }}>Installations + chambres</option>
             </select>
-        </div>
+        </div> -->
     </div>
 </div>
 

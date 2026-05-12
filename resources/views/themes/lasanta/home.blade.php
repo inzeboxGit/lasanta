@@ -74,6 +74,7 @@ php artisan migrate --path=database/migrations/2026_05_11_000000_add_rooms_label
 php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text_to_home_hero_settings_table.php --force 
 -->
 <!-- Booking Search -->
+@if($heroSetting->show_booking_form ?? true)
 <div class="booking-wrapper">
     <div class="container">
         <div class="booking-inner clearfix">
@@ -141,6 +142,7 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
         </div>
     </div>
 </div>
+@endif
 
 <!-- About -->
 <section class="about section-padding">
@@ -180,9 +182,6 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
 @include('themes.lasanta.partials.home.services', [
     'homeServices' => $homeServices ?? collect(),
 ])
-
-
-<!-- Offres Spéciales -->
 
 
 <!-- Activities & Excursions -->

@@ -60,8 +60,10 @@
 
                     <div class="row mb-30">
                         <div class="col-md-12">
-                            <p>{{ method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('lead') : ($aboutSectionSetting->lead ?? 'Led by Chef de Micheal Martin, The Restaurant is celebrated for its excellent cuisine and unique ambience. The gorgeous dining room features three open studio kitchens, allowing you to enjoy the sights and sounds of the culinary artistry on display.') }}
-                            </p>
+                            <!-- <p>{{ method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('lead') : ($aboutSectionSetting->lead ?? 'Led by Chef de Micheal Martin, The Restaurant is celebrated for its excellent cuisine and unique ambience. The gorgeous dining room features three open studio kitchens, allowing you to enjoy the sights and sounds of the culinary artistry on display.') }}
+                            </p> -->
+                            <!-- bottom restaurant -->
+                            <div class="pb-2"></div>
                             <p>
                                 {!! method_exists($aboutSectionSetting, 't')
                                     ? $aboutSectionSetting->t('description')
@@ -104,7 +106,7 @@
         </div>
     </section>
 
-    <section id="menu" class="restaurant-menu menu section-padding bg-darkgray">
+    <!-- <section id="menu" class="restaurant-menu menu section-padding bg-darkgray">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
@@ -175,7 +177,7 @@
             </div>
             @endif
         </div>
-    </section>
+    </section> -->
 
 
     @php

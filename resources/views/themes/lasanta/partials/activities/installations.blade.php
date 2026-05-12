@@ -51,7 +51,13 @@
     $buttonLabel = $buttonLabels[$locale] ?? $buttonLabels['en'];
 @endphp
 
-<section class="amenities section-padding bg-lightbrown">
+<style>
+.amenities .item.hover-box:not(:hover) {
+    background-color: #f4f1ed;
+}
+</style>
+
+<section class="amenities section-padding bg-white">
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col-lg-4 col-md-12 mb-30">

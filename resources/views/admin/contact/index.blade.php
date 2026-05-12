@@ -31,19 +31,19 @@
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $contactPageSetting->title ?? '') }}">
             </div>
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <label class="form-label">Petit titre disponibilité</label>
                 <input type="text" name="availability_small" class="form-control" value="{{ old('availability_small', $contactPageSetting->availability_small ?? '') }}">
-            </div>
+            </div> -->
             <div class="col-md-4">
                 <label class="form-label">Titre disponibilité</label>
                 <input type="text" name="availability_title" class="form-control" value="{{ old('availability_title', $contactPageSetting->availability_title ?? '') }}">
             </div>
-            <div class="col-md-8">
+            <!-- <div class="col-md-8">
                 <label class="form-label">Texte disponibilité</label>
                 <textarea name="availability_text" class="form-control" rows="3">{{ old('availability_text', $contactPageSetting->availability_text ?? '') }}</textarea>
-            </div>
-            <div class="col-12">
+            </div> -->
+            <!-- <div class="col-12">
                 <label class="form-label d-block mb-2">Libellés réservation et calendrier</label>
                 <ul class="nav nav-tabs" id="contact-booking-labels-tabs" role="tablist">
                     @foreach($locales as $localeKey => $localeLabel)
@@ -53,7 +53,7 @@
                             </button>
                         </li>
                     @endforeach
-                </ul>
+                </ul> -->
                 <div class="tab-content border border-top-0 rounded-bottom p-3">
                     @foreach($locales as $localeKey => $localeLabel)
                         @php
@@ -72,7 +72,7 @@
                                 return old('translations.' . $localeKey . '.' . $field, $translatedValue);
                             };
                         @endphp
-                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="contact-booking-labels-{{ $localeKey }}" role="tabpanel" aria-labelledby="contact-booking-labels-{{ $localeKey }}-tab" tabindex="0">
+                        <!-- <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="contact-booking-labels-{{ $localeKey }}" role="tabpanel" aria-labelledby="contact-booking-labels-{{ $localeKey }}-tab" tabindex="0">
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Infos et réservations</label>
@@ -95,10 +95,10 @@
                                     <input type="text" name="{{ $isFrench ? 'book_now_label' : 'translations[' . $localeKey . '][book_now_label]' }}" class="form-control" value="{{ $valueFor('book_now_label') }}">
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     @endforeach
                 </div>
-                <div class="form-text">Les jours, mois et textes internes du calendrier suivent automatiquement la langue active du site. Les champs ci-dessus pilotent les autres textes visibles de la réservation.</div>
+                <!-- <div class="form-text">Les jours, mois et textes internes du calendrier suivent automatiquement la langue active du site. Les champs ci-dessus pilotent les autres textes visibles de la réservation.</div> -->
             </div>
             <div class="col-md-4">
                 <label class="form-label">Latitude GPS</label>

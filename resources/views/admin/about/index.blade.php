@@ -5,7 +5,7 @@
 @section('content')
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
-            <h1 class="h3 mb-1">Section À propos</h1>
+            <h1 class="h3 mb-1">Section Présentation</h1>
             <div class="text-muted">Gérer le contenu affiché sur l'accueil et la page À propos</div>
         </div>
         <a href="{{ url('/') }}#first_section" class="btn btn-outline-secondary" target="_blank" rel="noopener">Voir la
@@ -74,20 +74,20 @@
 
             <div class="row g-3">
                 <div class="col-12">
-                    <label class="form-label">Petit titre</label>
+                    <label class="form-label">Petit Titre</label>
                     <input type="text" name="small_title" class="form-control"
                         value="{{ old('small_title', $aboutSetting->small_title ?? '') }}">
                 </div>
                 <div class="col-12">
-                    <label class="form-label">Titre</label>
+                    <label class="form-label">Sous Titre</label>
                     <input type="text" name="title" class="form-control"
                         value="{{ old('title', $aboutSetting->title ?? '') }}">
                 </div>
-                <div class="col-12">
+                <!-- <div class="col-12">
                     <label class="form-label">Lead</label>
                     <input type="text" name="lead" class="form-control"
                         value="{{ old('lead', $aboutSetting->lead ?? '') }}">
-                </div>
+                </div> -->
                 <div class="col-12">
                     <label class="form-label">Description</label>
                     @php

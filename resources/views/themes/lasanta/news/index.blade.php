@@ -2,6 +2,7 @@
 
 @php
 $bttext = ['fr' => 'Par', 'en' => 'By', 'de' => 'Von', 'it' => 'Da'];
+$moreLabels = ['fr' => 'Voir plus', 'en' => 'See more', 'de' => 'Mehr sehen', 'it' => 'Vedi di piu'];
 @endphp
 
 @section('content')
@@ -34,14 +35,17 @@ $bttext = ['fr' => 'Par', 'en' => 'By', 'de' => 'Von', 'it' => 'Da'];
                         <div class="cont">
                             <h4><a href="{{ route('news.show', $item->slug) }}">{{ method_exists($item, 't') ? $item->t('title') : $item->title }}</a></h4>
                             <p>{!! \Illuminate\Support\Str::limit(strip_tags(method_exists($item, 't') ? $item->t('excerpt') : ($item->excerpt ?? '')), 60) !!}</p>
-                            <div class="author">
-                                <div>
+                             <div class="col-lg-7 text-left">
+                                <a href="{{ route('news.show', $item->slug) }}" style="padding:0px 8px !important;" class="button-3">{{ $moreLabels[app()->getLocale()] ?? $moreLabels['en'] }}</a>
+                            </div>
+                            <!-- <div class="author"> -->
+                                <!-- <div>
                                     <h5>{{ $item->published_at?->format('d F Y') }}</h5>
                                     @if($item->author ?? null)
                                         <h5>{{ $bttext[app()->getLocale()] ?? 'Par' }} <a href="#" class="text-decoration-line-bottom">La Santa</a></h5>
                                     @endif
-                                </div>
-                            </div>
+                                </div> -->
+                            <!-- </div> -->
                         </div>
                     </div>  
                 </div>

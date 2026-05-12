@@ -38,7 +38,7 @@
                 : asset('storage/' . $phImg);
         }
     @endphp
-    <div class="d-flex align-items-center justify-content-between mb-3">
+    <!-- <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="h5 mb-0">En-tête de la section Offres</h2>
         <small class="text-muted">Titre et bannière affichés au-dessus de la liste des offres</small>
     </div>
@@ -67,7 +67,7 @@
             </div>
         </div>
     </form>
-</div>
+</div> -->
 
 <div class="admin-card p-4 mb-4">
     <div class="d-flex align-items-center justify-content-between mb-3">

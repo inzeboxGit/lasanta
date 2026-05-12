@@ -20,9 +20,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10 mb-60">
-                @if(method_exists($news, 't') ? $news->t('excerpt') : $news->excerpt)
+                <!-- @if(method_exists($news, 't') ? $news->t('excerpt') : $news->excerpt)
                     <div class="section-subtitle">{{ method_exists($news, 't') ? $news->t('excerpt') : $news->excerpt }}</div>
-                @endif
+                @endif -->
                 <div class="section-title">{{ method_exists($news, 't') ? $news->t('title') : $news->title }}</div>
                 @if(method_exists($news, 't') ? $news->t('body') : $news->body)
                     <p class="mb-30">{!! nl2br(e(method_exists($news, 't') ? $news->t('body') : $news->body)) !!}</p>

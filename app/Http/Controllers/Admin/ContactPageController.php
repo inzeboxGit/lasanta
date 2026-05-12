@@ -12,19 +12,13 @@ class ContactPageController extends Controller
 {
     public function index()
     {
-        $contactPageSetting = $this->resolveSetting();
-        if (method_exists($contactPageSetting, 'loadMissing')) {
-            $contactPageSetting->loadMissing('translations');
-        }
-        $locales = config('content_translations.locales', ['fr' => 'Français']);
-
-        return view('admin.contact.index', compact('contactPageSetting', 'locales'));
+        return redirect()->route('admin.settings.index');
     }
 
     public function update(Request $request)
     {
         if (! Schema::hasTable('page_header_settings')) {
-            return redirect()->route('admin.contact.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+            return redirect()->route('admin.settings.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
 
         $setting = $this->resolveSetting();
@@ -88,7 +82,7 @@ class ContactPageController extends Controller
             }
         }
 
-        return redirect()->route('admin.contact.index')->with('success', 'En-tête de la page contact mise à jour.');
+        return redirect()->route('admin.settings.index')->with('success', 'En-tête de la page contact mise à jour.');
     }
 
     private function resolveSetting(): object

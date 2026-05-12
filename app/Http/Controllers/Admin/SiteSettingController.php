@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PageHeaderSetting;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +14,8 @@ class SiteSettingController extends Controller
     public function index()
     {
         $siteSetting = $this->defaultSetting();
+        $contactPageSetting = (object) $this->defaultContactPageSetting();
         $locales = config('content_translations.locales', ['fr' => 'Français']);
-        $frontThemes = $this->availableFrontThemes();
         $supportsFooterBackgroundImage = Schema::hasTable('site_settings')
             && Schema::hasColumn('site_settings', 'footer_background_image');
 
@@ -25,7 +26,18 @@ class SiteSettingController extends Controller
             );
         }
 
-        return view('admin.settings.index', compact('siteSetting', 'locales', 'frontThemes', 'supportsFooterBackgroundImage'));
+        if (Schema::hasTable('page_header_settings')) {
+            $contactPageSetting = PageHeaderSetting::firstOrCreate(
+                ['page' => 'contact'],
+                $this->defaultContactPageSetting()
+            );
+
+            if (method_exists($contactPageSetting, 'loadMissing')) {
+                $contactPageSetting->loadMissing('translations');
+            }
+        }
+
+        return view('admin.settings.index', compact('siteSetting', 'contactPageSetting', 'locales', 'supportsFooterBackgroundImage'));
     }
 
     public function update(Request $request)
@@ -35,8 +47,6 @@ class SiteSettingController extends Controller
         }
 
         $supportsFooterBackgroundImage = Schema::hasColumn('site_settings', 'footer_background_image');
-        $supportsFrontTheme = Schema::hasColumn('site_settings', 'front_theme');
-        $frontThemes = $this->availableFrontThemes();
 
         $rules = [
             'site_name' => ['nullable', 'string', 'max:255'],
@@ -52,10 +62,6 @@ class SiteSettingController extends Controller
             'default_locale' => ['nullable', 'string', 'max:10'],
             'custom_head_scripts' => ['nullable', 'string'],
         ];
-
-        if ($supportsFrontTheme) {
-            $rules['front_theme'] = ['nullable', 'string', 'max:64'];
-        }
 
         if ($supportsFooterBackgroundImage) {
             $rules['footer_background_image'] = ['nullable', 'image', 'max:5120'];
@@ -74,16 +80,6 @@ class SiteSettingController extends Controller
 
         if ($data['use_site_email_for_contact']) {
             $data['contact_recipient_email'] = null;
-        }
-
-        if ($supportsFrontTheme) {
-            $frontTheme = strtolower(trim((string) ($data['front_theme'] ?? 'default')));
-
-            if (! array_key_exists($frontTheme, $frontThemes)) {
-                return back()->withErrors(['front_theme' => 'Thème front invalide.'])->withInput();
-            }
-
-            $data['front_theme'] = $frontTheme;
         }
 
         $setting = SiteSetting::firstOrCreate(
@@ -205,5 +201,25 @@ class SiteSettingController extends Controller
         }
 
         return $themes;
+    }
+
+    private function defaultContactPageSetting(): array
+    {
+        return [
+            'page' => 'contact',
+            'subtitle' => '',
+            'title' => '',
+            'availability_small' => ' Hotel La Santa',
+            'availability_title' => 'Disponibilité',
+            'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
+            'info_booking_label' => 'Infos et réservations',
+            'select_room_label' => 'Sélectionner un appartement',
+            'adults_label' => 'Adultes',
+            'children_label' => 'Enfants',
+            'book_now_label' => 'Réserver maintenant',
+            'map_latitude' => 42.6043096,
+            'map_longitude' => 8.9295210,
+            'header_image' => '',
+        ];
     }
 }

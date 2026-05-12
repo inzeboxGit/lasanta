@@ -17,7 +17,7 @@
 
 <div class="admin-card p-4 mb-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="h5 mb-0">Paramètres page Appartements</h2>
+        <h2 class="h5 mb-0">Paramètres page Chambres</h2>
         <a href="{{ route('appartements.index') }}" class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener">Voir la page</a>
     </div>
     <form action="{{ route('admin.rooms.page-settings.update') }}" method="post" enctype="multipart/form-data">
@@ -31,23 +31,23 @@
             }
         @endphp
         <div class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label">Sous-titre</label>
+            <div class="col-md-6">
+                <label class="form-label">Petit Titre</label>
                 <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $appartmentPageSetting->subtitle ?? '') }}">
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $appartmentPageSetting->title ?? '') }}">
             </div>
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
                 <label class="form-label">Sous-titre de la section accueil</label>
                 <input type="text" name="home_subtitle" class="form-control" value="{{ old('home_subtitle', $appartmentPageSetting->home_subtitle ?? '') }}">
-            </div>
-            <div class="col-md-6">
+            </div> -->
+            <!-- <div class="col-md-6">
                 <label class="form-label">Titre de la section accueil</label>
                 <input type="text" name="home_title" class="form-control" value="{{ old('home_title', $appartmentPageSetting->home_title ?? '') }}">
-            </div>
-            <div class="col-md-4">
+            </div> -->
+            <div class="col-12">
                 <label class="form-label">Image header</label>
                 <input type="file" name="header_image" id="appartement_header_image" class="form-control" accept="image/*">
                 <div class="mt-2">

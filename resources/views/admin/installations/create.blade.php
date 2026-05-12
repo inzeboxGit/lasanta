@@ -1,9 +1,9 @@
 @extends('admin.layout')
 
-@section('title', 'Ajouter une installation')
+@section('title', 'Ajouter un service')
 
 @section('content')
-<h1 class="h3 mb-4">Ajouter une installation</h1>
+<h1 class="h3 mb-4">Ajouter un service</h1>
 
 @if($errors->any())
     <div class="alert alert-danger">

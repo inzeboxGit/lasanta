@@ -15,12 +15,70 @@
 @endif
 
 <div class="admin-card p-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h5 mb-0">Paramètres de la page Contact</h2>
+        <a href="{{ url('/contacts') }}" class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener">Voir la page</a>
+    </div>
+    <form action="{{ route('admin.contact.update') }}" method="post" enctype="multipart/form-data">
+        @csrf
+        @php
+            $contactHeaderSrc = media_url($contactPageSetting->header_image ?? null, 'img/hero_home_2.jpg');
+        @endphp
+        <div class="row g-3">
+            <div class="col-12">
+                <h3 class="h6 mb-1">En-tête de la page Contact</h3>
+                <p class="text-muted mb-0">Textes et image du hero de la page contact.</p>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Sous-titre</label>
+                <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $contactPageSetting->subtitle ?? '') }}">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Titre</label>
+                <input type="text" name="title" class="form-control" value="{{ old('title', $contactPageSetting->title ?? '') }}">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Titre disponibilité</label>
+                <input type="text" name="availability_title" class="form-control" value="{{ old('availability_title', $contactPageSetting->availability_title ?? '') }}">
+            </div>
+            <div class="col-12">
+                <hr class="my-2">
+                <h3 class="h6 mb-1">Carte</h3>
+                <p class="text-muted mb-0">Coordonnées utilisées pour la position de la carte.</p>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Latitude GPS</label>
+                <input type="number" step="0.0000001" name="map_latitude" class="form-control" value="{{ old('map_latitude', $contactPageSetting->map_latitude ?? '42.6043096') }}" placeholder="42.6043096">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Longitude GPS</label>
+                <input type="number" step="0.0000001" name="map_longitude" class="form-control" value="{{ old('map_longitude', $contactPageSetting->map_longitude ?? '8.9295210') }}" placeholder="8.9295210">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Image header</label>
+                <input type="file" name="header_image" id="contact_header_image" class="form-control" accept="image/*">
+                <div class="mt-2">
+                    <img id="contact_header_preview" src="{{ $contactHeaderSrc }}" alt="" class="rounded" style="max-height:90px;">
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Mettre à jour</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="admin-card p-4 mt-4" id="site-settings">
     <form action="{{ route('admin.settings.update') }}" method="post" enctype="multipart/form-data">
         @csrf
         @php
             $footerBackgroundSrc = media_url($siteSetting->footer_background_image ?? null, 'img/rooms/3.jpg');
         @endphp
         <div class="row g-3">
+            <div class="col-12">
+                <h2 class="h6 mb-1">Informations générales</h2>
+                <p class="text-muted mb-0">Nom du site, langue.</p>
+            </div>
             <div class="col-md-6">
                 <label class="form-label">Nom du site</label>
                 <input type="text" name="site_name" class="form-control" value="{{ old('site_name', $siteSetting->site_name ?? '') }}">
@@ -39,16 +97,10 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Thème front</label>
-                <select name="front_theme" class="form-select">
-                    @foreach(($frontThemes ?? ['default' => 'Thème actuel']) as $themeKey => $themeLabel)
-                        <option value="{{ $themeKey }}" {{ old('front_theme', $siteSetting->front_theme ?? 'default') === $themeKey ? 'selected' : '' }}>
-                            {{ $themeLabel }}
-                        </option>
-                    @endforeach
-                </select>
-                <div class="form-text">Appliqué uniquement à la partie publique du site.</div>
+            <div class="col-12">
+                <hr class="my-2">
+                <h2 class="h6 mb-1">Contact et destinataire</h2>
+                <p class="text-muted mb-0">Adresse email utilisée pour recevoir les formulaires.</p>
             </div>
             <div class="col-12">
                 <div class="form-check mt-2">
@@ -76,6 +128,11 @@
                 >
                 <div class="form-text">Utilisé seulement si la case ci-dessus est décochée.</div>
             </div>
+            <div class="col-12">
+                <hr class="my-2">
+                <h2 class="h6 mb-1">Coordonnées du site</h2>
+                <p class="text-muted mb-0">Téléphones et adresse affichés sur le site.</p>
+            </div>
             <div class="col-md-6">
                 <label class="form-label">Téléphone 1</label>
                 <input type="text" name="phone_primary" class="form-control" value="{{ old('phone_primary', $siteSetting->phone_primary ?? '') }}">
@@ -88,6 +145,11 @@
                 <label class="form-label">Adresse</label>
                 <input type="text" name="address" class="form-control" value="{{ old('address', $siteSetting->address ?? '') }}">
             </div>
+            <div class="col-12">
+                <hr class="my-2">
+                <h2 class="h6 mb-1">Réseaux sociaux</h2>
+                <p class="text-muted mb-0">Liens externes affichés dans le front.</p>
+            </div>
             <div class="col-md-6">
                 <label class="form-label">Facebook</label>
                 <input type="text" name="facebook_url" class="form-control" value="{{ old('facebook_url', $siteSetting->facebook_url ?? '') }}" placeholder="https://facebook.com/...">
@@ -96,20 +158,25 @@
                 <label class="form-label">Instagram</label>
                 <input type="text" name="instagram_url" class="form-control" value="{{ old('instagram_url', $siteSetting->instagram_url ?? '') }}" placeholder="https://instagram.com/...">
             </div>
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
                 <label class="form-label">WhatsApp</label>
                 <input type="text" name="whatsapp_url" class="form-control" value="{{ old('whatsapp_url', $siteSetting->whatsapp_url ?? '') }}" placeholder="https://wa.me/...">
-            </div>
+            </div> -->
             <div class="col-md-6">
                 <label class="form-label">Twitter / X</label>
                 <input type="text" name="twitter_url" class="form-control" value="{{ old('twitter_url', $siteSetting->twitter_url ?? '') }}" placeholder="https://x.com/...">
+            </div>
+            <div class="col-12">
+                <hr class="my-2">
+                <h2 class="h6 mb-1">Scripts globaux</h2>
+                <p class="text-muted mb-0">Code injecté dans le head de toutes les pages.</p>
             </div>
             <div class="col-12">
                 <label class="form-label">Scripts personnalisés (Head)</label>
                 <textarea name="custom_head_scripts" class="form-control" rows="5" placeholder="&lt;script&gt;...&lt;/script&gt;">{{ old('custom_head_scripts', $siteSetting->custom_head_scripts ?? '') }}</textarea>
                 <div class="form-text">Ces scripts seront ajoutés dans la balise &lt;head&gt; de toutes les pages (Google Analytics, Facebook Pixel, etc.).</div>
             </div>
-            @if($supportsFooterBackgroundImage ?? false)
+            <!-- @if($supportsFooterBackgroundImage ?? false)
                 <div class="col-12">
                     <label class="form-label">Image de fond du footer</label>
                     <input type="file" name="footer_background_image" id="footer_background_image" class="form-control" accept="image/*">
@@ -118,7 +185,7 @@
                         <img id="footer_background_image_preview" src="{{ $footerBackgroundSrc }}" alt="" class="rounded" style="max-height:120px;">
                     </div>
                 </div>
-            @endif
+            @endif -->
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>
@@ -132,29 +199,45 @@ document.addEventListener('DOMContentLoaded', function () {
     const wrap = document.getElementById('contact_recipient_email_wrap');
     const footerBackgroundInput = document.getElementById('footer_background_image');
     const footerBackgroundPreview = document.getElementById('footer_background_image_preview');
+    const contactHeaderInput = document.getElementById('contact_header_image');
+    const contactHeaderPreview = document.getElementById('contact_header_preview');
 
-    if (!checkbox || !wrap) return;
-
-    const syncVisibility = function () {
-        wrap.style.display = checkbox.checked ? 'none' : '';
-    };
-
-    checkbox.addEventListener('change', syncVisibility);
-    syncVisibility();
-
-    if (!footerBackgroundInput || !footerBackgroundPreview) return;
-
-    footerBackgroundInput.addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            footerBackgroundPreview.src = e.target.result;
-            footerBackgroundPreview.style.display = 'block';
+    if (checkbox && wrap) {
+        const syncVisibility = function () {
+            wrap.style.display = checkbox.checked ? 'none' : '';
         };
-        reader.readAsDataURL(file);
-    });
+
+        checkbox.addEventListener('change', syncVisibility);
+        syncVisibility();
+    }
+
+    if (footerBackgroundInput && footerBackgroundPreview) {
+        footerBackgroundInput.addEventListener('change', function (event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                footerBackgroundPreview.src = e.target.result;
+                footerBackgroundPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (contactHeaderInput && contactHeaderPreview) {
+        contactHeaderInput.addEventListener('change', function (event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                contactHeaderPreview.src = e.target.result;
+                contactHeaderPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
 });
 </script>
 @endsection

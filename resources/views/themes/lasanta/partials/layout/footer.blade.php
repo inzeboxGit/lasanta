@@ -62,6 +62,9 @@ $footerTranslations = [
 ];
 $footerLocale = app()->getLocale();
 $ft = $footerTranslations[$footerLocale] ?? $footerTranslations['en'];
+$instagramUrl = !empty($siteSetting->instagram_url ?? null) ? $siteSetting->instagram_url : '#';
+$twitterUrl = !empty($siteSetting->twitter_url ?? null) ? $siteSetting->twitter_url : '#';
+$facebookUrl = !empty($siteSetting->facebook_url ?? null) ? $siteSetting->facebook_url : '#';
 @endphp
 <footer class="footer">
     <!-- top -->
@@ -85,9 +88,9 @@ $ft = $footerTranslations[$footerLocale] ?? $footerTranslations['en'];
                         <p>{{ $aboutExcerpt ?: '...' }}</p>
                         <div class="social-icons" bis_skin_checked="1">
                             <ul class="list-inline">
-                                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                <li><a href="{{ $instagramUrl }}" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a href="{{ $twitterUrl }}" target="_blank" rel="noopener"><i class="fa-brands fa-twitter"></i></a></li>
+                                <li><a href="{{ $facebookUrl }}" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i></a></li>
                             </ul>
                         </div>
                     </div>

@@ -13,10 +13,10 @@
             <label class="form-label">Slug</label>
             <input type="text" name="slug" class="form-control" value="{{ old('slug', $item->slug ?? '') }}" placeholder="auto">
         </div>
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <label class="form-label">Auteur</label>
             <input type="text" name="author" class="form-control" value="{{ old('author', $item->author ?? '') }}" placeholder="Admin">
-        </div>
+        </div> -->
         <div class="col-md-6">
             <label class="form-label">Catégorie</label>
             <input type="text" name="category" class="form-control" value="{{ old('category', $item->category ?? '') }}" placeholder="Ex: Événement, Offre...">
@@ -33,7 +33,7 @@
             </select>
         </div>
         <div class="col-12">
-            <label class="form-label">Résumé</label>
+            <label class="form-label">Petit Contenu</label>
             <textarea name="excerpt" class="form-control" rows="3">{{ old('excerpt', $item->excerpt ?? '') }}</textarea>
         </div>
         <div class="col-12">

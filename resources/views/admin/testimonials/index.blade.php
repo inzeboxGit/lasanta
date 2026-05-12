@@ -26,15 +26,15 @@
             $backgroundSrc = media_url($testimonialSectionSetting->header_image ?? null, 'img/hero_home_1.jpg');
         @endphp
         <div class="row g-3">
-            <div class="col-md-4">
+            <div class="col-12">
                 <label class="form-label">Sous-titre</label>
                 <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $testimonialSectionSetting->subtitle ?? '') }}">
             </div>
-            <div class="col-md-4">
+            <div class="col-12">
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $testimonialSectionSetting->title ?? '') }}">
             </div>
-            <div class="col-md-4">
+            <div class="col-12">
                 <label class="form-label">Image d'arrière-plan</label>
                 <input type="file" name="header_image" id="testimonials_background_image" class="form-control" accept="image/*">
                 <div class="mt-2">

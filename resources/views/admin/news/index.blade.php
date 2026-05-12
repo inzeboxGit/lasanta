@@ -35,10 +35,10 @@
                 <input type="text" name="title" class="form-control" value="{{ old('title', $newsPageSetting->title ?? '') }}">
             </div>
 
-            <div class="col-md-11">
-                <label class="form-label">Texte hero</label>
+            <!-- <div class="col-md-11">
+                <label class="form-label">Texte hero.</label>
                 <textarea name="hero_text" class="form-control" rows="4">{{ old('hero_text', $newsPageSetting->hero_text ?? '') }}</textarea>
-            </div>
+            </div> -->
             <div class="col-md-7">
                 <label class="form-label">Image header</label>
                 <input type="file" name="header_image" id="news_header_image" class="form-control" accept="image/*">
@@ -55,7 +55,7 @@
 
 <div class="admin-card p-4 mb-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="h5 mb-0">Section Actualités — Home</h2>
+        <h2 class="h5 mb-0">Section Actualités — Accueil</h2>
         <small class="text-muted">Titre et sous-titre affichés sur la page d'accueil</small>
     </div>
     <form action="{{ route('admin.news.home-section.update') }}" method="post">

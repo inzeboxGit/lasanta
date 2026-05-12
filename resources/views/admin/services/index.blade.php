@@ -136,7 +136,7 @@
             </div>
 
             {{-- Clé onglet --}}
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <label class="form-label">Clé onglet <span class="text-danger">*</span></label>
                 <input type="text" name="tab_key" class="form-control"
                        value="{{ old('tab_key', $s?->tab_key ?? '') }}"
@@ -145,14 +145,14 @@
             </div>
 
             {{-- Ordre --}}
-            <div class="col-md-2">
+            <div class="col-md-6">
                 <label class="form-label">Ordre d'affichage</label>
                 <input type="number" name="sort_order" class="form-control" min="0"
                        value="{{ old('sort_order', $s?->sort_order ?? 0) }}">
             </div>
 
             {{-- Sous-titre --}}
-            <div class="col-md-5">
+            <div class="col-12">
                 <label class="form-label">Sous-titre</label>
                 <input type="text" name="subtitle" class="form-control"
                        value="{{ old('subtitle', $s?->subtitle ?? '') }}"
@@ -160,7 +160,7 @@
             </div>
 
             {{-- Titre --}}
-            <div class="col-md-5">
+            <div class="col-12">
                 <label class="form-label">Titre <span class="text-danger">*</span></label>
                 <input type="text" name="title" class="form-control"
                        value="{{ old('title', $s?->title ?? '') }}"
@@ -227,7 +227,7 @@
                     'fa-solid fa-shield-heart'     => 'Sécurité',
                 ];
             @endphp
-            <div class="col-12">
+            <!-- <div class="col-12">
                 <label class="form-label">Icône FontAwesome</label>
 
                 {{-- Champ texte caché qui stocke la valeur --}}
@@ -258,7 +258,7 @@
                     </label>
                     @endforeach
                 </div>
-            </div>
+            </div> -->
 
             {{-- Image --}}
             <div class="col-12">

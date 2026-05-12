@@ -5,8 +5,8 @@
 @section('content')
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h1 class="h3 mb-1">Installations principales</h1>
-        <div class="text-muted">Gérer la section installations de la page d'accueil</div>
+        <h1 class="h3 mb-1">Services</h1>
+        <div class="text-muted">Gérer la section services de la page d'accueil</div>
     </div>
     <a href="{{ route('admin.installations.create') }}" class="btn btn-primary">Ajouter</a>
 </div>
@@ -16,12 +16,12 @@
 @endif
 
 <div class="admin-card p-4 mb-4">
-    <h2 class="h5 mb-3">Paramètres de section Installations</h2>
+    <h2 class="h5 mb-3">Paramètres de section Services</h2>
     <form action="{{ route('admin.installations.section-settings.update') }}" method="post">
         @csrf
         <div class="row g-3">
             <div class="col-md-6">
-                <label class="form-label">Sous-titre</label>
+                <label class="form-label">Petit Titre</label>
                 <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $sectionSetting->subtitle ?? '') }}">
             </div>
             <div class="col-md-6">

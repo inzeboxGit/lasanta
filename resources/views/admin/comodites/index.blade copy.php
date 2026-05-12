@@ -30,6 +30,15 @@
                     $headerSrc = media_url($sectionSetting->header_image ?? null);
                 @endphp
                 <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Image header</label>
+                        <input type="file" name="header_image" id="restaurant_header_image" class="form-control"
+                            accept="image/*">
+                        <div class="mt-2">
+                            <img id="restaurant_header_preview" src="{{ $headerSrc ?? '' }}" alt="" class="rounded"
+                                style="max-height:120px;{{ empty($headerSrc) ? 'display:none;' : '' }}">
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <label class="form-label">Sous-titre</label>
                         <input type="text" name="subtitle" class="form-control"
@@ -39,15 +48,6 @@
                         <label class="form-label">Titre</label>
                         <input type="text" name="title" class="form-control"
                             value="{{ old('title', $sectionSetting->title ?? '') }}">
-                    </div>
-                    <div class="col-12">
-                        <label class="form-label">Image header</label>
-                        <input type="file" name="header_image" id="restaurant_header_image" class="form-control"
-                            accept="image/*">
-                        <div class="mt-2">
-                            <img id="restaurant_header_preview" src="{{ $headerSrc ?? '' }}" alt="" class="rounded"
-                                style="max-height:120px;{{ empty($headerSrc) ? 'display:none;' : '' }}">
-                        </div>
                     </div>
                     <!-- @if($pageMeta['section_settings']['show_hero_text'])
                         <div class="col-12">
@@ -74,32 +74,32 @@
                     $aboutOverlaySrc = media_url($aboutSectionSetting->overlay_image ?? null, 'img/home_1.jpg');
                 @endphp
                 <div class="row g-3">
-                    <div class="col-12">
+                    <div class="col-md-4">
                         <label class="form-label">Petit titre</label>
                         <input type="text" name="small_title" class="form-control"
                             value="{{ old('small_title', $aboutSectionSetting->small_title ?? '') }}">
                     </div>
-                    <div class="col-12">
+                    <div class="col-md-4">
                         <label class="form-label">Titre</label>
                         <input type="text" name="title" class="form-control"
                             value="{{ old('title', $aboutSectionSetting->title ?? '') }}">
                     </div>
-                    <!-- <div class="col-md-4">
+                    <div class="col-md-4">
                         <label class="form-label">Lead</label>
                         <input type="text" name="lead" class="form-control"
                             value="{{ old('lead', $aboutSectionSetting->lead ?? '') }}">
-                    </div> -->
-                    <div class="col-12">
+                    </div>
+                    <div class="col-md-8">
                         <label class="form-label">Description</label>
                         <textarea name="description" class="form-control"
                             rows="5">{{ old('description', $aboutSectionSetting->description ?? '') }}</textarea>
                     </div>
-                    <!-- <div class="col-md-4">
+                    <div class="col-md-4">
                         <label class="form-label">Signature</label>
                         <input type="text" name="signature" class="form-control"
                             value="{{ old('signature', $aboutSectionSetting->signature ?? '') }}">
-                    </div> -->
-                    <!-- <div class="col-md-6">
+                    </div>
+                    <div class="col-md-6">
                         <label class="form-label">Image principale</label>
                         <input type="file" name="main_image" id="about_main_image" class="form-control" accept="image/*">
                         @if(($pageMeta['title'] ?? '') === 'Piscine')
@@ -109,15 +109,15 @@
                             <img id="about_main_preview" src="{{ $aboutMainSrc }}" alt="" class="rounded"
                                 style="max-height:100px;">
                         </div>
-                    </div> -->
-                    <!-- <div class="col-md-6">
+                    </div>
+                    <div class="col-md-6">
                         <label class="form-label">Image superposée</label>
                         <input type="file" name="overlay_image" id="about_overlay_image" class="form-control" accept="image/*">
                         <div class="mt-2">
                             <img id="about_overlay_preview" src="{{ $aboutOverlaySrc }}" alt="" class="rounded"
                                 style="max-height:100px;">
                         </div>
-                    </div> -->
+                    </div>
                     <div class="col-12">
                         <button class="btn btn-primary" type="submit">Mettre à jour</button>
                     </div>
@@ -126,8 +126,8 @@
         </div>
     @endif
 
-    <!-- @if($pageMeta['extra_text_section']['enabled']) -->
-        <!-- <div class="admin-card p-4 mb-4">
+    @if($pageMeta['extra_text_section']['enabled'])
+        <div class="admin-card p-4 mb-4">
             <h2 class="h5 mb-3">{{ $pageMeta['extra_text_section']['title'] }}</h2>
             <form action="{{ route($pageMeta['extra_text_section']['route']) }}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -186,8 +186,8 @@
                     </div>
                 </div>
             </form>
-        </div> -->
-    <!-- @endif -->
+        </div>
+    @endif
 
     @if($pageMeta['secondary_extra_section']['enabled'])
         <div class="admin-card p-4 mb-4">
@@ -241,31 +241,31 @@
             <form action="{{ route($pageMeta['restaurant_info_section']['route']) }}" method="post">
                 @csrf
                 <div class="row g-3">
-                    <div class="col-12">
+                    <div class="col-md-4">
                         <label class="form-label">Titre réservation</label>
                         <input type="text" name="small_title" class="form-control"
                             value="{{ old('small_title', $restaurantInfoSectionSetting->small_title ?? '') }}">
                     </div>
-                    <div class="col-12">
+                    <div class="col-md-8">
                         <label class="form-label">Horaires</label>
                         <textarea name="lead" class="form-control" rows="5">{{ old('lead', $restaurantInfoSectionSetting->lead ?? '') }}</textarea>
                         <small class="text-muted d-block mt-1">Une ligne par horaire.</small>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">Titre dress code</label>
                         <input type="text" name="title" class="form-control"
                             value="{{ old('title', $restaurantInfoSectionSetting->title ?? '') }}">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
+                        <label class="form-label">Texte dress code</label>
+                        <textarea name="description" class="form-control" rows="3">{{ old('description', $restaurantInfoSectionSetting->description ?? '') }}</textarea>
+                    </div>
+                    <div class="col-md-4">
                         <label class="form-label">Titre terrasse</label>
                         <input type="text" name="signature" class="form-control"
                             value="{{ old('signature', $restaurantInfoSectionSetting->signature ?? '') }}">
                     </div>
-                    <div class="col-12">
-                        <label class="form-label">Texte dress code</label>
-                        <textarea name="description" class="form-control" rows="3">{{ old('description', $restaurantInfoSectionSetting->description ?? '') }}</textarea>
-                    </div>
-                    <div class="col-12">
+                    <div class="col-md-8">
                         <label class="form-label">Texte terrasse</label>
                         <textarea name="main_image" class="form-control" rows="3">{{ old('main_image', $restaurantInfoSectionSetting->main_image ?? '') }}</textarea>
                     </div>
@@ -321,9 +321,9 @@
 
     
 
-    <!-- <div class="mt-3">
+    <div class="mt-3">
         {{ $comodites->links('pagination::bootstrap-5') }}
-    </div> -->
+    </div>
 
     @if(($pageMeta['restaurant_gallery_section']['enabled'] ?? false))
     <div class="admin-card p-4 mt-4" id="gallery-section">
