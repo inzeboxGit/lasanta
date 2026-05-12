@@ -79,7 +79,8 @@ $footerEmail = $siteSetting->email ?? '';
             <div class="row" bis_skin_checked="1">
                 <div class="col-md-4 mb-30" bis_skin_checked="1">
                     <div class="item" bis_skin_checked="1">
-                        <div class="logo" bis_skin_checked="1"><img src="img/logo.png" alt=""></div>
+                        <div class="logo" bis_skin_checked="1">
+                            <img src="themes/lasanta/img/logo.png" alt="" style="width:90px"></div>
                         @php
                             $aboutExcerpt = null;
                             try {

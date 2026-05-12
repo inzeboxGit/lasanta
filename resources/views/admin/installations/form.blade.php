@@ -13,6 +13,7 @@
 @endphp
 
 <div class="admin-card p-4">
+    <input type="hidden" name="scope" value="{{ old('scope', $installation->scope ?? 'home') }}">
     <div class="row g-3">
         <div class="col-md-6">
             <label class="form-label">Titre</label>

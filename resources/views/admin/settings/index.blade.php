@@ -1,11 +1,11 @@
 @extends('admin.layout')
 
-@section('title', 'Paramètres')
+@section('title', 'Contact')
 
 @section('content')
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
-        <h1 class="h3 mb-1">Paramètres du site</h1>
+        <h1 class="h3 mb-1">Contact</h1>
         <div class="text-muted">Téléphones, email, adresse, nom du site et réseaux sociaux</div>
     </div>
 </div>
