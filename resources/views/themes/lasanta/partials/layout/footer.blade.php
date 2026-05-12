@@ -65,6 +65,12 @@ $ft = $footerTranslations[$footerLocale] ?? $footerTranslations['en'];
 $instagramUrl = !empty($siteSetting->instagram_url ?? null) ? $siteSetting->instagram_url : '#';
 $twitterUrl = !empty($siteSetting->twitter_url ?? null) ? $siteSetting->twitter_url : '#';
 $facebookUrl = !empty($siteSetting->facebook_url ?? null) ? $siteSetting->facebook_url : '#';
+$footerAddress = method_exists($siteSetting, 't')
+    ? ($siteSetting->t('address') ?: ($siteSetting->address ?? ''))
+    : ($siteSetting->address ?? '');
+$footerPhone = $siteSetting->phone_primary ?? '';
+$footerPhoneHref = $footerPhone !== '' ? preg_replace('/\s+/', '', (string) $footerPhone) : '';
+$footerEmail = $siteSetting->email ?? '';
 @endphp
 <footer class="footer">
     <!-- top -->
@@ -98,9 +104,13 @@ $facebookUrl = !empty($siteSetting->facebook_url ?? null) ? $siteSetting->facebo
                 <div class="col-md-3 offset-md-1 mb-30" bis_skin_checked="1">
                     <div class="item" bis_skin_checked="1">
                         <h3>{{ $ft['contact_us'] }}</h3>
-                        <p>0665 Broadway st.<br>10234 NY, USA</p>
-                        <div class="phone" bis_skin_checked="1"><a href="tel:+410315520900">+1 123 567 8910</a></div>
-                        <div class="mail" bis_skin_checked="1"><a href="mailto:hi@rixoshotel.com">hi@rixoshotel.com</a></div>
+                        <p>{{ $footerAddress !== '' ? $footerAddress : '...' }}</p>
+                        <div class="phone" bis_skin_checked="1">
+                            <a href="{{ $footerPhoneHref !== '' ? 'tel:' . $footerPhoneHref : '#' }}">{{ $footerPhone !== '' ? $footerPhone : '...' }}</a>
+                        </div>
+                        <div class="mail" bis_skin_checked="1">
+                            <a href="{{ $footerEmail !== '' ? 'mailto:' . $footerEmail : '#' }}">{{ $footerEmail !== '' ? $footerEmail : '...' }}</a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-30" bis_skin_checked="1">

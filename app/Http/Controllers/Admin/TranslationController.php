@@ -10,7 +10,7 @@ class TranslationController extends Controller
 {
     public function index(Request $request)
     {
-        $types = config('content_translations.types', []);
+        $types = $this->operationalTypes();
         $locales = config('content_translations.locales', ['fr' => 'Français']);
 
         $selectedType = $request->query('type', array_key_first($types));
@@ -64,7 +64,7 @@ class TranslationController extends Controller
 
     public function update(Request $request)
     {
-        $types = config('content_translations.types', []);
+        $types = $this->operationalTypes();
         $locales = config('content_translations.locales', ['fr' => 'Français']);
 
         $validated = $request->validate([
@@ -109,5 +109,37 @@ class TranslationController extends Controller
             'id' => $record->id,
             'locale' => $locale,
         ])->with('success', 'Traductions enregistrées.');
+    }
+
+    private function operationalTypes(): array
+    {
+        $types = config('content_translations.types', []);
+
+        // Keep only sections currently managed and used in the admin.
+        $allowedTypeKeys = [
+            'home_hero',
+            'about_section',
+            'installation_section',
+            'promo_section',
+            'faq_section',
+            'faqs',
+            'services',
+            'appartment_page',
+            'rooms',
+            'amenities',
+            'restaurant_page',
+            'restaurant_about',
+            'restaurant_items',
+            'pool_page',
+            'pool_about',
+            'pool_items',
+            'news',
+            'contact_page',
+            'legal_pages',
+            'testimonials',
+            'site_settings',
+        ];
+
+        return array_intersect_key($types, array_flip($allowedTypeKeys));
     }
 }
