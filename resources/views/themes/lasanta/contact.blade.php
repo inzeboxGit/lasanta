@@ -18,12 +18,12 @@
     $contactUi = [
         'fr' => [
             'address' => 'Adresse',
-            'phone' => 'Telephone',
-            'first_name' => 'Prenom',
+            'phone' => 'Téléphone',
+            'first_name' => 'Prénom',
             'last_name' => 'Nom',
             'email' => 'Email',
             'message' => 'Message',
-            'human_check' => 'Etes-vous humain ? 3 + 1 =',
+            'human_check' => 'Êtes-vous humain ? 3 + 1 =',
             'send' => 'Envoyer',
         ],
         'en' => [
