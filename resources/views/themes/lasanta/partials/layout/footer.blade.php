@@ -86,7 +86,10 @@ $footerEmail = $siteSetting->email ?? '';
                             try {
                                 $about = \App\Models\AboutSectionSetting::first();
                                 if ($about) {
-                                    $aboutExcerpt = Str::limit(strip_tags($about->description ?? ''), 120);
+                                    $aboutDescription = method_exists($about, 't')
+                                        ? ($about->t('description', $footerLocale) ?: ($about->description ?? ''))
+                                        : ($about->description ?? '');
+                                    $aboutExcerpt = Str::limit(strip_tags($aboutDescription), 120);
                                 }
                             } catch (Exception $e) {
                                 $aboutExcerpt = null;

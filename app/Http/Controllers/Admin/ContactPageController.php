@@ -21,6 +21,12 @@ class ContactPageController extends Controller
             return redirect()->route('admin.settings.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
 
+        // Accept French decimal format (comma) from admin inputs.
+        $request->merge([
+            'map_latitude' => $this->normalizeCoordinate($request->input('map_latitude')),
+            'map_longitude' => $this->normalizeCoordinate($request->input('map_longitude')),
+        ]);
+
         $setting = $this->resolveSetting();
         $data = $request->validate([
             'subtitle' => ['nullable', 'string', 'max:255'],
@@ -83,6 +89,17 @@ class ContactPageController extends Controller
         }
 
         return redirect()->route('admin.settings.index')->with('success', 'En-tête de la page contact mise à jour.');
+    }
+
+    private function normalizeCoordinate(mixed $value): mixed
+    {
+        if (! is_string($value)) {
+            return $value;
+        }
+
+        $normalized = str_replace([',', ' '], ['.', ''], trim($value));
+
+        return $normalized === '' ? null : $normalized;
     }
 
     private function resolveSetting(): object

@@ -37,10 +37,10 @@
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $contactPageSetting->title ?? '') }}">
             </div>
-            <div class="col-12">
+            <!-- <div class="col-12">
                 <label class="form-label">Titre disponibilité</label>
                 <input type="text" name="availability_title" class="form-control" value="{{ old('availability_title', $contactPageSetting->availability_title ?? '') }}">
-            </div>
+            </div> -->
             <div class="col-12">
                 <hr class="my-2">
                 <h3 class="h6 mb-1">Carte</h3>
@@ -48,11 +48,11 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Latitude GPS</label>
-                <input type="number" step="0.0000001" name="map_latitude" class="form-control" value="{{ old('map_latitude', $contactPageSetting->map_latitude ?? '42.6043096') }}" placeholder="42.6043096">
+                <input type="text" name="map_latitude" class="form-control" value="{{ old('map_latitude', $contactPageSetting->map_latitude ?? '42.6043096') }}" placeholder="42,6043096">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Longitude GPS</label>
-                <input type="number" step="0.0000001" name="map_longitude" class="form-control" value="{{ old('map_longitude', $contactPageSetting->map_longitude ?? '8.9295210') }}" placeholder="8.9295210">
+                <input type="text" name="map_longitude" class="form-control" value="{{ old('map_longitude', $contactPageSetting->map_longitude ?? '8.9295210') }}" placeholder="8,9295210">
             </div>
             <div class="col-12">
                 <label class="form-label">Image header</label>
