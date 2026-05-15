@@ -22,7 +22,13 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $rooms = Room::latest()->paginate(10);
+        $rooms = Room::query()
+            ->when(
+                Schema::hasColumn('rooms', 'sort_order'),
+                fn ($query) => $query->orderBy('sort_order')->orderBy('id'),
+                fn ($query) => $query->latest()
+            )
+            ->paginate(10);
         $appartmentPageSetting = (object) [
             'title' => 'Our Rooms & Suites',
             'subtitle' => 'Luxury Hotel Experience',
@@ -113,8 +119,11 @@ class RoomController extends Controller
             ->orderBy('title')
             ->get();
         $selectedAmenities = [];
+        $nextSortOrder = Schema::hasColumn('rooms', 'sort_order')
+            ? ((int) Room::max('sort_order')) + 1
+            : 0;
 
-        return view('admin.rooms.create', compact('amenities', 'selectedAmenities'));
+        return view('admin.rooms.create', compact('amenities', 'selectedAmenities', 'nextSortOrder'));
     }
 
     /**
@@ -181,7 +190,22 @@ class RoomController extends Controller
             ->orderBy('title')
             ->get();
         $selectedAmenities = $room->amenities()->pluck('amenities.id')->all();
-        $nextRoom = Room::where('id', '>', $room->id)->orderBy('id')->first();
+        $nextRoom = Room::query()
+            ->when(
+                Schema::hasColumn('rooms', 'sort_order'),
+                fn ($query) => $query
+                    ->where(function ($subQuery) use ($room) {
+                        $subQuery->where('sort_order', '>', $room->sort_order)
+                            ->orWhere(function ($tieQuery) use ($room) {
+                                $tieQuery->where('sort_order', $room->sort_order)
+                                    ->where('id', '>', $room->id);
+                            });
+                    })
+                    ->orderBy('sort_order')
+                    ->orderBy('id'),
+                fn ($query) => $query->where('id', '>', $room->id)->orderBy('id')
+            )
+            ->first();
 
         return view('admin.rooms.edit', compact('room', 'amenities', 'selectedAmenities', 'nextRoom'));
     }
@@ -296,6 +320,7 @@ class RoomController extends Controller
             'gallery.*' => ['nullable', 'image', 'max:5120'],
             'gallery_order' => ['nullable', 'array'],
             'gallery_order.*' => ['string'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
             'status' => ['required', 'in:draft,published'],
         ]);
     }

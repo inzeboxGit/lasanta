@@ -25,6 +25,7 @@ class Room extends Model
         'children_policy',
         'main_image',
         'gallery',
+        'sort_order',
         'status',
     ];
 

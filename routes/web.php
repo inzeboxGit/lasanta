@@ -107,7 +107,11 @@ Route::get('/', function () {
 
     $homeRooms = \App\Models\Room::with(['translations', 'amenities'])
         ->where('status', 'published')
-        ->latest()
+        ->when(
+            \Illuminate\Support\Facades\Schema::hasColumn('rooms', 'sort_order'),
+            fn ($query) => $query->orderBy('sort_order')->orderBy('id'),
+            fn ($query) => $query->latest()
+        )
         ->limit(3)
         ->get();
 
@@ -285,7 +289,11 @@ Route::get('/', function () {
 Route::get('/contacts', function () {
     $rooms = \App\Models\Room::with('translations')
         ->where('status', 'published')
-        ->latest()
+        ->when(
+            \Illuminate\Support\Facades\Schema::hasColumn('rooms', 'sort_order'),
+            fn ($query) => $query->orderBy('sort_order')->orderBy('id'),
+            fn ($query) => $query->latest()
+        )
         ->get();
 
     $contactPageSetting = (object) [
@@ -653,7 +661,11 @@ Route::get('/activites', function () {
 Route::get('/appartements', function () {
     $rooms = \App\Models\Room::with('amenities.translations', 'translations')
         ->where('status', 'published')
-        ->latest()
+        ->when(
+            \Illuminate\Support\Facades\Schema::hasColumn('rooms', 'sort_order'),
+            fn ($query) => $query->orderBy('sort_order')->orderBy('id'),
+            fn ($query) => $query->latest()
+        )
         ->get();
 
     $installations = \App\Models\Amenity::whereIn('scope', ['home', 'both'])

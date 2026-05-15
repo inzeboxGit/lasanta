@@ -77,6 +77,12 @@
                 value="{{ old('price_per_night', $room->price_per_night ?? '') }}">
         </div>
         <div class="col-md-4">
+            <label class="form-label">Ordre d'affichage</label>
+            <input type="number" min="0" name="sort_order" class="form-control"
+                value="{{ old('sort_order', $room->sort_order ?? ($nextSortOrder ?? 0)) }}">
+            <div class="form-text">Plus petit = affiché plus haut sur le front.</div>
+        </div>
+        <div class="col-md-4">
             <label class="form-label">Réduction <small class="text-muted">(ex&nbsp;: 25% Off)</small></label>
             <input type="text" name="discount" class="form-control" value="{{ old('discount', $room->discount ?? '') }}"
                 placeholder="Laisser vide pour masquer">

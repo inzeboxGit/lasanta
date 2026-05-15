@@ -3,7 +3,10 @@
 @section('title', 'Ajouter une chambre')
 
 @section('content')
-<h1 class="h3 mb-4">Ajouter une chambre</h1>
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0">Ajouter une chambre</h1>
+    <a href="{{ route('admin.rooms.index') }}" class="btn btn-outline-secondary">Retour à la liste des chambres</a>
+</div>
 
 @if($errors->any())
     <div class="alert alert-danger">

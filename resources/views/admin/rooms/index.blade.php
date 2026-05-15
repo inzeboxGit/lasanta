@@ -66,6 +66,7 @@
         <table class="table align-middle mb-0">
             <thead>
                 <tr>
+                    <th>Ordre</th>
                     <th>Titre</th>
                     <th>Superficie</th>
                     <th>Prix / nuit</th>
@@ -78,6 +79,7 @@
             <tbody>
                 @forelse($rooms as $room)
                     <tr>
+                        <td>{{ $room->sort_order ?? 0 }}</td>
                         <td>
                             <div class="fw-semibold">{{ $room->title }}</div>
                             <div class="text-muted small">{{ $room->slug }}</div>
@@ -103,7 +105,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted">Aucune chambre</td>
+                        <td colspan="8" class="text-center text-muted">Aucune chambre</td>
                     </tr>
                 @endforelse
             </tbody>
