@@ -78,12 +78,12 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
 <div class="booking-wrapper">
     <div class="container">
         <div class="booking-inner clearfix">
-            <form action="booking-system.html" class="form1 clearfix">
+            <form id="hnet-booking-form" class="form1 clearfix">
                 <div class="col1 c1">
                     <div class="input1_wrapper border-l border-b border-t border-r br-5005">
                         <label>{{ $ui['check_in_label'] }}</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" placeholder="{{ $ui['check_in_label'] }}">
+                            <input type="text" id="hnet-check-in" class="form-control input datepicker" placeholder="{{ $ui['check_in_label'] }}" readonly>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
                     <div class="input1_wrapper border-l border-b border-t border-r">
                         <label>{{ $ui['check_out_label'] }}</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" placeholder="{{ $ui['check_out_label'] }}">
+                            <input type="text" id="hnet-check-out" class="form-control input datepicker" placeholder="{{ $ui['check_out_label'] }}" readonly>
                         </div>
                     </div>
                 </div>
@@ -99,9 +99,9 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
                     <div class="select1_wrapper border-l border-b border-t border-r">
                         <label>{{ $ui['adults_label'] }}</label>
                         <div class="select1_inner">
-                            <select class="select2 select" style="width: 100%">
+                            <select id="hnet-adults" class="select2 select" style="width: 100%">
                                 <option value="1">1 {{ $ui['adult_s'] ?? $ui['adults_label'] }}</option>
-                                <option value="2">2 {{ $ui['adults_label'] }}</option>
+                                <option value="2" selected>2 {{ $ui['adults_label'] }}</option>
                                 <option value="3">3 {{ $ui['adults_label'] }}</option>
                                 <option value="4">4 {{ $ui['adults_label'] }}</option>
                             </select>
@@ -112,12 +112,11 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
                     <div class="select1_wrapper border-l border-b border-t  border-r">
                         <label>{{ $ui['children_label'] }}</label>
                         <div class="select1_inner">
-                            <select class="select2 select" style="width: 100%">
+                            <select id="hnet-children" class="select2 select" style="width: 100%">
                                 <option value="0">0 {{ $ui['children_label'] }}</option>
                                 <option value="1">1 {{ $ui['child_s'] ?? $ui['children_label'] }}</option>
                                 <option value="2">2 {{ $ui['children_label'] }}</option>
                                 <option value="3">3 {{ $ui['children_label'] }}</option>
-                                <option value="4">4 {{ $ui['children_label'] }}</option>
                             </select>
                         </div>
                     </div>
@@ -126,11 +125,10 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
                     <div class="select1_wrapper border-l border-b border-t  border-r">
                         <label>{{ $ui['rooms_label'] }}</label>
                         <div class="select1_inner">
-                            <select class="select2 select" style="width: 100%">
+                            <select id="hnet-rooms" class="select2 select" style="width: 100%">
                                 <option value="1">1 {{ $ui['room_s'] ?? $ui['rooms_label'] }}</option>
                                 <option value="2">2 {{ $ui['rooms_label'] }}</option>
                                 <option value="3">3 {{ $ui['rooms_label'] }}</option>
-                                <option value="4">4 {{ $ui['rooms_label'] }}</option>
                             </select>
                         </div>
                     </div>

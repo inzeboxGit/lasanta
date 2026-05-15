@@ -70,10 +70,11 @@
 
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item"><a class="nav-link {{ $isHome ? 'active' : '' }}" href="{{ url('/') }}">{{ $t['home'] }}</a>
+                <li class="nav-item"><a class="nav-link {{ $isHome ? 'active' : '' }}"
+                        href="{{ url('/') }}">{{ $t['home'] }}</a>
                 </li>
                 <li class="nav-item"><a class="nav-link {{ $isApartments ? 'active' : '' }}"
-                    href="{{ route('appartements.index') }}">{{ $t['appartement'] }}</a></li>
+                        href="{{ route('appartements.index') }}">{{ $t['appartement'] }}</a></li>
                 <li class="nav-item"><a class="nav-link {{ $isRestaurant ? 'active' : '' }}"
                         href="{{ route('restaurant.index') }}">{{ $t['auberge'] }}</a></li>
                 <li class="nav-item"><a class="nav-link {{ $isPool ? 'active' : '' }}"
@@ -104,8 +105,9 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="button"><a href="{{ route('appartements.index') }}"><i
-                            class="fa-light fa-calendar-check"></i> {{ $t['book'] }}</a></div>
+                <div class="button"><a target="_blank"
+                        href="https://smartbooking.hotelnet.biz/home/main?hotel=5191&channel=0000&lingua={{ strtoupper($locale) }}">
+                        <i class="fa-light fa-calendar-check"></i> {{ $t['book'] }}</a></div>
             </div>
         </div>
     </div>

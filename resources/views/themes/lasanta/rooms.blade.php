@@ -130,8 +130,4 @@
     'faqSectionSetting' => $faqSectionSetting ?? null,
 ])
 
-@include('themes.lasanta.partials.home.booking-footer', [
-    'bookingFooterSetting' => $bookingFooterSetting ?? null,
-    'heroSetting'          => null,
-])
 @endsection

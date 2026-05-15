@@ -214,10 +214,6 @@
 ])
 
 <!-- Booking Footer -->
-@include('themes.lasanta.partials.home.booking-footer', [
-    'bookingFooterSetting' => $bookingFooterSetting ?? null,
-    'heroSetting'          => $heroSetting ?? null,
-])
 <!-- 
 @if(($similarRooms ?? collect())->isNotEmpty())
 <section class="blog1 section-padding bg-lightbrown">

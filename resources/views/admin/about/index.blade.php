@@ -122,7 +122,7 @@
                 <div class="col-12">
                     <label class="form-label">Image principale 600, 750</label>
                     <input type="file" name="main_image" id="about_main_image" class="form-control" accept="image/*">
-                    <div class="form-text">L'image sera recadrée automatiquement en 600x750 exact.</div>
+                    {{-- <div class="form-text">L'image sera recadrée automatiquement en 600x750 exact.</div> --}}
                     <div class="mt-2">
                         <img id="about_main_preview" src="{{ $mainSrc ?? '' }}" alt="" class="rounded"
                             style="max-height:100px;{{ empty($mainSrc) ? 'display:none;' : '' }}">

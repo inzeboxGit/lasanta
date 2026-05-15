@@ -70,6 +70,73 @@
     @if($showPromoModal)
         <script src="{{ asset('js/modal_popup.js') }}?v={{ filemtime(public_path('js/modal_popup.js')) }}"></script>
     @endif
+
+    <script>
+    $(document).ready(function() {
+        // On s'assure que le datepicker utilise le format JJ/MM/AAAA
+        if ($.fn.datepicker) {
+            $(".datepicker").datepicker("option", "dateFormat", "dd/mm/yy");
+        }
+
+        // Fonction universelle pour soumettre à HotelNet
+        function submitToHotelNet(checkInId, checkOutId, adultsId, childrenId, roomsId) {
+            var checkInStr = $(checkInId).val();
+            var checkOutStr = $(checkOutId).val();
+
+            if(!checkInStr || !checkOutStr) {
+                alert('Veuillez sélectionner vos dates de séjour.');
+                return;
+            }
+
+            // Formater les dates pour HotelNet (AAAA-MM-JJ)
+            function formatDate(str) {
+                var parts = str.split('/');
+                if(parts.length === 3) {
+                    // Avec format dd/mm/yy : parts[0]=day, parts[1]=month, parts[2]=year
+                    return parts[2] + '-' + parts[1] + '-' + parts[0];
+                }
+                return str;
+            }
+
+            var arrivo = formatDate(checkInStr);
+            var partenza = formatDate(checkOutStr);
+            var adults = $(adultsId).val() || 2;
+            var children = $(childrenId).val() || 0;
+            var rooms = $(roomsId).val() || 1;
+            var language = '{{ app()->getLocale() == "en" ? "GB" : strtoupper(app()->getLocale()) }}';
+            
+            // Format HotelNet: [Rooms]![Adults](-[Children])
+            var camere = rooms + '!' + adults;
+            if (parseInt(children) > 0) {
+                camere += '-' + children;
+            }
+
+            var hotelId = '5191';
+            var searchUrl = "https://smartbooking.hotelnet.biz/home/accomodation?" +
+                            "hotel=" + hotelId +
+                            "&channel=0000" +
+                            "&lingua=" + language +
+                            "&arrivo=" + arrivo +
+                            "&partenza=" + partenza +
+                            "&camere=" + camere;
+
+            window.open(searchUrl, '_blank');
+        }
+
+        // Branchement du formulaire Home
+        $('#hnet-booking-form').on('submit', function(e) {
+            e.preventDefault();
+            submitToHotelNet('#hnet-check-in', '#hnet-check-out', '#hnet-adults', '#hnet-children', '#hnet-rooms');
+        });
+
+        // Branchement du formulaire Footer
+        $('#hnet-booking-footer').on('submit', function(e) {
+            e.preventDefault();
+            submitToHotelNet('#hnet-footer-check-in', '#hnet-footer-check-out', '#hnet-footer-adults', '#hnet-footer-children', '#hnet-footer-rooms');
+        });
+    });
+    </script>
+
     @stack('scripts')
 </body>
 </html>

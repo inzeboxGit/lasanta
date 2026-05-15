@@ -65,7 +65,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         abort_unless($this->hasSectionSettings(), 404);
 
-        if (! Schema::hasTable('local_amenity_section_settings')) {
+        if (!Schema::hasTable('local_amenity_section_settings')) {
             return redirect()->route($this->indexRouteName())
                 ->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
@@ -80,7 +80,7 @@ abstract class AbstractLocalAmenityController extends Controller
         $setting = $this->resolveSectionSetting();
 
         if ($request->hasFile('header_image')) {
-            if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+            if (!empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
                 Storage::disk('public')->delete($setting->header_image);
             }
 
@@ -104,13 +104,13 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         abort_unless($this->hasAboutSectionSettings(), 404);
 
-        if (! Schema::hasTable('about_section_settings')) {
+        if (!Schema::hasTable('about_section_settings')) {
             return redirect()->route($this->indexRouteName())
                 ->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
 
         $setting = $this->resolveAboutSectionSetting();
-        $mainImageDimensions = $this->aboutSectionImageDimensions('main_image', 600, 730);
+        $mainImageDimensions = $this->aboutSectionImageDimensions('main_image', 600, 750);
         $overlayImageDimensions = $this->aboutSectionImageDimensions('overlay_image', 600, 830);
         $data = $request->validate([
             'small_title' => ['nullable', 'string', 'max:255'],
@@ -133,7 +133,7 @@ abstract class AbstractLocalAmenityController extends Controller
         ]);
 
         if ($request->hasFile('main_image')) {
-            if (! empty($setting->main_image) && ! str_starts_with($setting->main_image, 'img/')) {
+            if (!empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
                 Storage::disk('public')->delete($setting->main_image);
             }
 
@@ -146,7 +146,7 @@ abstract class AbstractLocalAmenityController extends Controller
         }
 
         if ($request->hasFile('overlay_image')) {
-            if (! empty($setting->overlay_image) && ! str_starts_with($setting->overlay_image, 'img/')) {
+            if (!empty($setting->overlay_image) && !str_starts_with($setting->overlay_image, 'img/')) {
                 Storage::disk('public')->delete($setting->overlay_image);
             }
 
@@ -176,7 +176,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         abort_unless($this->hasExtraTextSectionSettings(), 404);
 
-        if (! Schema::hasTable('about_section_settings')) {
+        if (!Schema::hasTable('about_section_settings')) {
             return redirect()->route($this->indexRouteName())
                 ->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
@@ -202,7 +202,7 @@ abstract class AbstractLocalAmenityController extends Controller
             $imageDirectory = $this->extraTextSectionConfig['image_directory'] ?? 'extra-text';
 
             if ($request->hasFile('image_one')) {
-                if (! empty($setting->main_image) && ! str_starts_with($setting->main_image, 'img/')) {
+                if (!empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
                     Storage::disk('public')->delete($setting->main_image);
                 }
 
@@ -215,7 +215,7 @@ abstract class AbstractLocalAmenityController extends Controller
             }
 
             if ($request->hasFile('image_two')) {
-                if (! empty($setting->overlay_image) && ! str_starts_with($setting->overlay_image, 'img/')) {
+                if (!empty($setting->overlay_image) && !str_starts_with($setting->overlay_image, 'img/')) {
                     Storage::disk('public')->delete($setting->overlay_image);
                 }
 
@@ -228,7 +228,7 @@ abstract class AbstractLocalAmenityController extends Controller
             }
 
             if ($request->hasFile('image_three')) {
-                if (! empty($setting->third_image) && ! str_starts_with($setting->third_image, 'img/')) {
+                if (!empty($setting->third_image) && !str_starts_with($setting->third_image, 'img/')) {
                     Storage::disk('public')->delete($setting->third_image);
                 }
 
@@ -263,7 +263,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         abort_unless($this->hasSecondaryExtraSectionSettings(), 404);
 
-        if (! Schema::hasTable('about_section_settings')) {
+        if (!Schema::hasTable('about_section_settings')) {
             return redirect()->route($this->indexRouteName())
                 ->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
@@ -292,7 +292,7 @@ abstract class AbstractLocalAmenityController extends Controller
         $imageDirectory = $this->secondaryExtraSectionConfig['image_directory'] ?? 'secondary-extra';
 
         if ($request->hasFile('main_image')) {
-            if (! empty($setting->main_image) && ! str_starts_with($setting->main_image, 'img/')) {
+            if (!empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
                 Storage::disk('public')->delete($setting->main_image);
             }
 
@@ -305,7 +305,7 @@ abstract class AbstractLocalAmenityController extends Controller
         }
 
         if ($request->hasFile('overlay_image')) {
-            if (! empty($setting->overlay_image) && ! str_starts_with($setting->overlay_image, 'img/')) {
+            if (!empty($setting->overlay_image) && !str_starts_with($setting->overlay_image, 'img/')) {
                 Storage::disk('public')->delete($setting->overlay_image);
             }
 
@@ -365,7 +365,7 @@ abstract class AbstractLocalAmenityController extends Controller
         $data = $this->validatedData($request);
 
         if ($request->hasFile('image')) {
-            if (! empty($comodite->image_path) && ! str_starts_with($comodite->image_path, 'img/')) {
+            if (!empty($comodite->image_path) && !str_starts_with($comodite->image_path, 'img/')) {
                 Storage::disk('public')->delete($comodite->image_path);
             }
 
@@ -384,7 +384,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         $comodite = $this->findItemOrFail($id);
 
-        if (! empty($comodite->image_path) && ! str_starts_with($comodite->image_path, 'img/')) {
+        if (!empty($comodite->image_path) && !str_starts_with($comodite->image_path, 'img/')) {
             Storage::disk('public')->delete($comodite->image_path);
         }
 
@@ -443,7 +443,7 @@ abstract class AbstractLocalAmenityController extends Controller
 
     protected function resolveSectionSetting(): object
     {
-        if (! $this->hasSectionSettings()) {
+        if (!$this->hasSectionSettings()) {
             return (object) [];
         }
 
@@ -466,7 +466,7 @@ abstract class AbstractLocalAmenityController extends Controller
 
     protected function resolveAboutSectionSetting(): object
     {
-        if (! $this->hasAboutSectionSettings()) {
+        if (!$this->hasAboutSectionSettings()) {
             return (object) [];
         }
 
@@ -489,7 +489,7 @@ abstract class AbstractLocalAmenityController extends Controller
 
     protected function resolveExtraTextSectionSetting(): object
     {
-        if (! $this->hasExtraTextSectionSettings()) {
+        if (!$this->hasExtraTextSectionSettings()) {
             return (object) [];
         }
 
@@ -512,7 +512,7 @@ abstract class AbstractLocalAmenityController extends Controller
 
     protected function resolveSecondaryExtraSectionSetting(): object
     {
-        if (! $this->hasSecondaryExtraSectionSettings()) {
+        if (!$this->hasSecondaryExtraSectionSettings()) {
             return (object) [];
         }
 
@@ -598,7 +598,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         $configured = $this->extraTextSectionConfig['image_dimensions'] ?? null;
 
-        if (! is_array($configured)) {
+        if (!is_array($configured)) {
             return ['width' => $defaultWidth, 'height' => $defaultHeight];
         }
 
@@ -615,7 +615,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         $configured = $this->secondaryExtraSectionConfig["{$key}_dimensions"] ?? null;
 
-        if (! is_array($configured)) {
+        if (!is_array($configured)) {
             return ['width' => $defaultWidth, 'height' => $defaultHeight];
         }
 
@@ -713,7 +713,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         $configured = $this->aboutSectionConfig["{$key}_dimensions"] ?? null;
 
-        if (! is_array($configured)) {
+        if (!is_array($configured)) {
             return ['width' => $defaultWidth, 'height' => $defaultHeight];
         }
 
@@ -731,14 +731,14 @@ abstract class AbstractLocalAmenityController extends Controller
         $path = $file->store($directory, 'public');
         $absolutePath = Storage::disk('public')->path($path);
 
-        $this->cropImageToSize($absolutePath, $width, $height);
+        // $this->cropImageToSize($absolutePath, $width, $height);
 
         return $path;
     }
 
     protected function cropImageToSize(string $path, int $targetWidth, int $targetHeight): void
     {
-        if (! file_exists($path)) {
+        if (!file_exists($path)) {
             return;
         }
 

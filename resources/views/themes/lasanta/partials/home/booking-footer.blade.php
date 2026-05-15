@@ -35,12 +35,12 @@
             </div>
         </div>
         <div class="booking-inner clearfix">
-            <form action="booking-system.html" class="form1 clearfix">
+            <form id="hnet-booking-footer" class="form1 clearfix">
                 <div class="col1 c1">
                     <div class="input1_wrapper border-l border-b border-t border-r">
                         <label>{{ $bfLang['check_in'] }}</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" placeholder="{{ $bfLang['check_in'] }}">
+                            <input type="text" id="hnet-footer-check-in" class="form-control input datepicker" placeholder="{{ $bfLang['check_in'] }}" readonly>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="input1_wrapper border-l border-b border-t border-r">
                         <label>{{ $bfLang['check_out'] }}</label>
                         <div class="input1_inner">
-                            <input type="text" class="form-control input datepicker" placeholder="{{ $bfLang['check_out'] }}">
+                            <input type="text" id="hnet-footer-check-out" class="form-control input datepicker" placeholder="{{ $bfLang['check_out'] }}" readonly>
                         </div>
                     </div>
                 </div>
@@ -56,9 +56,9 @@
                     <div class="select1_wrapper border-l border-b border-t border-r">
                         <label>{{ $bfLang['adults'] }}</label>
                         <div class="select1_inner">
-                            <select class="select2 select" style="width: 100%">
+                            <select id="hnet-footer-adults" class="select2 select" style="width: 100%">
                                 <option value="1">1 {{ $bfLang['adults'] }}</option>
-                                <option value="2">2 {{ $bfLang['adults'] }}</option>
+                                <option value="2" selected>2 {{ $bfLang['adults'] }}</option>
                                 <option value="3">3 {{ $bfLang['adults'] }}</option>
                                 <option value="4">4 {{ $bfLang['adults'] }}</option>
                             </select>
@@ -69,8 +69,8 @@
                     <div class="select1_wrapper border-l border-b border-t border-r">
                         <label>{{ $bfLang['children'] }}</label>
                         <div class="select1_inner">
-                            <select class="select2 select" style="width: 100%">
-                                <option value="0">{{ $bfLang['children'] }}</option>
+                            <select id="hnet-footer-children" class="select2 select" style="width: 100%">
+                                <option value="0" selected>{{ $bfLang['children'] }}</option>
                                 <option value="1">1 {{ $bfLang['children'] }}</option>
                                 <option value="2">2 {{ $bfLang['children'] }}</option>
                                 <option value="3">3 {{ $bfLang['children'] }}</option>
@@ -83,7 +83,7 @@
                     <div class="select1_wrapper border-l border-b border-t border-r">
                         <label>{{ $bfLang['rooms'] }}</label>
                         <div class="select1_inner">
-                            <select class="select2 select" style="width: 100%">
+                            <select id="hnet-footer-rooms" class="select2 select" style="width: 100%">
                                 <option value="1">1 {{ $bfLang['rooms'] }}</option>
                                 <option value="2">2 {{ $bfLang['rooms'] }}</option>
                                 <option value="3">3 {{ $bfLang['rooms'] }}</option>
