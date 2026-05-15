@@ -7,6 +7,7 @@ use App\Models\Amenity;
 use App\Models\AppartmentPageSetting;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -166,8 +167,18 @@ class RoomController extends Controller
         $amenityIds = $data['amenities'] ?? [];
         unset($data['amenities']);
 
-        $room = Room::create($data);
-        $room->amenities()->sync($amenityIds);
+        $room = DB::transaction(function () use ($data, $amenityIds) {
+            $sortOrder = $this->prepareSortOrderForCreate($data);
+            $room = Room::create($data);
+
+            if ($sortOrder !== null) {
+                $room->update(['sort_order' => $sortOrder]);
+            }
+
+            $room->amenities()->sync($amenityIds);
+
+            return $room;
+        });
 
         return redirect()->route('admin.rooms.edit', $room)->with('success', 'Chambre créée.');
     }
@@ -257,8 +268,17 @@ class RoomController extends Controller
         $amenityIds = $data['amenities'] ?? [];
         unset($data['amenities']);
 
-        $room->update($data);
-        $room->amenities()->sync($amenityIds);
+        DB::transaction(function () use ($room, $data, $amenityIds) {
+            $sortOrder = $this->prepareSortOrderForUpdate($room, $data);
+
+            $room->update($data);
+
+            if ($sortOrder !== null) {
+                $room->update(['sort_order' => $sortOrder]);
+            }
+
+            $room->amenities()->sync($amenityIds);
+        });
 
         return redirect()->route('admin.rooms.edit', $room)->with('success', 'Chambre mise à jour.');
     }
@@ -323,5 +343,60 @@ class RoomController extends Controller
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'status' => ['required', 'in:draft,published'],
         ]);
+    }
+
+    private function prepareSortOrderForCreate(array &$data): ?int
+    {
+        if (!Schema::hasColumn('rooms', 'sort_order')) {
+            return null;
+        }
+
+        $requestedOrder = max(0, (int) ($data['sort_order'] ?? 0));
+        $maxOrder = (int) Room::max('sort_order');
+
+        if ($requestedOrder <= 0) {
+            $requestedOrder = $maxOrder + 1;
+        } else {
+            Room::where('sort_order', '>=', $requestedOrder)->increment('sort_order');
+        }
+
+        $data['sort_order'] = $requestedOrder;
+
+        return $requestedOrder;
+    }
+
+    private function prepareSortOrderForUpdate(Room $room, array &$data): ?int
+    {
+        if (!Schema::hasColumn('rooms', 'sort_order')) {
+            return null;
+        }
+
+        $currentOrder = (int) ($room->sort_order ?? 0);
+        $requestedOrder = max(0, (int) ($data['sort_order'] ?? $currentOrder));
+        $maxOrder = max((int) Room::whereKeyNot($room->id)->max('sort_order'), 0);
+
+        if ($requestedOrder <= 0) {
+            $requestedOrder = $maxOrder + 1;
+        } elseif ($requestedOrder > $maxOrder + 1) {
+            $requestedOrder = $maxOrder + 1;
+        }
+
+        if ($currentOrder <= 0) {
+            $currentOrder = $maxOrder + 1;
+        }
+
+        if ($requestedOrder < $currentOrder) {
+            Room::whereKeyNot($room->id)
+                ->whereBetween('sort_order', [$requestedOrder, $currentOrder - 1])
+                ->increment('sort_order');
+        } elseif ($requestedOrder > $currentOrder) {
+            Room::whereKeyNot($room->id)
+                ->whereBetween('sort_order', [$currentOrder + 1, $requestedOrder])
+                ->decrement('sort_order');
+        }
+
+        $data['sort_order'] = $requestedOrder;
+
+        return $requestedOrder;
     }
 }

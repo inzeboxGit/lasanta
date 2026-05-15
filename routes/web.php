@@ -806,6 +806,8 @@ Route::prefix('admin')->group(function () {
         Route::post('restaurant/info-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateRestaurantInfoSectionSettings'])->name('admin.restaurant.info-section.update');
         Route::post('restaurant/gallery-section-settings', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'updateGallerySectionSettings'])->name('admin.restaurant.gallery-section.update');
         Route::post('restaurant/gallery-section-settings/remove-image', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'removeGalleryImage'])->name('admin.restaurant.gallery-image.remove');
+        Route::post('restaurant/gallery-section-settings/reorder', [\App\Http\Controllers\Admin\RestaurantAmenityController::class, 'reorderGallery'])->name('admin.restaurant.gallery-reorder');
+        Route::post('pool/gallery-section-settings/reorder', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'reorderGallery'])->name('admin.pool.gallery-reorder');
         Route::get('settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'index'])->name('admin.settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SiteSettingController::class, 'update'])->name('admin.settings.update');
         Route::get('legal', [\App\Http\Controllers\Admin\LegalPageController::class, 'index'])->name('admin.legal.index');

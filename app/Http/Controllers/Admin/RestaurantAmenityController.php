@@ -86,7 +86,7 @@ class RestaurantAmenityController extends AbstractLocalAmenityController
             'gallery'     => $gallery,
         ]);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#gallery-section')
             ->with('success', 'Galerie Restaurant mise à jour.');
     }
 
@@ -102,8 +102,18 @@ class RestaurantAmenityController extends AbstractLocalAmenityController
         $gallery = array_values(array_filter($gallery, fn ($img) => $img !== $image));
         $setting->update(['gallery' => $gallery]);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#gallery-section')
             ->with('success', 'Image supprimée.');
+    }
+
+    public function reorderGallery(Request $request)
+    {
+        $request->validate(['order' => ['required', 'array']]);
+
+        $setting = $this->resolveRestaurantGallerySectionSetting();
+        $setting->update(['gallery' => $request->input('order')]);
+
+        return response()->json(['success' => true]);
     }
 
     protected function resolveRestaurantGallerySectionSetting(): object
@@ -142,7 +152,7 @@ class RestaurantAmenityController extends AbstractLocalAmenityController
 
         $this->resolveRestaurantInfoSectionSetting()->update($data);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#restaurant-info-section')
             ->with('success', 'Informations pratiques Restaurant mises à jour.');
     }
 
@@ -164,6 +174,7 @@ class RestaurantAmenityController extends AbstractLocalAmenityController
             'title'        => 'Galerie Restaurant',
             'route'        => 'admin.restaurant.gallery-section.update',
             'remove_route' => 'admin.restaurant.gallery-image.remove',
+            'reorder_route' => 'admin.restaurant.gallery-reorder',
         ];
 
         $data['pageMeta']['crud_labels'] = [

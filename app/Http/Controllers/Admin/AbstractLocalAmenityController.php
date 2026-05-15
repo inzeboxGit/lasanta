@@ -96,7 +96,7 @@ abstract class AbstractLocalAmenityController extends Controller
                 : ($setting->hero_text ?? null),
         ]);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#header-section')
             ->with('success', $this->sectionSettingsSuccessMessage ?? "Paramètres {$this->itemLabelSingular} mis à jour.");
     }
 
@@ -168,7 +168,7 @@ abstract class AbstractLocalAmenityController extends Controller
             'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
         ]);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#about-section')
             ->with('success', $this->aboutSectionConfig['success_message'] ?? "Section À propos {$this->itemLabelSingular} mise à jour.");
     }
 
@@ -250,7 +250,7 @@ abstract class AbstractLocalAmenityController extends Controller
             'third_image' => $data['third_image'] ?? $setting->third_image,
         ]);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#extra-text-section')
             ->with('success', $this->extraTextSectionConfig['success_message'] ?? "Section texte {$this->itemLabelSingular} mise à jour.");
     }
 
@@ -324,8 +324,8 @@ abstract class AbstractLocalAmenityController extends Controller
             'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
         ]);
 
-        return redirect()->route($this->indexRouteName())
-            ->with('success', $this->secondaryExtraSectionConfig['success_message'] ?? "Section complémentaire {$this->itemLabelSingular} mise à jour.");
+        return redirect()->to(route($this->indexRouteName()) . '#secondary-extra-section')
+            ->with('success', $this->secondaryExtraSectionConfig['success_message'] ?? "Section secondaire {$this->itemLabelSingular} mise à jour.");
     }
 
     public function store(Request $request)

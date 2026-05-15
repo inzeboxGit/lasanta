@@ -3,6 +3,42 @@
 @section('title', $pageMeta['title'])
 
 @section('content')
+    <style>
+        .rich-editor {
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            background: #fff;
+        }
+
+        .rich-editor__toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid #e9ecef;
+            background: #f8f9fa;
+        }
+
+        .rich-editor__toolbar button {
+            border: 1px solid #d0d7de;
+            background: #fff;
+            border-radius: 0.375rem;
+            padding: 0.35rem 0.65rem;
+            font-size: 0.875rem;
+            line-height: 1;
+        }
+
+        .rich-editor__content {
+            min-height: 220px;
+            padding: 1rem;
+            outline: none;
+        }
+
+        .rich-editor__content:empty:before {
+            content: attr(data-placeholder);
+            color: #6c757d;
+        }
+    </style>
     @php
         $crudLabels = $pageMeta['crud_labels'] ?? [];
     @endphp
@@ -22,7 +58,7 @@
     @endif
 
     @if($pageMeta['section_settings']['enabled'])
-        <div class="admin-card p-4 mb-4">
+        <div class="admin-card p-4 mb-4" id="header-section">
             <h2 class="h5 mb-3">{{ $pageMeta['section_settings']['title'] }}</h2>
             <form action="{{ route($pageMeta['routes']['section_settings']) }}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -65,7 +101,7 @@
     @endif
 
     @if($pageMeta['about_section']['enabled'])
-        <div class="admin-card p-4 mb-4">
+        <div class="admin-card p-4 mb-4" id="about-section">
             <h2 class="h5 mb-3">{{ $pageMeta['about_section']['title'] }}</h2>
             <form action="{{ route($pageMeta['about_section']['route']) }}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -91,8 +127,28 @@
                     </div> -->
                     <div class="col-12">
                         <label class="form-label">Description</label>
-                        <textarea name="description" class="form-control"
-                            rows="5">{{ old('description', $aboutSectionSetting->description ?? '') }}</textarea>
+                        @php
+                            $aboutDescription = old('description', $aboutSectionSetting->description ?? '');
+                        @endphp
+                        <div class="rich-editor">
+                            <div class="rich-editor__toolbar">
+                                <button type="button" data-editor-command="bold"><strong>G</strong></button>
+                                <button type="button" data-editor-command="italic"><em>I</em></button>
+                                <button type="button" data-editor-command="underline"><u>S</u></button>
+                                <button type="button" data-editor-command="insertUnorderedList">Liste</button>
+                                <button type="button" data-editor-command="formatBlock" data-editor-value="p">Paragraphe</button>
+                                <button type="button" data-editor-command="formatBlock" data-editor-value="h3">Titre</button>
+                                <button type="button" data-editor-command="justifyLeft">Gauche</button>
+                                <button type="button" data-editor-command="justifyCenter">Centre</button>
+                                <button type="button" data-editor-command="justifyRight">Droite</button>
+                                <button type="button" data-editor-command="justifyFull">Justifier</button>
+                                <button type="button" data-editor-link="true">Lien</button>
+                            </div>
+                            <div class="rich-editor__content" id="about_description_editor" contenteditable="true"
+                                data-placeholder="Saisissez la description...">{!! $aboutDescription !!}</div>
+                        </div>
+                        <textarea name="description" id="about_description" class="form-control d-none"
+                            rows="5">{{ $aboutDescription }}</textarea>
                     </div>
                     <!-- <div class="col-md-4">
                         <label class="form-label">Signature</label>
@@ -190,7 +246,7 @@
     <!-- @endif -->
 
     @if($pageMeta['secondary_extra_section']['enabled'])
-        <div class="admin-card p-4 mb-4">
+        <div class="admin-card p-4 mb-4" id="secondary-extra-section">
             <h2 class="h5 mb-3">{{ $pageMeta['secondary_extra_section']['title'] }}</h2>
             <form action="{{ route($pageMeta['secondary_extra_section']['route']) }}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -236,7 +292,7 @@
     @endif
 
     @if(($pageMeta['restaurant_info_section']['enabled'] ?? false))
-        <div class="admin-card p-4 mb-4">
+        <div class="admin-card p-4 mb-4" id="restaurant-info-section">
             <h2 class="h5 mb-3">{{ $pageMeta['restaurant_info_section']['title'] }}</h2>
             <form action="{{ route($pageMeta['restaurant_info_section']['route']) }}" method="post">
                 @csrf
@@ -278,7 +334,7 @@
     @endif
 
     @if(($pageMeta['pool_info_section']['enabled'] ?? false))
-        <div class="admin-card p-4 mb-4">
+        <div class="admin-card p-4 mb-4" id="pool-info-section">
             <h2 class="h5 mb-3">{{ $pageMeta['pool_info_section']['title'] }}</h2>
             <form action="{{ route($pageMeta['pool_info_section']['route']) }}" method="post">
                 @csrf
@@ -355,10 +411,10 @@
             $currentGallery = $restaurantGallerySectionSetting->gallery ?? [];
         @endphp
         @if(!empty($currentGallery))
-            <h6 class="mb-3">Photos actuelles ({{ count($currentGallery) }})</h6>
-            <div class="row g-2">
+            <h6 class="mb-3">Photos actuelles ({{ count($currentGallery) }}) <small class="text-muted">(Glissez pour réorganiser)</small></h6>
+            <div class="row g-2 sortable-gallery" id="restaurant-gallery-grid" data-reorder-url="{{ route($pageMeta['restaurant_gallery_section']['reorder_route'] ?? 'admin.dashboard') }}">
                 @foreach($currentGallery as $galleryImg)
-                <div class="col-6 col-md-3 col-lg-2 position-relative">
+                <div class="col-6 col-md-3 col-lg-2 position-relative gallery-item" data-path="{{ $galleryImg }}">
                     <img src="{{ asset('storage/' . $galleryImg) }}" alt=""
                         class="img-fluid rounded" style="height:120px;width:100%;object-fit:cover;">
                     <form action="{{ route($pageMeta['restaurant_gallery_section']['remove_route']) }}" method="post"
@@ -407,10 +463,10 @@
             $currentPoolGallery = $poolGallerySectionSetting->gallery ?? [];
         @endphp
         @if(!empty($currentPoolGallery))
-            <h6 class="mb-3">Photos actuelles ({{ count($currentPoolGallery) }})</h6>
-            <div class="row g-2">
+            <h6 class="mb-3">Photos actuelles ({{ count($currentPoolGallery) }}) <small class="text-muted">(Glissez pour réorganiser)</small></h6>
+            <div class="row g-2 sortable-gallery" id="pool-gallery-grid" data-reorder-url="{{ route($pageMeta['pool_gallery_section']['reorder_route'] ?? 'admin.dashboard') }}">
                 @foreach($currentPoolGallery as $galleryImg)
-                <div class="col-6 col-md-3 col-lg-2 position-relative">
+                <div class="col-6 col-md-3 col-lg-2 position-relative gallery-item" data-path="{{ $galleryImg }}">
                     <img src="{{ asset('storage/' . $galleryImg) }}" alt=""
                         class="img-fluid rounded" style="height:120px;width:100%;object-fit:cover;">
                     <form action="{{ route($pageMeta['pool_gallery_section']['remove_route']) }}" method="post"
@@ -486,6 +542,70 @@
             bindPreview('extra_image_three', 'extra_image_three_preview');
             bindPreview('secondary_extra_main_image', 'secondary_extra_main_preview');
             bindPreview('secondary_extra_overlay_image', 'secondary_extra_overlay_preview');
+
+            // Gallery Sortable
+            document.querySelectorAll('.sortable-gallery').forEach(grid => {
+                new Sortable(grid, {
+                    animation: 150,
+                    ghostClass: 'bg-light',
+                    onEnd: function() {
+                        const url = grid.dataset.reorderUrl;
+                        if (!url || url.includes('dashboard')) return;
+
+                        const order = Array.from(grid.querySelectorAll('.gallery-item')).map(el => el.dataset.path);
+                        
+                        fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({ order })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Optional: show toast or success indicator
+                            }
+                        })
+                        .catch(err => console.error('Error reordering gallery:', err));
+                    }
+                });
+            });
+
+            // Rich Editor
+            const editor = document.getElementById('about_description_editor');
+            const textarea = document.getElementById('about_description');
+            const toolbarButtons = document.querySelectorAll('[data-editor-command], [data-editor-link]');
+
+            if (editor && textarea) {
+                const syncEditor = () => {
+                    textarea.value = editor.innerHTML.trim();
+                };
+
+                toolbarButtons.forEach((button) => {
+                    button.addEventListener('click', function () {
+                        const command = this.dataset.editorCommand;
+                        const value = this.dataset.editorValue;
+
+                        editor.focus();
+
+                        if (this.dataset.editorLink) {
+                            const url = window.prompt('URL du lien');
+                            if (!url) return;
+                            document.execCommand('createLink', false, url);
+                            syncEditor();
+                            return;
+                        }
+
+                        document.execCommand(command, false, value || null);
+                        syncEditor();
+                    });
+                });
+
+                editor.addEventListener('input', syncEditor);
+                editor.closest('form')?.addEventListener('submit', syncEditor);
+            }
         });
     </script>
 @endsection

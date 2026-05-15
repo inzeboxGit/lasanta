@@ -88,7 +88,7 @@ class PoolAmenityController extends AbstractLocalAmenityController
             'gallery'     => $gallery,
         ]);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#pool-gallery-section')
             ->with('success', 'Galerie Piscine mise à jour.');
     }
 
@@ -104,8 +104,18 @@ class PoolAmenityController extends AbstractLocalAmenityController
         $gallery = array_values(array_filter($gallery, fn ($img) => $img !== $image));
         $setting->update(['gallery' => $gallery]);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#pool-gallery-section')
             ->with('success', 'Image supprimée.');
+    }
+
+    public function reorderGallery(Request $request)
+    {
+        $request->validate(['order' => ['required', 'array']]);
+
+        $setting = $this->resolvePoolGallerySectionSetting();
+        $setting->update(['gallery' => $request->input('order')]);
+
+        return response()->json(['success' => true]);
     }
 
     protected function resolvePoolGallerySectionSetting(): object
@@ -146,7 +156,7 @@ class PoolAmenityController extends AbstractLocalAmenityController
 
         $this->resolvePoolInfoSectionSetting()->update($data);
 
-        return redirect()->route($this->indexRouteName())
+        return redirect()->to(route($this->indexRouteName()) . '#pool-info-section')
             ->with('success', 'Informations pratiques Piscine mises à jour.');
     }
 
@@ -191,6 +201,7 @@ class PoolAmenityController extends AbstractLocalAmenityController
             'title'        => 'Galerie Piscine',
             'route'        => 'admin.pool.gallery-section.update',
             'remove_route' => 'admin.pool.gallery-image.remove',
+            'reorder_route' => 'admin.pool.gallery-reorder',
         ];
 
         $data['pageMeta']['crud_labels'] = [
