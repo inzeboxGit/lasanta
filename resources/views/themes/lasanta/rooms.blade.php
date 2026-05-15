@@ -1,10 +1,15 @@
 @extends('themes.lasanta.layouts.app')
 
-@section('content')
 @php
     $headerImage = media_url($appartmentPageSetting->header_image ?? null, 'themes/lasanta/img/banner/11.jpg');
 @endphp
-<section class="rooms banner-header bg-img bg-fixed" data-overlay-dark="5" data-background="{{ $headerImage }}">
+
+@push('styles')
+    <link rel="preload" as="image" href="{{ $headerImage }}" fetchpriority="high">
+@endpush
+
+@section('content')
+<section class="rooms banner-header bg-img bg-fixed" data-overlay-dark="5" data-background="{{ $headerImage }}" style="background-image: url('{{ $headerImage }}');">
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
@@ -39,6 +44,7 @@
             $rowBr           = $isEven ? 'br-5005' : 'br-0550';
             $imgBr           = $isEven ? 'br-0550' : 'br-5005';
             $rowMb           = $isLast  ? '' : ' mb-90';
+            $isPriorityRoom  = $loop->first;
         @endphp
 
         <div class="row g-0 justify-content-center align-items-center bg-lightbrown {{ $rowBr }}{{ $rowMb }}">
@@ -49,11 +55,11 @@
                 <div class="owl-carousel owl-theme">
                     @forelse($gallery as $image)
                         <div class="img">
-                            <img src="{{ media_url($image) }}" class="img-fluid {{ $imgBr }}" alt="{{ $roomTitle }}">
+                            <img src="{{ media_url($image) }}" class="img-fluid {{ $imgBr }}" alt="{{ $roomTitle }}" width="1080" height="900" loading="{{ $isPriorityRoom ? 'eager' : 'lazy' }}" fetchpriority="{{ $isPriorityRoom ? 'high' : 'auto' }}" decoding="async">
                         </div>
                     @empty
                         <div class="img">
-                            <img src="{{ asset('themes/lasanta/img/restaurant/2.jpg') }}" class="img-fluid {{ $imgBr }}" alt="{{ $roomTitle }}">
+                            <img src="{{ asset('themes/lasanta/img/restaurant/2.jpg') }}" class="img-fluid {{ $imgBr }}" alt="{{ $roomTitle }}" width="1080" height="900" loading="{{ $isPriorityRoom ? 'eager' : 'lazy' }}" fetchpriority="{{ $isPriorityRoom ? 'high' : 'auto' }}" decoding="async">
                         </div>
                     @endforelse
                 </div>
@@ -105,11 +111,11 @@
                 <div class="owl-carousel owl-theme">
                     @forelse($gallery as $image)
                         <div class="img">
-                            <img src="{{ media_url($image) }}" class="img-fluid {{ $imgBr }}" alt="{{ $roomTitle }}">
+                            <img src="{{ media_url($image) }}" class="img-fluid {{ $imgBr }}" alt="{{ $roomTitle }}" width="1080" height="900" loading="{{ $isPriorityRoom ? 'eager' : 'lazy' }}" fetchpriority="{{ $isPriorityRoom ? 'high' : 'auto' }}" decoding="async">
                         </div>
                     @empty
                         <div class="img">
-                            <img src="{{ asset('themes/lasanta/img/restaurant/2.jpg') }}" class="img-fluid {{ $imgBr }}" alt="{{ $roomTitle }}">
+                            <img src="{{ asset('themes/lasanta/img/restaurant/2.jpg') }}" class="img-fluid {{ $imgBr }}" alt="{{ $roomTitle }}" width="1080" height="900" loading="{{ $isPriorityRoom ? 'eager' : 'lazy' }}" fetchpriority="{{ $isPriorityRoom ? 'high' : 'auto' }}" decoding="async">
                         </div>
                     @endforelse
                 </div>

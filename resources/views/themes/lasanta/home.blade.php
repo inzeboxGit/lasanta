@@ -1,6 +1,5 @@
 @extends('themes.lasanta.layouts.app')
 
-@section('content')
 @php
     $locale = app()->getLocale();
     $heroImage = media_url($heroSetting->background_image ?? null, 'themes/lasanta/img/banner/11.jpg');
@@ -53,7 +52,13 @@
         }
     }
 @endphp
-<section class="banner-header full-height valign bg-img" data-overlay-dark="5" data-background="{{ $heroImage }}">
+
+@push('styles')
+    <link rel="preload" as="image" href="{{ $heroImage }}" fetchpriority="high">
+@endpush
+
+@section('content')
+<section class="banner-header full-height valign bg-img" data-overlay-dark="5" data-background="{{ $heroImage }}" style="background-image: url('{{ $heroImage }}');">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-12 text-center">
@@ -162,7 +167,7 @@ php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text
             <!-- offset-lg-1 mt-45-->
             <div class="col-lg-7 col-md-12 mb-20 ">
                 <div style="aspect-ratio: 4 / 3; overflow: hidden; border-radius: 8px;">
-                    <img src="{{ $aboutMain }}" class="rounded-2" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{ $aboutMain }}" class="rounded-2" alt="" width="1080" height="810" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
             </div>
         </div>
