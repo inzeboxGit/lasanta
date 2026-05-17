@@ -58,8 +58,8 @@
     <div class="container">
         <div class="logo-wrapper">
             <a class="logo" href="{{ url('/') }}">
-                <img src="{{ theme_asset('img/logo.png') }}" class="logo-img"
-                    width="121" height="119" decoding="async" fetchpriority="high"
+                <img src="{{ theme_asset('img/logo.png') }}" class="logo-img" width="121" height="119" decoding="async"
+                    fetchpriority="high"
                     alt="{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Lasanta') }}">
             </a>
         </div>
@@ -106,9 +106,10 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="button"><a target="_blank"
+                <!-- <div class="button"><a target="_blank"
                         href="https://smartbooking.hotelnet.biz/home/main?hotel=5191&channel=0000&lingua={{ strtoupper($locale) }}">
-                        <i class="fa-light fa-calendar-check"></i> {{ $t['book'] }}</a></div>
+                        <i class="fa-light fa-calendar-check"></i> {{ $t['book'] }}</a>
+                </div> -->
             </div>
         </div>
     </div>

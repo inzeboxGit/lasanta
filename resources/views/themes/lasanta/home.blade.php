@@ -44,11 +44,13 @@
     if (isset($heroSetting) && method_exists($heroSetting, 't')) {
         foreach (['dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'rooms_label', 'search_label'] as $_f) {
             $v = $heroSetting->t($_f, $locale);
-            if (!empty($v)) $ui[$_f] = $v;
+            if (!empty($v))
+                $ui[$_f] = $v;
         }
     } elseif (isset($heroSetting)) {
         foreach (['dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'rooms_label', 'search_label'] as $_f) {
-            if (!empty($heroSetting->{$_f} ?? null)) $ui[$_f] = $heroSetting->{$_f};
+            if (!empty($heroSetting->{$_f} ?? null))
+                $ui[$_f] = $heroSetting->{$_f};
         }
     }
 @endphp
@@ -58,157 +60,165 @@
 @endpush
 
 @section('content')
-<section class="banner-header full-height valign bg-img" data-overlay-dark="5" data-background="{{ $heroImage }}" style="background-image: url('{{ $heroImage }}');">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-12 text-center">
-                <div class="subtitle">{{ method_exists($heroSetting, 't') ? $heroSetting->t('small_title') : ($heroSetting->small_title ?? 'Expérience hôtelière') }}</div>
-                <div class="title">{{ method_exists($heroSetting, 't') ? $heroSetting->t('title') : ($heroSetting->title ?? ' Lasanta') }}</div>
-                <div class="mt-20"></div>
-                <!-- <a href="about.html" class="button-3 mb-15">About Hotel</a> -->
-                <a href="{{ $heroButtonLink }}" class="button-3 mb-15" target="{{ $heroButtonTarget }}"
-                    @if($heroButtonTarget === '_blank') rel="noopener" @endif>
-                    {{ $heroButtonLabel }}
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- 
-php artisan migrate --path=database/migrations/2026_05_11_000000_add_rooms_label_to_home_hero_settings_table.php --force 
-php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text_to_home_hero_settings_table.php --force 
--->
-<!-- Booking Search -->
-@if($heroSetting->show_booking_form ?? true)
-<div class="booking-wrapper">
-    <div class="container">
-        <div class="booking-inner clearfix">
-            <form id="hnet-booking-form" class="form1 clearfix">
-                <div class="col1 c1">
-                    <div class="input1_wrapper border-l border-b border-t border-r br-5005">
-                        <label>{{ $ui['check_in_label'] }}</label>
-                        <div class="input1_inner">
-                            <input type="text" id="hnet-check-in" class="form-control input datepicker" placeholder="{{ $ui['check_in_label'] }}" readonly>
-                        </div>
+    <section class="banner-header full-height valign bg-img" data-overlay-dark="5" data-background="{{ $heroImage }}"
+        style="background-image: url('{{ $heroImage }}');">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-12 text-center">
+                    <div class="subtitle">
+                        {{ method_exists($heroSetting, 't') ? $heroSetting->t('small_title') : ($heroSetting->small_title ?? 'Expérience hôtelière') }}
                     </div>
-                </div>
-                <div class="col1 c2">
-                    <div class="input1_wrapper border-l border-b border-t border-r">
-                        <label>{{ $ui['check_out_label'] }}</label>
-                        <div class="input1_inner">
-                            <input type="text" id="hnet-check-out" class="form-control input datepicker" placeholder="{{ $ui['check_out_label'] }}" readonly>
-                        </div>
+                    <div class="title">
+                        {{ method_exists($heroSetting, 't') ? $heroSetting->t('title') : ($heroSetting->title ?? ' Lasanta') }}
                     </div>
-                </div>
-                <div class="col2 c3">
-                    <div class="select1_wrapper border-l border-b border-t border-r">
-                        <label>{{ $ui['adults_label'] }}</label>
-                        <div class="select1_inner">
-                            <select id="hnet-adults" class="select2 select" style="width: 100%">
-                                <option value="1">1 {{ $ui['adult_s'] ?? $ui['adults_label'] }}</option>
-                                <option value="2" selected>2 {{ $ui['adults_label'] }}</option>
-                                <option value="3">3 {{ $ui['adults_label'] }}</option>
-                                <option value="4">4 {{ $ui['adults_label'] }}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col2 c4">
-                    <div class="select1_wrapper border-l border-b border-t  border-r">
-                        <label>{{ $ui['children_label'] }}</label>
-                        <div class="select1_inner">
-                            <select id="hnet-children" class="select2 select" style="width: 100%">
-                                <option value="0">0 {{ $ui['children_label'] }}</option>
-                                <option value="1">1 {{ $ui['child_s'] ?? $ui['children_label'] }}</option>
-                                <option value="2">2 {{ $ui['children_label'] }}</option>
-                                <option value="3">3 {{ $ui['children_label'] }}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col2 c5">
-                    <div class="select1_wrapper border-l border-b border-t  border-r">
-                        <label>{{ $ui['rooms_label'] }}</label>
-                        <div class="select1_inner">
-                            <select id="hnet-rooms" class="select2 select" style="width: 100%">
-                                <option value="1">1 {{ $ui['room_s'] ?? $ui['rooms_label'] }}</option>
-                                <option value="2">2 {{ $ui['rooms_label'] }}</option>
-                                <option value="3">3 {{ $ui['rooms_label'] }}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col3 c6">
-                    <button type="submit" class="btn-form1-submit">{{ $ui['search_label'] }}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endif
-
-<!-- About -->
-<section class="about section-padding">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-5 col-md-12 mb-15">
-                <div class="section-subtitle brown">{{ $aboutSmallTitle }}</div>
-                <div class="section-title black">{{ $aboutTitle }}</div>
-                <p class="mb-15 grey">{!! $aboutDescription !!}</p>
-                <a href="{{ route('restaurant.index') }}" class="button-3 mb-15">Découvrir Le Domaine</a>
-                <!-- @if(!empty($siteSetting->phone_primary ?? null))
-                    <div class="phone">
-                        <a href="tel:{{ preg_replace('/\s+/', '', (string) $siteSetting->phone_primary) }}">
-                            <i class="fa-light fa-phone"></i>{{ $siteSetting->phone_primary }}
-                        </a>
-                    </div>
-                @endif -->
-            </div>
-            <!-- offset-lg-1 mt-45-->
-            <div class="col-lg-7 col-md-12 mb-20 ">
-                <div style="aspect-ratio: 4 / 3; overflow: hidden; border-radius: 8px;">
-                    <img src="{{ $aboutMain }}" class="rounded-2" alt="" width="1080" height="810" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="mt-20"></div>
+                    <!-- <a href="about.html" class="button-3 mb-15">About Hotel</a> -->
+                    <a href="{{ $heroButtonLink }}" class="button-3 mb-15" target="{{ $heroButtonTarget }}"
+                        @if($heroButtonTarget === '_blank') rel="noopener" @endif>
+                        {{ $heroButtonLabel }}
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+    <!-- 
+    php artisan migrate --path=database/migrations/2026_05_11_000000_add_rooms_label_to_home_hero_settings_table.php --force 
+    php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text_to_home_hero_settings_table.php --force 
+    -->
+    <!-- Booking Search -->
+    @if($heroSetting->show_booking_form ?? true)
+        <div class="booking-wrapper">
+            <div class="container">
+                <div class="booking-inner clearfix">
+                    <form id="hnet-booking-form" class="form1 clearfix">
+                        <div class="col1 c1">
+                            <div class="input1_wrapper border-l border-b border-t border-r br-5005">
+                                <label>{{ $ui['check_in_label'] }}</label>
+                                <div class="input1_inner">
+                                    <input type="text" id="hnet-check-in" class="form-control input datepicker"
+                                        placeholder="{{ $ui['check_in_label'] }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col1 c2">
+                            <div class="input1_wrapper border-l border-b border-t border-r">
+                                <label>{{ $ui['check_out_label'] }}</label>
+                                <div class="input1_inner">
+                                    <input type="text" id="hnet-check-out" class="form-control input datepicker"
+                                        placeholder="{{ $ui['check_out_label'] }}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col2 c3">
+                            <div class="select1_wrapper border-l border-b border-t border-r">
+                                <label>{{ $ui['adults_label'] }}</label>
+                                <div class="select1_inner">
+                                    <select id="hnet-adults" class="select2 select" style="width: 100%">
+                                        <option value="1">1 {{ $ui['adult_s'] ?? $ui['adults_label'] }}</option>
+                                        <option value="2" selected>2 {{ $ui['adults_label'] }}</option>
+                                        <option value="3">3 {{ $ui['adults_label'] }}</option>
+                                        <option value="4">4 {{ $ui['adults_label'] }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col2 c4">
+                            <div class="select1_wrapper border-l border-b border-t  border-r">
+                                <label>{{ $ui['children_label'] }}</label>
+                                <div class="select1_inner">
+                                    <select id="hnet-children" class="select2 select" style="width: 100%">
+                                        <option value="0">0 {{ $ui['children_label'] }}</option>
+                                        <option value="1">1 {{ $ui['child_s'] ?? $ui['children_label'] }}</option>
+                                        <option value="2">2 {{ $ui['children_label'] }}</option>
+                                        <option value="3">3 {{ $ui['children_label'] }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col2 c5">
+                            <div class="select1_wrapper border-l border-b border-t  border-r">
+                                <label>{{ $ui['rooms_label'] }}</label>
+                                <div class="select1_inner">
+                                    <select id="hnet-rooms" class="select2 select" style="width: 100%">
+                                        <option value="1">1 {{ $ui['room_s'] ?? $ui['rooms_label'] }}</option>
+                                        <option value="2">2 {{ $ui['rooms_label'] }}</option>
+                                        <option value="3">3 {{ $ui['rooms_label'] }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col3 c6">
+                            <button type="submit" class="btn-form1-submit">{{ $ui['search_label'] }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
 
-<!-- chambres -->
- @include('themes.lasanta.partials.home.rooms', [
-    'apartmentsSubtitle' => $apartmentsSubtitle,
-    'apartmentsTitle' => $apartmentsTitle,
-    'homeRooms' => $homeRooms ?? collect(),
-])
+    <!-- About -->
+    <section class="about section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-md-12 mb-15">
+                    <div class="section-subtitle brown">{{ $aboutSmallTitle }}</div>
+                    <div class="section-title black">{{ $aboutTitle }}</div>
+                    <p class="mb-15 grey">{!! $aboutDescription !!}</p>
+                    <a href="{{ route('restaurant.index') }}" class="button-3 mb-15">Découvrir Le Domaine</a>
+                    <!-- @if(!empty($siteSetting->phone_primary ?? null))
+                        <div class="phone">
+                            <a href="tel:{{ preg_replace('/\s+/', '', (string) $siteSetting->phone_primary) }}">
+                                <i class="fa-light fa-phone"></i>{{ $siteSetting->phone_primary }}
+                            </a>
+                        </div>
+                    @endif -->
+                </div>
+                <!-- offset-lg-1 mt-45-->
+                <div class="col-lg-7 col-md-12 mb-20 ">
+                    <div style="aspect-ratio: 4 / 3; overflow: hidden; border-radius: 8px;">
+                        <img src="{{ $aboutMain }}" class="rounded-2" alt="" width="1080" height="810" loading="lazy"
+                            decoding="async" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- Services -->
-@include('themes.lasanta.partials.home.services', [
-    'homeServices' => $homeServices ?? collect(),
-])
+    <!-- chambres -->
+    @include('themes.lasanta.partials.home.rooms', [
+        'apartmentsSubtitle' => $apartmentsSubtitle,
+        'apartmentsTitle' => $apartmentsTitle,
+        'homeRooms' => $homeRooms ?? collect(),
+    ])
+
+    <!-- Services -->
+    @include('themes.lasanta.partials.home.services', [
+        'homeServices' => $homeServices ?? collect(),
+    ])
 
 
-<!-- Activities & Excursions -->
-@include('themes.lasanta.partials.activities.pricing', [
-    'localComodites' => $localComodites ?? collect(),
-    'localAmenitySectionSetting' => $localAmenitySectionSetting ?? null,
-    'installations' => $installations ?? collect(),
-    'installationSectionSetting' => $installationSectionSetting ?? null,
-])
+    <!-- Activities & Excursions -->
+    @include('themes.lasanta.partials.activities.pricing', [
+        'localComodites' => $localComodites ?? collect(),
+        'localAmenitySectionSetting' => $localAmenitySectionSetting ?? null,
+        'installations' => $installations ?? collect(),
+        'installationSectionSetting' => $installationSectionSetting ?? null,
+    ])
 
-<!-- Témoignages -->
-@include('partials.home.testimonials', [
-    'homeTestimonials'          => $homeTestimonials ?? collect(),
-    'testimonialSectionSetting' => $testimonialSectionSetting ?? null,
-])
+    <!-- Témoignages -->
+    @include('partials.home.testimonials', [
+        'homeTestimonials' => $homeTestimonials ?? collect(),
+        'testimonialSectionSetting' => $testimonialSectionSetting ?? null,
+    ])
 
-@include('partials.home.news-events', [
-    'homeNews'           => $homeNews ?? collect(),
-    'newsSectionSetting' => $newsSectionSetting ?? null,
-])
+    @include('partials.home.news-events', [
+        'homeNews' => $homeNews ?? collect(),
+        'newsSectionSetting' => $newsSectionSetting ?? null,
+    ])
 
-<!-- Booking Footer -->
-@include('themes.lasanta.partials.home.booking-footer', [
-    'bookingFooterSetting' => $bookingFooterSetting ?? null,
-    'heroSetting'          => $heroSetting ?? null,
-])
+    <!-- Booking Footer -->
+    @include('themes.lasanta.partials.home.booking-footer', [
+        'bookingFooterSetting' => $bookingFooterSetting ?? null,
+        'heroSetting' => $heroSetting ?? null,
+    ])
 @endsection
