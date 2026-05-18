@@ -106,10 +106,11 @@
                         @endforeach
                     </ul>
                 </div>
-                <!-- <div class="button"><a target="_blank"
-                        href="https://smartbooking.hotelnet.biz/home/main?hotel=5191&channel=0000&lingua={{ strtoupper($locale) }}">
-                        <i class="fa-light fa-calendar-check"></i> {{ $t['book'] }}</a>
-                </div> -->
+                <div class="button" style="visibility: hidden; pointer-events: none;">
+                    <a href="{{ route('appartements.index') }}">
+                        <i class="fa-light fa-calendar-check"></i> {{ $t['book'] }}
+                    </a>
+                </div>
             </div>
         </div>
     </div>

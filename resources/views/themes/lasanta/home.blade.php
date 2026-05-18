@@ -72,19 +72,16 @@
                         {{ method_exists($heroSetting, 't') ? $heroSetting->t('title') : ($heroSetting->title ?? ' Lasanta') }}
                     </div>
                     <div class="mt-20"></div>
-                    <!-- <a href="about.html" class="button-3 mb-15">About Hotel</a> -->
-                    <a href="{{ $heroButtonLink }}" class="button-3 mb-15" target="{{ $heroButtonTarget }}"
+                     <!-- buttonHeader -->
+                    <!-- <a href="{{ $heroButtonLink }}" class="button-3 mb-15" target="{{ $heroButtonTarget }}"
                         @if($heroButtonTarget === '_blank') rel="noopener" @endif>
                         {{ $heroButtonLabel }}
-                    </a>
+                    </a> -->
                 </div>
             </div>
         </div>
     </section>
-    <!-- 
-    php artisan migrate --path=database/migrations/2026_05_11_000000_add_rooms_label_to_home_hero_settings_table.php --force 
-    php artisan migrate --path=database/migrations/2026_05_11_000001_add_button_text_to_home_hero_settings_table.php --force 
-    -->
+
     <!-- Booking Search -->
     @if($heroSetting->show_booking_form ?? true)
         <div class="booking-wrapper">
@@ -166,12 +163,12 @@
                     <p class="mb-15 grey">{!! $aboutDescription !!}</p>
                     <a href="{{ route('restaurant.index') }}" class="button-3 mb-15">Découvrir Le Domaine</a>
                     <!-- @if(!empty($siteSetting->phone_primary ?? null))
-                        <div class="phone">
-                            <a href="tel:{{ preg_replace('/\s+/', '', (string) $siteSetting->phone_primary) }}">
-                                <i class="fa-light fa-phone"></i>{{ $siteSetting->phone_primary }}
-                            </a>
-                        </div>
-                    @endif -->
+                            <div class="phone">
+                                <a href="tel:{{ preg_replace('/\s+/', '', (string) $siteSetting->phone_primary) }}">
+                                    <i class="fa-light fa-phone"></i>{{ $siteSetting->phone_primary }}
+                                </a>
+                            </div>
+                        @endif -->
                 </div>
                 <!-- offset-lg-1 mt-45-->
                 <div class="col-lg-7 col-md-12 mb-20 ">
@@ -196,29 +193,28 @@
         'homeServices' => $homeServices ?? collect(),
     ])
 
-
     <!-- Activities & Excursions -->
-    @include('themes.lasanta.partials.activities.pricing', [
-        'localComodites' => $localComodites ?? collect(),
-        'localAmenitySectionSetting' => $localAmenitySectionSetting ?? null,
-        'installations' => $installations ?? collect(),
-        'installationSectionSetting' => $installationSectionSetting ?? null,
-    ])
+        @include('themes.lasanta.partials.activities.pricing', [
+            'localComodites' => $localComodites ?? collect(),
+            'localAmenitySectionSetting' => $localAmenitySectionSetting ?? null,
+            'installations' => $installations ?? collect(),
+            'installationSectionSetting' => $installationSectionSetting ?? null,
+        ])
 
-    <!-- Témoignages -->
-    @include('partials.home.testimonials', [
-        'homeTestimonials' => $homeTestimonials ?? collect(),
-        'testimonialSectionSetting' => $testimonialSectionSetting ?? null,
-    ])
+        <!-- Témoignages -->
+        @include('partials.home.testimonials', [
+            'homeTestimonials' => $homeTestimonials ?? collect(),
+            'testimonialSectionSetting' => $testimonialSectionSetting ?? null,
+        ])
 
-    @include('partials.home.news-events', [
-        'homeNews' => $homeNews ?? collect(),
-        'newsSectionSetting' => $newsSectionSetting ?? null,
-    ])
+        @include('partials.home.news-events', [
+            'homeNews' => $homeNews ?? collect(),
+            'newsSectionSetting' => $newsSectionSetting ?? null,
+        ])
 
-    <!-- Booking Footer -->
-    @include('themes.lasanta.partials.home.booking-footer', [
-        'bookingFooterSetting' => $bookingFooterSetting ?? null,
-        'heroSetting' => $heroSetting ?? null,
-    ])
+        <!-- Booking Footer -->
+        @include('themes.lasanta.partials.home.booking-footer', [
+            'bookingFooterSetting' => $bookingFooterSetting ?? null,
+            'heroSetting' => $heroSetting ?? null,
+        ])
 @endsection

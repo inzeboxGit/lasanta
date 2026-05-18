@@ -3,328 +3,364 @@
 @section('title', 'Header accueil')
 
 @section('content')
-<div class="d-flex align-items-center justify-content-between mb-4">
-    <div>
-        <h1 class="h3 mb-1">Header accueil</h1>
-        <div class="text-muted">Gerer le titre, le type de fond (video ou image) et l'affichage du formulaire sur la homepage</div>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="h3 mb-1">Header accueil</h1>
+            <div class="text-muted">Gerer le titre, le type de fond (video ou image) et l'affichage du formulaire sur la
+                homepage</div>
+        </div>
+        <a href="{{ url('/') }}" class="btn btn-outline-secondary" target="_blank" rel="noopener">Voir la home</a>
     </div>
-    <a href="{{ url('/') }}" class="btn btn-outline-secondary" target="_blank" rel="noopener">Voir la home</a>
-</div>
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-<div class="admin-card p-4">
-    <form action="{{ route('admin.hero.update') }}" method="post" enctype="multipart/form-data">
-        @csrf
-        @php
-            $backgroundSrc = null;
-            $backgroundType = old('background_type', $heroSetting->background_type ?? 'video');
-            $backgroundVideo = old('background_video', $heroSetting->background_video ?? 'video/sunset.mp4');
-            $backgroundVideoSrc = str_starts_with($backgroundVideo, 'video/')
-                ? asset($backgroundVideo)
-                : asset('storage/' . $backgroundVideo);
-            $youtubeVideoUrl = old('youtube_video_url', $heroSetting->youtube_video_url ?? '');
-            if (!empty($heroSetting->background_image ?? null)) {
-                $backgroundSrc = str_starts_with($heroSetting->background_image, 'img/')
-                    ? asset($heroSetting->background_image)
-                    : asset('storage/' . $heroSetting->background_image);
-            }
-        @endphp
+    <div class="admin-card p-4">
+        <form action="{{ route('admin.hero.update') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @php
+                $backgroundSrc = null;
+                $backgroundType = old('background_type', $heroSetting->background_type ?? 'video');
+                $backgroundVideo = old('background_video', $heroSetting->background_video ?? 'video/sunset.mp4');
+                $backgroundVideoSrc = str_starts_with($backgroundVideo, 'video/')
+                    ? asset($backgroundVideo)
+                    : asset('storage/' . $backgroundVideo);
+                $youtubeVideoUrl = old('youtube_video_url', $heroSetting->youtube_video_url ?? '');
+                if (!empty($heroSetting->background_image ?? null)) {
+                    $backgroundSrc = str_starts_with($heroSetting->background_image, 'img/')
+                        ? asset($heroSetting->background_image)
+                        : asset('storage/' . $heroSetting->background_image);
+                }
+            @endphp
 
-        <div class="row g-3">
-            <div class="col-12">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="hero_show_booking_form" name="show_booking_form" value="1" {{ old('show_booking_form', $heroSetting->show_booking_form ?? false) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="hero_show_booking_form">Afficher le formulaire de recherche</label>
+            <div class="row g-3">
+                <div class="col-12">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="hero_show_booking_form"
+                            name="show_booking_form" value="1" {{ old('show_booking_form', $heroSetting->show_booking_form ?? false) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="hero_show_booking_form">Afficher le formulaire de
+                            recherche</label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-12">
-                <label class="form-label d-block mb-2">Libellés du formulaire de recherche</label>
-                <ul class="nav nav-tabs" id="booking-labels-tabs" role="tablist">
-                    @foreach($locales as $localeKey => $localeLabel)
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="booking-labels-{{ $localeKey }}-tab" data-bs-toggle="tab" data-bs-target="#booking-labels-{{ $localeKey }}" type="button" role="tab" aria-controls="booking-labels-{{ $localeKey }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}">
-                                {{ $localeLabel }}
-                            </button>
-                        </li>
-                    @endforeach
-                </ul>
-                <div class="tab-content border border-top-0 rounded-bottom p-3" id="booking-labels-content">
-                    @foreach($locales as $localeKey => $localeLabel)
-                        @php
-                            $isFrench = $localeKey === 'fr';
-                            $valueFor = function (string $field) use ($heroSetting, $localeKey, $isFrench) {
-                                if ($isFrench) {
-                                    return old($field, $heroSetting->{$field} ?? '');
-                                }
+                <div class="col-12">
+                    <label class="form-label d-block mb-2">Libellés du formulaire de recherche</label>
+                    <ul class="nav nav-tabs" id="booking-labels-tabs" role="tablist">
+                        @foreach($locales as $localeKey => $localeLabel)
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link {{ $loop->first ? 'active' : '' }}"
+                                    id="booking-labels-{{ $localeKey }}-tab" data-bs-toggle="tab"
+                                    data-bs-target="#booking-labels-{{ $localeKey }}" type="button" role="tab"
+                                    aria-controls="booking-labels-{{ $localeKey }}"
+                                    aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                                    {{ $localeLabel }}
+                                </button>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <div class="tab-content border border-top-0 rounded-bottom p-3" id="booking-labels-content">
+                        @foreach($locales as $localeKey => $localeLabel)
+                            @php
+                                $isFrench = $localeKey === 'fr';
+                                $valueFor = function (string $field) use ($heroSetting, $localeKey, $isFrench) {
+                                    if ($isFrench) {
+                                        return old($field, $heroSetting->{$field} ?? '');
+                                    }
 
-                                return old('translations.' . $localeKey . '.' . $field, $heroSetting->t($field, $localeKey) ?? '');
-                            };
-                        @endphp
-                        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="booking-labels-{{ $localeKey }}" role="tabpanel" aria-labelledby="booking-labels-{{ $localeKey }}-tab" tabindex="0">
-                            <div class="row g-3">
-                                <!-- <div class="col-md-12">
-                                    <label class="form-label">Dates</label>
-                                    <input type="text" name="{{ $isFrench ? 'dates_label' : 'translations[' . $localeKey . '][dates_label]' }}" class="form-control" value="{{ $valueFor('dates_label') }}" placeholder="Arrivée / Départ">
-                                </div> -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Check in</label>
-                                    <input type="text" name="{{ $isFrench ? 'check_in_label' : 'translations[' . $localeKey . '][check_in_label]' }}" class="form-control" value="{{ $valueFor('check_in_label') }}" placeholder="Arrivée">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Check out</label>
-                                    <input type="text" name="{{ $isFrench ? 'check_out_label' : 'translations[' . $localeKey . '][check_out_label]' }}" class="form-control" value="{{ $valueFor('check_out_label') }}" placeholder="Départ">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Adultes</label>
-                                    <input type="text" name="{{ $isFrench ? 'adults_label' : 'translations[' . $localeKey . '][adults_label]' }}" class="form-control" value="{{ $valueFor('adults_label') }}">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Enfants</label>
-                                    <input type="text" name="{{ $isFrench ? 'children_label' : 'translations[' . $localeKey . '][children_label]' }}" class="form-control" value="{{ $valueFor('children_label') }}">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Chambres</label>
-                                    <input type="text" name="{{ $isFrench ? 'rooms_label' : 'translations[' . $localeKey . '][rooms_label]' }}" class="form-control" value="{{ $valueFor('rooms_label') }}" placeholder="Chambres">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Rechercher</label>
-                                    <input type="text" name="{{ $isFrench ? 'search_label' : 'translations[' . $localeKey . '][search_label]' }}" class="form-control" value="{{ $valueFor('search_label') }}">
+                                    return old('translations.' . $localeKey . '.' . $field, $heroSetting->t($field, $localeKey) ?? '');
+                                };
+                            @endphp
+                            <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                                id="booking-labels-{{ $localeKey }}" role="tabpanel"
+                                aria-labelledby="booking-labels-{{ $localeKey }}-tab" tabindex="0">
+                                <div class="row g-3">
+                                    <!-- <div class="col-md-12">
+                                                    <label class="form-label">Dates</label>
+                                                    <input type="text" name="{{ $isFrench ? 'dates_label' : 'translations[' . $localeKey . '][dates_label]' }}" class="form-control" value="{{ $valueFor('dates_label') }}" placeholder="Arrivée / Départ">
+                                                </div> -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Check in</label>
+                                        <input type="text"
+                                            name="{{ $isFrench ? 'check_in_label' : 'translations[' . $localeKey . '][check_in_label]' }}"
+                                            class="form-control" value="{{ $valueFor('check_in_label') }}"
+                                            placeholder="Arrivée">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Check out</label>
+                                        <input type="text"
+                                            name="{{ $isFrench ? 'check_out_label' : 'translations[' . $localeKey . '][check_out_label]' }}"
+                                            class="form-control" value="{{ $valueFor('check_out_label') }}"
+                                            placeholder="Départ">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Adultes</label>
+                                        <input type="text"
+                                            name="{{ $isFrench ? 'adults_label' : 'translations[' . $localeKey . '][adults_label]' }}"
+                                            class="form-control" value="{{ $valueFor('adults_label') }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Enfants</label>
+                                        <input type="text"
+                                            name="{{ $isFrench ? 'children_label' : 'translations[' . $localeKey . '][children_label]' }}"
+                                            class="form-control" value="{{ $valueFor('children_label') }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Chambres</label>
+                                        <input type="text"
+                                            name="{{ $isFrench ? 'rooms_label' : 'translations[' . $localeKey . '][rooms_label]' }}"
+                                            class="form-control" value="{{ $valueFor('rooms_label') }}" placeholder="Chambres">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label"> (Libelle du bouton formulaire)</label>
+                                        <input type="text"
+                                            name="{{ $isFrench ? 'search_label' : 'translations[' . $localeKey . '][search_label]' }}"
+                                            class="form-control" value="{{ $valueFor('search_label') }}">
+                                    </div>
                                 </div>
                             </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Petit titre</label>
+                    <input type="text" name="small_title" class="form-control"
+                        value="{{ old('small_title', $heroSetting->small_title ?? '') }}">
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Titre</label>
+                    <input type="text" name="title" class="form-control"
+                        value="{{ old('title', $heroSetting->title ?? '') }}">
+                </div>
+                <!-- <div class="col-md-8">
+                        <label class="form-label">Texte du bouton</label>
+                        <input type="text" name="button_text" class="form-control" value="{{ old('button_text', $heroSetting->button_text ?? '') }}" placeholder="Découvrir Le Domaine">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Lien du bouton Reserver</label>
+                        <input type="text" name="button_link" class="form-control" value="{{ old('button_link', $heroSetting->button_link ?? '') }}" placeholder="https://... ou /appartements">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Target du bouton</label>
+                        <select name="button_target" class="form-select">
+                            <option value="_self" {{ old('button_target', $heroSetting->button_target ?? '_self') === '_self' ? 'selected' : '' }}>Meme onglet</option>
+                            <option value="_blank" {{ old('button_target', $heroSetting->button_target ?? '_self') === '_blank' ? 'selected' : '' }}>Nouvel onglet</option>
+                        </select>
+                    </div> -->
+                <div class="col-12">
+                    <label class="form-label d-block">Type d'arriere-plan</label>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="background_type"
+                                id="hero_background_type_video" value="video" {{ $backgroundType === 'video' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="hero_background_type_video">Video</label>
                         </div>
-                    @endforeach
-                </div>
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Petit titre</label>
-                <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $heroSetting->small_title ?? '') }}">
-            </div>
-            <div class="col-md-8">
-                <label class="form-label">Titre</label>
-                <input type="text" name="title" class="form-control" value="{{ old('title', $heroSetting->title ?? '') }}">
-            </div>
-            <div class="col-md-8">
-                <label class="form-label">Texte du bouton</label>
-                <input type="text" name="button_text" class="form-control" value="{{ old('button_text', $heroSetting->button_text ?? '') }}" placeholder="Découvrir Le Domaine">
-            </div>
-            <div class="col-md-8">
-                <label class="form-label">Lien du bouton Reserver</label>
-                <input type="text" name="button_link" class="form-control" value="{{ old('button_link', $heroSetting->button_link ?? '') }}" placeholder="https://... ou /appartements">
-            </div>
-            <div class="col-md-4">
-                <label class="form-label">Target du bouton</label>
-                <select name="button_target" class="form-select">
-                    <option value="_self" {{ old('button_target', $heroSetting->button_target ?? '_self') === '_self' ? 'selected' : '' }}>Meme onglet</option>
-                    <option value="_blank" {{ old('button_target', $heroSetting->button_target ?? '_self') === '_blank' ? 'selected' : '' }}>Nouvel onglet</option>
-                </select>
-            </div>
-            <div class="col-12">
-                <label class="form-label d-block">Type d'arriere-plan</label>
-                <div class="d-flex flex-wrap gap-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="background_type" id="hero_background_type_video" value="video" {{ $backgroundType === 'video' ? 'checked' : '' }}>
-                        <label class="form-check-label" for="hero_background_type_video">Video</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="background_type"
+                                id="hero_background_type_image" value="image" {{ $backgroundType === 'image' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="hero_background_type_image">Image</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="background_type" id="hero_background_type_image" value="image" {{ $backgroundType === 'image' ? 'checked' : '' }}>
-                        <label class="form-check-label" for="hero_background_type_image">Image</label>
+                    <div class="form-text">Si aucun lien YouTube ni upload n'est defini, la video par defaut reste
+                        `public/video/sunset.mp4`.</div>
+                </div>
+                <div class="col-12" id="hero_background_video_fields">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Upload video</label>
+                            <input type="file" name="background_video" id="hero_background_video" class="form-control"
+                                accept="video/mp4,video/webm,video/ogg,video/quicktime">
+                            <div class="form-text">Formats acceptes: mp4, webm, ogg, mov. Taille max 50 Mo.</div>
+                            <div class="mt-2">
+                                <video id="hero_background_video_preview" src="{{ $backgroundVideoSrc }}"
+                                    class="rounded w-100" style="max-height:220px; object-fit:cover;" controls muted
+                                    playsinline></video>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Lien YouTube</label>
+                            <input type="url" name="youtube_video_url" class="form-control" value="{{ $youtubeVideoUrl }}"
+                                placeholder="https://www.youtube.com/watch?v=...">
+                            <div class="form-text">Si ce champ est rempli, le lien YouTube est prioritaire sur la video
+                                uploadée.</div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-text">Si aucun lien YouTube ni upload n'est defini, la video par defaut reste `public/video/sunset.mp4`.</div>
+                <div class="col-12" id="hero_background_image_field">
+                    <label class="form-label">Image d'arriere-plan</label>
+                    <input type="file" name="background_image" id="hero_background_image" class="form-control"
+                        accept="image/*">
+                    <div class="mt-2">
+                        <img id="hero_background_preview" src="{{ $backgroundSrc ?? '' }}" alt="" class="rounded"
+                            style="max-height:120px;{{ empty($backgroundSrc) ? 'display:none;' : '' }}">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
             </div>
-            <div class="col-12" id="hero_background_video_fields">
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const typeInputs = document.querySelectorAll('input[name="background_type"]');
+            const videoFields = document.getElementById('hero_background_video_fields');
+            const imageField = document.getElementById('hero_background_image_field');
+            const videoInput = document.getElementById('hero_background_video');
+            const videoPreview = document.getElementById('hero_background_video_preview');
+            const input = document.getElementById('hero_background_image');
+            const preview = document.getElementById('hero_background_preview');
+
+            function toggleImageField() {
+                const selectedType = document.querySelector('input[name="background_type"]:checked')?.value ?? 'video';
+                if (videoFields) {
+                    videoFields.style.display = selectedType === 'video' ? 'block' : 'none';
+                }
+                if (imageField) {
+                    imageField.style.display = selectedType === 'image' ? 'block' : 'none';
+                }
+            }
+
+            typeInputs.forEach(function (typeInput) {
+                typeInput.addEventListener('change', toggleImageField);
+            });
+
+            toggleImageField();
+
+            if (!input || !preview) {
+                return;
+            }
+
+            input.addEventListener('change', function (event) {
+                const file = event.target.files && event.target.files[0];
+                if (!file) {
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            });
+
+            if (!videoInput || !videoPreview) {
+                return;
+            }
+
+            videoInput.addEventListener('change', function (event) {
+                const file = event.target.files && event.target.files[0];
+                if (!file) {
+                    return;
+                }
+
+                videoPreview.src = URL.createObjectURL(file);
+                videoPreview.style.display = 'block';
+            });
+        });
+    </script>
+
+    <!-- <div class="admin-card p-4 mt-4">
+            <h2 class="h5 mb-3">Section image d'ambiance</h2>
+            <form action="{{ route('admin.hero.video-section.update') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                @php
+                    $videoSectionImageSrc = media_url($homeVideoSetting->header_image ?? null, 'img/video-background.png');
+                @endphp
                 <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Upload video</label>
-                        <input type="file" name="background_video" id="hero_background_video" class="form-control" accept="video/mp4,video/webm,video/ogg,video/quicktime">
-                        <div class="form-text">Formats acceptes: mp4, webm, ogg, mov. Taille max 50 Mo.</div>
+                    <div class="col-md-4">
+                        <label class="form-label">Sous-titre</label>
+                        <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $homeVideoSetting->subtitle ?? '') }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Titre</label>
+                        <input type="text" name="title" class="form-control" value="{{ old('title', $homeVideoSetting->title ?? '') }}">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Image d'arrière-plan</label>
+                        <input type="file" name="header_image" id="home_video_header_image" class="form-control" accept="image/*">
                         <div class="mt-2">
-                            <video id="hero_background_video_preview" src="{{ $backgroundVideoSrc }}" class="rounded w-100" style="max-height:220px; object-fit:cover;" controls muted playsinline></video>
+                            <img id="home_video_header_preview" src="{{ $videoSectionImageSrc }}" alt="" class="rounded" style="max-height:140px;">
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Lien YouTube</label>
-                        <input type="url" name="youtube_video_url" class="form-control" value="{{ $youtubeVideoUrl }}" placeholder="https://www.youtube.com/watch?v=...">
-                        <div class="form-text">Si ce champ est rempli, le lien YouTube est prioritaire sur la video uploadée.</div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Mettre à jour</button>
                     </div>
                 </div>
-            </div>
-            <div class="col-12" id="hero_background_image_field">
-                <label class="form-label">Image d'arriere-plan</label>
-                <input type="file" name="background_image" id="hero_background_image" class="form-control" accept="image/*">
-                <div class="mt-2">
-                    <img id="hero_background_preview" src="{{ $backgroundSrc ?? '' }}" alt="" class="rounded" style="max-height:120px;{{ empty($backgroundSrc) ? 'display:none;' : '' }}">
+            </form>
+        </div> -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('home_video_header_image');
+            const preview = document.getElementById('home_video_header_preview');
+
+            if (!input || !preview) return;
+
+            input.addEventListener('change', function (event) {
+                const file = event.target.files && event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+
+    <div class="admin-card p-4 mt-4">
+        <h2 class="h5 mb-3">Section Footer</h2>
+        <form action="{{ route('admin.hero.booking-footer.update') }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @php
+                $bfImg = $bookingFooterSetting->header_image ?? 'img/rooms/01.jpg';
+                $bfSrc = str_starts_with($bfImg, 'img/')
+                    ? asset('themes/lasanta/' . $bfImg)
+                    : asset('storage/' . $bfImg);
+            @endphp
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Sous-titre</label>
+                    <input type="text" name="subtitle" class="form-control"
+                        value="{{ old('subtitle', $bookingFooterSetting->subtitle ?? 'Hotel Experience') }}">
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Titre</label>
+                    <input type="text" name="title" class="form-control"
+                        value="{{ old('title', $bookingFooterSetting->title ?? 'Booking Form') }}">
+                </div>
+                <div class="col-12">
+                    <div class="form-label">Image d'arrière-plan</div>
+                    <input type="file" name="header_image" id="booking_footer_header_image" class="form-control"
+                        accept="image/*">
+                    <div class="mt-2">
+                        <img id="booking_footer_header_preview" src="{{ $bfSrc }}" alt="" class="rounded"
+                            style="max-height:140px;">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Mettre à jour</button>
                 </div>
             </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Enregistrer</button>
-            </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const typeInputs = document.querySelectorAll('input[name="background_type"]');
-    const videoFields = document.getElementById('hero_background_video_fields');
-    const imageField = document.getElementById('hero_background_image_field');
-    const videoInput = document.getElementById('hero_background_video');
-    const videoPreview = document.getElementById('hero_background_video_preview');
-    const input = document.getElementById('hero_background_image');
-    const preview = document.getElementById('hero_background_preview');
-
-    function toggleImageField() {
-        const selectedType = document.querySelector('input[name="background_type"]:checked')?.value ?? 'video';
-        if (videoFields) {
-            videoFields.style.display = selectedType === 'video' ? 'block' : 'none';
-        }
-        if (imageField) {
-            imageField.style.display = selectedType === 'image' ? 'block' : 'none';
-        }
-    }
-
-    typeInputs.forEach(function (typeInput) {
-        typeInput.addEventListener('change', toggleImageField);
-    });
-
-    toggleImageField();
-
-    if (!input || !preview) {
-        return;
-    }
-
-    input.addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) {
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    });
-
-    if (!videoInput || !videoPreview) {
-        return;
-    }
-
-    videoInput.addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) {
-            return;
-        }
-
-        videoPreview.src = URL.createObjectURL(file);
-        videoPreview.style.display = 'block';
-    });
-});
-</script>
-
-<!-- <div class="admin-card p-4 mt-4">
-    <h2 class="h5 mb-3">Section image d'ambiance</h2>
-    <form action="{{ route('admin.hero.video-section.update') }}" method="post" enctype="multipart/form-data">
-        @csrf
-        @php
-            $videoSectionImageSrc = media_url($homeVideoSetting->header_image ?? null, 'img/video-background.png');
-        @endphp
-        <div class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label">Sous-titre</label>
-                <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $homeVideoSetting->subtitle ?? '') }}">
-            </div>
-            <div class="col-md-8">
-                <label class="form-label">Titre</label>
-                <input type="text" name="title" class="form-control" value="{{ old('title', $homeVideoSetting->title ?? '') }}">
-            </div>
-            <div class="col-12">
-                <label class="form-label">Image d'arrière-plan</label>
-                <input type="file" name="header_image" id="home_video_header_image" class="form-control" accept="image/*">
-                <div class="mt-2">
-                    <img id="home_video_header_preview" src="{{ $videoSectionImageSrc }}" alt="" class="rounded" style="max-height:140px;">
-                </div>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Mettre à jour</button>
-            </div>
-        </div>
-    </form>
-</div> -->
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const input = document.getElementById('home_video_header_image');
-    const preview = document.getElementById('home_video_header_preview');
-
-    if (!input || !preview) return;
-
-    input.addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    });
-});
-</script>
-
-<div class="admin-card p-4 mt-4">
-    <h2 class="h5 mb-3">Section Footer</h2>
-    <form action="{{ route('admin.hero.booking-footer.update') }}" method="post" enctype="multipart/form-data">
-        @csrf
-        @php
-            $bfImg = $bookingFooterSetting->header_image ?? 'img/rooms/01.jpg';
-            $bfSrc = str_starts_with($bfImg, 'img/')
-                ? asset('themes/lasanta/' . $bfImg)
-                : asset('storage/' . $bfImg);
-        @endphp
-        <div class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label">Sous-titre</label>
-                <input type="text" name="subtitle" class="form-control"
-                       value="{{ old('subtitle', $bookingFooterSetting->subtitle ?? 'Hotel Experience') }}">
-            </div>
-            <div class="col-md-8">
-                <label class="form-label">Titre</label>
-                <input type="text" name="title" class="form-control"
-                       value="{{ old('title', $bookingFooterSetting->title ?? 'Booking Form') }}">
-            </div>
-            <div class="col-12">
-                <div class="form-label">Image d'arrière-plan</div>
-                <input type="file" name="header_image" id="booking_footer_header_image" class="form-control" accept="image/*">
-                <div class="mt-2">
-                    <img id="booking_footer_header_preview" src="{{ $bfSrc }}" alt=""
-                         class="rounded" style="max-height:140px;">
-                </div>
-            </div>
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary">Mettre à jour</button>
-            </div>
-        </div>
-    </form>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const input = document.getElementById('booking_footer_header_image');
-    const preview = document.getElementById('booking_footer_header_preview');
-    if (!input || !preview) return;
-    input.addEventListener('change', function (event) {
-        const file = event.target.files && event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function (e) { preview.src = e.target.result; };
-        reader.readAsDataURL(file);
-    });
-});
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('booking_footer_header_image');
+            const preview = document.getElementById('booking_footer_header_preview');
+            if (!input || !preview) return;
+            input.addEventListener('change', function (event) {
+                const file = event.target.files && event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function (e) { preview.src = e.target.result; };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
 @endsection
