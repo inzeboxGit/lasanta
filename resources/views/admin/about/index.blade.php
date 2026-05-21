@@ -114,6 +114,25 @@
                     <textarea name="description" id="about_description" class="form-control d-none"
                         rows="5">{{ $aboutDescription }}</textarea>
                 </div>
+                <div class="col-md-4">
+                    <label class="form-label">Texte Ou Numero de Tel</label>
+                    <input type="text" name="button_text" class="form-control"
+                        value="{{ old('button_text', $aboutSetting->button_text ?? '') }}"
+                        placeholder="Découvrir Le Domaine">
+                </div>
+                <!-- <div class="col-md-5">
+                    <label class="form-label">Lien du bouton</label>
+                    <input type="text" name="button_link" class="form-control"
+                        value="{{ old('button_link', $aboutSetting->button_link ?? '') }}"
+                        placeholder="https://... ou /restaurant">
+                </div> -->
+                <!-- <div class="col-md-3">
+                    <label class="form-label">Ouverture du lien</label>
+                    <select name="button_target" class="form-select">
+                        <option value="_self" {{ old('button_target', $aboutSetting->button_target ?? '_self') === '_self' ? 'selected' : '' }}>Meme onglet</option>
+                        <option value="_blank" {{ old('button_target', $aboutSetting->button_target ?? '_self') === '_blank' ? 'selected' : '' }}>Nouvel onglet</option>
+                    </select>
+                </div> -->
                 <!-- <div class="col-md-4">
                     <label class="form-label">Signature</label>
                     <input type="text" name="signature" class="form-control"

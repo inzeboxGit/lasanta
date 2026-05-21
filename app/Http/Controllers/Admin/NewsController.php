@@ -131,6 +131,24 @@ class NewsController extends Controller
         return view('admin.news.edit', compact('item'));
     }
 
+    public function removeImage(Request $request, string $id)
+    {
+        $item = News::findOrFail($id);
+        $data = $request->validate([
+            'field' => ['required', 'in:hero_image,cover_image'],
+        ]);
+
+        $field = $data['field'];
+        $path = $item->{$field};
+
+        if (!empty($path)) {
+            Storage::disk('public')->delete($path);
+            $item->update([$field => null]);
+        }
+
+        return redirect()->route('admin.news.edit', $item)->with('success', 'Image supprimée.');
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -140,10 +158,26 @@ class NewsController extends Controller
         $data = $this->validatedData($request, $item->id);
         $data['slug'] = $data['slug'] ?: Str::slug($data['title']);
 
+        if ($request->boolean('remove_hero_image') && !empty($item->hero_image)) {
+            Storage::disk('public')->delete($item->hero_image);
+            $data['hero_image'] = null;
+        }
+
+        if ($request->boolean('remove_cover_image') && !empty($item->cover_image)) {
+            Storage::disk('public')->delete($item->cover_image);
+            $data['cover_image'] = null;
+        }
+
         if ($request->hasFile('hero_image')) {
+            if (!empty($item->hero_image)) {
+                Storage::disk('public')->delete($item->hero_image);
+            }
             $data['hero_image'] = $request->file('hero_image')->store('news', 'public');
         }
         if ($request->hasFile('cover_image')) {
+            if (!empty($item->cover_image)) {
+                Storage::disk('public')->delete($item->cover_image);
+            }
             $data['cover_image'] = $request->file('cover_image')->store('news', 'public');
         }
 
@@ -158,6 +192,15 @@ class NewsController extends Controller
     public function destroy(string $id)
     {
         $item = News::findOrFail($id);
+
+        if (!empty($item->hero_image)) {
+            Storage::disk('public')->delete($item->hero_image);
+        }
+
+        if (!empty($item->cover_image)) {
+            Storage::disk('public')->delete($item->cover_image);
+        }
+
         $item->delete();
 
         return redirect()->route('admin.news.index')->with('success', 'Actualité supprimée.');
@@ -180,6 +223,8 @@ class NewsController extends Controller
             'body' => ['nullable', 'string'],
             'hero_image' => ['nullable', 'image', 'max:5120'],
             'cover_image' => ['nullable', 'image', 'max:5120'],
+            'remove_hero_image' => ['nullable', 'boolean'],
+            'remove_cover_image' => ['nullable', 'boolean'],
             'status' => ['required', 'in:draft,published'],
         ]);
     }

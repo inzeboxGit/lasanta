@@ -140,6 +140,9 @@ Route::get('/', function () {
         'lead' => 'Une conception du tourisme...',
         'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
         'signature' => 'L’équipe du Hotel La Santa',
+        'button_text' => 'Découvrir Le Domaine',
+        'button_link' => '',
+        'button_target' => '_self',
         'main_image' => 'img/home_2.jpg',
         'overlay_image' => 'img/home_1.jpg',
     ];
@@ -153,6 +156,9 @@ Route::get('/', function () {
                 'lead' => 'Une conception du tourisme...',
                 'description' => "Un établissement où se côtoient dans un subtil mélange, l’accueil chaleureux, la convivialité, le confort de chambres récemment rénovées dans un esprit moderne de grande qualité le tout associé à une table reconnue par le Titre de Maître Restaurateur.",
                 'signature' => 'L’équipe du Hotel La Santa',
+                'button_text' => 'Découvrir Le Domaine',
+                'button_link' => '',
+                'button_target' => '_self',
                 'main_image' => 'img/home_2.jpg',
                 'overlay_image' => 'img/home_1.jpg',
             ]
@@ -817,6 +823,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('testimonials', \App\Http\Controllers\Admin\TestimonialController::class)->names('admin.testimonials');
         Route::post('testimonials/section-settings', [\App\Http\Controllers\Admin\TestimonialController::class, 'updateSectionSettings'])->name('admin.testimonials.section-settings.update');
         Route::resource('news', \App\Http\Controllers\Admin\NewsController::class)->names('admin.news');
+        Route::post('news/{news}/remove-image', [\App\Http\Controllers\Admin\NewsController::class, 'removeImage'])->name('admin.news.remove-image');
         Route::post('news/page-settings', [\App\Http\Controllers\Admin\NewsController::class, 'updatePageSettings'])->name('admin.news.page-settings.update');
         Route::post('news/home-section', [\App\Http\Controllers\Admin\NewsController::class, 'updateHomeSectionSettings'])->name('admin.news.home-section.update');
         Route::get('faqs', [\App\Http\Controllers\Admin\FaqController::class, 'index'])->name('admin.faqs.index');

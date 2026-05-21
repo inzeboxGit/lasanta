@@ -27,6 +27,13 @@
     $aboutDescription = method_exists($aboutSectionSetting, 't')
         ? ($aboutSectionSetting->t('description') ?: "Entre les sentiers du maquis, la proximité de la plage de Saleccia et les moments de partage à l’auberge, chaque journée s’organise librement, au rythme de vos envies.")
         : ($aboutSectionSetting->description ?? "Entre les sentiers du maquis, la proximité de la plage de Saleccia et les moments de partage à l’auberge, chaque journée s’organise librement, au rythme de vos envies.");
+    $aboutButtonText = method_exists($aboutSectionSetting, 't')
+        ? ($aboutSectionSetting->t('button_text', $locale) ?: ($aboutSectionSetting->button_text ?? 'Découvrir Le Domaine'))
+        : ($aboutSectionSetting->button_text ?? 'Découvrir Le Domaine');
+    $aboutButtonLink = !empty($aboutSectionSetting->button_link ?? null)
+        ? $aboutSectionSetting->button_link
+        : route('restaurant.index');
+    $aboutButtonTarget = $aboutSectionSetting->button_target ?? '_self';
     $apartmentsSubtitle = method_exists($appartmentPageSetting, 't')
         ? ($appartmentPageSetting->t('subtitle') ?: 'Expérience hôtelière')
         : ($appartmentPageSetting->subtitle ?? 'Expérience hôtelière');
@@ -152,7 +159,9 @@
             </div>
         </div>
     @endif
-
+<!-- 
+php artisan migrate --path=database/migrations/2026_05_11_000002_alter_description_longtext_in_about_section_settings_table.php --force 
+-->
     <!-- About -->
     <section class="about section-padding">
         <div class="container">
@@ -161,7 +170,14 @@
                     <div class="section-subtitle brown">{{ $aboutSmallTitle }}</div>
                     <div class="section-title black">{{ $aboutTitle }}</div>
                     <p class="mb-15 grey">{!! $aboutDescription !!}</p>
-                    <a href="{{ route('restaurant.index') }}" class="button-3 mb-15">Découvrir Le Domaine</a>
+                    <!-- <a href="{{ $aboutButtonLink }}" class="button-3 mb-15" target="{{ $aboutButtonTarget }}" @if($aboutButtonTarget === '_blank') rel="noopener" @endif> -->
+                        <!-- {{ $aboutButtonText }} -->
+                    <!-- </a> -->
+                     <div style="padding-left: 0!important;" class="phone" bis_skin_checked="1">
+                        <a href="tel:{{ $aboutButtonText }}">
+                            <i class="fa-light fa-phone"></i>{{ $aboutButtonText }}
+                        </a>
+                    </div>
                     <!-- @if(!empty($siteSetting->phone_primary ?? null))
                             <div class="phone">
                                 <a href="tel:{{ preg_replace('/\s+/', '', (string) $siteSetting->phone_primary) }}">

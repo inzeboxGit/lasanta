@@ -19,7 +19,7 @@ return [
         'about_section' => [
             'label' => 'Accueil - À propos',
             'class' => \App\Models\AboutSectionSetting::class,
-            'fields' => ['small_title', 'title', 'lead', 'description', 'signature'],
+            'fields' => ['small_title', 'title', 'lead', 'description', 'signature', 'button_text'],
             'wysiwyg_fields' => ['description'],
             'display_field' => 'section',
         ],

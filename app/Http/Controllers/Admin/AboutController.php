@@ -42,6 +42,9 @@ class AboutController extends Controller
             'lead' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'signature' => ['nullable', 'string', 'max:255'],
+            'button_text' => ['nullable', 'string', 'max:255'],
+            'button_link' => ['nullable', 'string', 'max:2048'],
+            'button_target' => ['nullable', 'in:_self,_blank'],
             'main_image' => ['nullable', 'image', 'max:5120'],
             'overlay_image' => ['nullable', 'image', 'max:5120'],
         ]);
@@ -68,6 +71,9 @@ class AboutController extends Controller
             'lead' => $data['lead'] ?? $setting->lead,
             'description' => $data['description'] ?? $setting->description,
             'signature' => $data['signature'] ?? $setting->signature,
+            'button_text' => $data['button_text'] ?? $setting->button_text,
+            'button_link' => $data['button_link'] ?? $setting->button_link,
+            'button_target' => $data['button_target'] ?? $setting->button_target,
             'main_image' => $data['main_image'] ?? $setting->main_image,
             'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
         ]);
@@ -83,6 +89,9 @@ class AboutController extends Controller
             'lead' => '',
             'description' => "",
             'signature' => '',
+            'button_text' => 'Découvrir Le Domaine',
+            'button_link' => '',
+            'button_target' => '_self',
             'main_image' => '',
             'overlay_image' => '',
         ];

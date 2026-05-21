@@ -42,20 +42,40 @@
         </div>
         <div class="col-md-6">
             <label class="form-label">Image hero</label>
+            <div class="form-text mb-2">
+                Image utilisée en priorité dans le hero de la page détail. Si elle est vide, le site utilise l'image contenu de l'actualité. Si aucune image n'est envoyée, aucun visuel n'est affiché et le hero devient plus petit.
+            </div>
             <input type="file" name="hero_image" class="form-control">
             @if(!empty($item->hero_image))
                 <div class="mt-2">
                     <img src="{{ asset('storage/' . $item->hero_image) }}" alt="" style="max-height:120px;" class="rounded">
                 </div>
+                @if($isEdit)
+                    <div class="mt-2">
+                        <button type="button" class="badge border-0 bg-danger js-remove-news-image" data-form-id="remove-news-hero-image-form">
+                            Supprimer
+                        </button>
+                    </div>
+                @endif
             @endif
         </div>
         <div class="col-md-6">
             <label class="form-label">Image contenu</label>
+            <div class="form-text mb-2">
+                Cette image sert dans le contenu de l'actualité et elle est aussi utilisée dans le hero si aucune image hero n'est définie.
+            </div>
             <input type="file" name="cover_image" class="form-control">
             @if(!empty($item->cover_image))
                 <div class="mt-2">
                     <img src="{{ asset('storage/' . $item->cover_image) }}" alt="" style="max-height:120px;" class="rounded">
                 </div>
+                @if($isEdit)
+                    <div class="mt-2">
+                        <button type="button" class="badge border-0 bg-danger js-remove-news-image" data-form-id="remove-news-cover-image-form">
+                            Supprimer
+                        </button>
+                    </div>
+                @endif
             @endif
         </div>
     </div>
