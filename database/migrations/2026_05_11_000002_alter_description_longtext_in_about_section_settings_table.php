@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('about_section_settings', function (Blueprint $table) {
-            $table->longText('description')->change();
+            $table->longText('description')->nullable()->change();
         });
     }
 
     public function down(): void
     {
         Schema::table('about_section_settings', function (Blueprint $table) {
-            $table->string('description', 255)->change(); // Remettre comme avant si besoin
+            $table->text('description')->nullable()->change();
         });
     }
 };
