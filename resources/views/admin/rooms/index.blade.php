@@ -40,7 +40,7 @@
                 <input type="text" name="title" class="form-control" value="{{ old('title', $appartmentPageSetting->title ?? '') }}">
             </div>
             <div class="col-12">
-                <label class="form-label">Description de la section accueil</label>
+                <label class="form-label">Description de la section Chambres Accueil (facultatif)</label>
                 <textarea name="home_description" class="form-control" rows="4">{{ old('home_description', $appartmentPageSetting->home_description ?? '') }}</textarea>
             </div>
             <div class="col-12">
