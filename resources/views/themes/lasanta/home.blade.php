@@ -201,6 +201,7 @@ php artisan migrate --path=database/migrations/2026_05_11_000002_alter_descripti
     @include('themes.lasanta.partials.home.rooms', [
         'apartmentsSubtitle' => $apartmentsSubtitle,
         'apartmentsTitle' => $apartmentsTitle,
+        'appartmentPageSetting' => $appartmentPageSetting ?? null,
         'homeRooms' => $homeRooms ?? collect(),
     ])
 

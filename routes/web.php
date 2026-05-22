@@ -118,6 +118,7 @@ Route::get('/', function () {
     $appartmentPageSetting = (object) [
         'home_title' => null,
         'home_subtitle' => null,
+        'home_description' => null,
     ];
 
     if (\Illuminate\Support\Facades\Schema::hasTable('appartment_page_settings')) {
@@ -126,6 +127,10 @@ Route::get('/', function () {
         if (\Illuminate\Support\Facades\Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
             $defaults['home_title'] = 'Chambres et suites';
             $defaults['home_subtitle'] = 'Expérience hôtelière';
+        }
+
+        if (\Illuminate\Support\Facades\Schema::hasColumn('appartment_page_settings', 'home_description')) {
+            $defaults['home_description'] = null;
         }
 
         $appartmentPageSetting = \App\Models\AppartmentPageSetting::firstOrCreate(

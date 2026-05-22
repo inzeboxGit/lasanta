@@ -39,14 +39,10 @@
                 <label class="form-label">Titre</label>
                 <input type="text" name="title" class="form-control" value="{{ old('title', $appartmentPageSetting->title ?? '') }}">
             </div>
-            <!-- <div class="col-md-6">
-                <label class="form-label">Sous-titre de la section accueil</label>
-                <input type="text" name="home_subtitle" class="form-control" value="{{ old('home_subtitle', $appartmentPageSetting->home_subtitle ?? '') }}">
-            </div> -->
-            <!-- <div class="col-md-6">
-                <label class="form-label">Titre de la section accueil</label>
-                <input type="text" name="home_title" class="form-control" value="{{ old('home_title', $appartmentPageSetting->home_title ?? '') }}">
-            </div> -->
+            <div class="col-12">
+                <label class="form-label">Description de la section accueil</label>
+                <textarea name="home_description" class="form-control" rows="4">{{ old('home_description', $appartmentPageSetting->home_description ?? '') }}</textarea>
+            </div>
             <div class="col-12">
                 <label class="form-label">Image header</label>
                 <input type="file" name="header_image" id="appartement_header_image" class="form-control" accept="image/*">

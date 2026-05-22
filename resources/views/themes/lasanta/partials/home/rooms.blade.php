@@ -1,8 +1,48 @@
 <!-- Rooms 1 -->
-<!-- <section class="rooms1 section-padding bg-darkgray">
+@php
+    $sectionDescription = '';
+
+    if (isset($appartmentPageSetting)) {
+        $locale = app()->getLocale();
+
+        if ($locale === 'fr') {
+            $sectionDescription = trim((string) ($appartmentPageSetting->home_description ?? ''));
+        } elseif (method_exists($appartmentPageSetting, 'translations')) {
+            $sectionDescription = trim((string) ($appartmentPageSetting->translations()
+                ->where('field', 'home_description')
+                ->where('locale', $locale)
+                ->value('value') ?? ''));
+        }
+    }
+@endphp
+<section class="rooms1 section-padding bg-darkgray">
     <div class="container">
         <div class="row mb-30">
-            <div class="col-12 text-center">
+            <div class="row mb-30 align-items-center" bis_skin_checked="1">
+                <div class="col-md-5 text-left" bis_skin_checked="1">
+                    <div class="section-subtitle brown" bis_skin_checked="1">{{ $apartmentsSubtitle }}</div>
+                    <!-- <div class="section-title white mb-0" bis_skin_checked="1">Rooms &amp; Suites</div> -->
+                    
+                    @php
+                        $safeTitle = e($apartmentsTitle);
+                        $titleHtml = str_replace('&amp;', '<span class="brown">&</span>', $safeTitle);
+                    @endphp
+                <div class="section-title white mb-0">{!! $titleHtml !!}</div>
+                </div>
+                <div class="col-md-5" bis_skin_checked="1">
+                    @if($sectionDescription !== '')
+                        <p>{{ $sectionDescription }}</p>
+                    @endif
+                </div>
+                <div class="col-md-2 d-flex justify-content-center justify-content-lg-end" bis_skin_checked="1">
+                    <div class="my-owl-nav" bis_skin_checked="1"> <span class="my-prev-button">
+                            <i class="fa-light fa-angle-left" aria-hidden="true"></i>
+                        </span> <span class="my-next-button">
+                            <i class="fa-light fa-angle-right" aria-hidden="true"></i>
+                        </span> </div>
+                </div>
+            </div>
+            <!-- <div class="col-12 text-center">
                 <div class="section-subtitle brown">{{ $apartmentsSubtitle }}</div>
                 @php
                     $safeTitle = e($apartmentsTitle);
@@ -11,7 +51,7 @@
                 <div class="section-title white mb-0">{!! $titleHtml !!}</div>
             </div>
            
-        </div>
+        </div> -->
         <div class="row">
             <div class="col-md-12">
                 <div class="owl-carousel owl-theme">
@@ -61,10 +101,10 @@
             </div>
         </div>
     </div>
-</section> -->
+</section>
 
 
-
+<!-- 
 <section class="rooms3 section-padding bg-darkgray">
         <div class="row" bis_skin_checked="1">
             <div class="col-md-12 mb-25 text-center" bis_skin_checked="1">
@@ -103,5 +143,4 @@
                 </div>
             </div>
         </div>
-    </section>
-
+    </section> -->

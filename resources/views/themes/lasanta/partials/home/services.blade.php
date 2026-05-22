@@ -3,9 +3,13 @@
 <section class="facilities2 bg-lightbrown">
     <div class="border-bottom">
         <div class="container">
-            <ul class="tab-buttons">
+            <ul class="tab-buttons justify-content-center" style="gap: 24px;">
                 @foreach($homeServices as $svc)
-                <li data-tab="#{{ $svc->tab_key }}" class="tab-btn {{ $loop->first ? 'active-btn' : '' }}">
+                <li
+                    data-tab="#{{ $svc->tab_key }}"
+                    class="tab-btn {{ $loop->first ? 'active-btn' : '' }}"
+                    style="flex: 0 0 auto; max-width: none; width: auto; border-left: 0;"
+                >
                     <span>{{ method_exists($svc, 't') ? ($svc->t('title') ?: $svc->title) : $svc->title }}</span>
                 </li>
                 @endforeach

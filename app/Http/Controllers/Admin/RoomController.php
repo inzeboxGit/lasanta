@@ -35,6 +35,7 @@ class RoomController extends Controller
             'subtitle' => 'Luxury Hotel Experience',
             'home_title' => 'Chambres et suites',
             'home_subtitle' => 'Expérience hôtelière',
+            'home_description' => null,
             'header_image' => 'img/rooms/4.jpg',
         ];
 
@@ -48,6 +49,10 @@ class RoomController extends Controller
             if (Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
                 $defaults['home_title'] = 'Chambres et suites';
                 $defaults['home_subtitle'] = 'Expérience hôtelière';
+            }
+
+            if (Schema::hasColumn('appartment_page_settings', 'home_description')) {
+                $defaults['home_description'] = null;
             }
 
             $appartmentPageSetting = AppartmentPageSetting::firstOrCreate(
@@ -85,6 +90,10 @@ class RoomController extends Controller
             $rules['home_subtitle'] = ['nullable', 'string', 'max:255'];
         }
 
+        if (Schema::hasColumn('appartment_page_settings', 'home_description')) {
+            $rules['home_description'] = ['nullable', 'string'];
+        }
+
         $data = $request->validate($rules);
 
         if ($request->hasFile('header_image')) {
@@ -104,6 +113,10 @@ class RoomController extends Controller
         if (Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
             $payload['home_title'] = $data['home_title'] ?? $setting->home_title;
             $payload['home_subtitle'] = $data['home_subtitle'] ?? $setting->home_subtitle;
+        }
+
+        if (Schema::hasColumn('appartment_page_settings', 'home_description')) {
+            $payload['home_description'] = $data['home_description'] ?? $setting->home_description;
         }
 
         $setting->update($payload);
