@@ -67,9 +67,60 @@
 
     <script>
     $(document).ready(function() {
-        // On s'assure que le datepicker utilise le format JJ/MM/AAAA
         if ($.fn.datepicker) {
-            $(".datepicker").datepicker("option", "dateFormat", "dd/mm/yy");
+            var pickerLocales = {
+                fr: {
+                    closeText: "Fermer",
+                    prevText: "Prec",
+                    nextText: "Suiv",
+                    currentText: "Aujourd'hui",
+                    monthNames: ["janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre"],
+                    monthNamesShort: ["janv.", "fevr.", "mars", "avr.", "mai", "juin", "juil.", "aout", "sept.", "oct.", "nov.", "dec."],
+                    dayNames: ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"],
+                    dayNamesShort: ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."],
+                    dayNamesMin: ["Di", "Lu", "Ma", "Me", "Je", "Ve", "Sa"],
+                    weekHeader: "Sem.",
+                    dateFormat: "dd/mm/yy",
+                    firstDay: 1
+                },
+                de: {
+                    closeText: "Schliessen",
+                    prevText: "Zuruck",
+                    nextText: "Weiter",
+                    currentText: "Heute",
+                    monthNames: ["Januar", "Februar", "Marz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+                    monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
+                    dayNames: ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+                    dayNamesShort: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+                    dayNamesMin: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+                    weekHeader: "KW",
+                    dateFormat: "dd/mm/yy",
+                    firstDay: 1
+                },
+                it: {
+                    closeText: "Chiudi",
+                    prevText: "Prec",
+                    nextText: "Succ",
+                    currentText: "Oggi",
+                    monthNames: ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+                    monthNamesShort: ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"],
+                    dayNames: ["domenica", "lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato"],
+                    dayNamesShort: ["dom", "lun", "mar", "mer", "gio", "ven", "sab"],
+                    dayNamesMin: ["Do", "Lu", "Ma", "Me", "Gi", "Ve", "Sa"],
+                    weekHeader: "Sm",
+                    dateFormat: "dd/mm/yy",
+                    firstDay: 1
+                }
+            };
+
+            var pageLocale = '{{ app()->getLocale() }}'.toLowerCase();
+            var localeKey = Object.prototype.hasOwnProperty.call(pickerLocales, pageLocale) ? pageLocale : 'fr';
+            var pickerLocale = pickerLocales[localeKey];
+
+            $.datepicker.setDefaults($.extend({}, $.datepicker.regional[""], pickerLocale));
+            $(".datepicker").datepicker("option", $.extend({}, pickerLocale, {
+                dateFormat: "dd/mm/yy"
+            }));
         }
 
         // Fonction universelle pour soumettre à HotelNet
