@@ -25,11 +25,28 @@ if (! function_exists('media_url')) {
             return '/' . $path;
         }
 
+        if (media_url_mode() === 'storage') {
+            return '/storage/' . $path;
+        }
+
+        if (media_url_mode() === 'media') {
+            return '/media/' . $path;
+        }
+
         if (public_storage_is_available()) {
             return '/storage/' . $path;
         }
 
         return '/media/' . $path;
+    }
+}
+
+if (! function_exists('media_url_mode')) {
+    function media_url_mode(): string
+    {
+        $mode = strtolower((string) env('MEDIA_URL_MODE', 'auto'));
+
+        return in_array($mode, ['auto', 'storage', 'media'], true) ? $mode : 'auto';
     }
 }
 
