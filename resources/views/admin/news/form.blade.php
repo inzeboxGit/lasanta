@@ -48,7 +48,7 @@
             <input type="file" name="hero_image" class="form-control">
             @if(!empty($item->hero_image))
                 <div class="mt-2">
-                    <img src="{{ asset('storage/' . $item->hero_image) }}" alt="" style="max-height:120px;" class="rounded">
+                    <img src="{{ media_url($item->hero_image) }}" alt="" style="max-height:120px;" class="rounded">
                 </div>
                 @if($isEdit)
                     <div class="mt-2">
@@ -67,7 +67,7 @@
             <input type="file" name="cover_image" class="form-control">
             @if(!empty($item->cover_image))
                 <div class="mt-2">
-                    <img src="{{ asset('storage/' . $item->cover_image) }}" alt="" style="max-height:120px;" class="rounded">
+                    <img src="{{ media_url($item->cover_image) }}" alt="" style="max-height:120px;" class="rounded">
                 </div>
                 @if($isEdit)
                     <div class="mt-2">

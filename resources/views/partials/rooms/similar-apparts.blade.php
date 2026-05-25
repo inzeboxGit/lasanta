@@ -23,7 +23,7 @@
             @foreach($items as $similarRoom)
                 @php
                     $img = !empty($similarRoom->main_image)
-                        ? asset('storage/' . $similarRoom->main_image)
+                        ? media_url($similarRoom->main_image)
                         : asset('img/rooms/1.jpg');
                     $priceLabel = $similarRoom->price_per_night
                         ? $ui['from'] . ' ' . number_format($similarRoom->price_per_night, 0) . ' ' . $ui['per_night']

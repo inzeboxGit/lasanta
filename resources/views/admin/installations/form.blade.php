@@ -50,7 +50,7 @@
             <div class="mt-2">
                 <img
                     id="installation_image_preview"
-                    src="{{ !empty($installation->image_path) ? asset('storage/' . $installation->image_path) : '' }}"
+                    src="{{ !empty($installation->image_path) ? media_url($installation->image_path) : '' }}"
                     alt=""
                     style="max-height:120px;{{ empty($installation->image_path) ? 'display:none;' : '' }}"
                     class="rounded"

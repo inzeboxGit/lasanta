@@ -29,7 +29,7 @@
                 if (!empty($testimonial->photo_path ?? null)) {
                     $existingSrc = str_starts_with($testimonial->photo_path, 'img/')
                         ? asset($testimonial->photo_path)
-                        : asset('storage/' . $testimonial->photo_path);
+                        : media_url($testimonial->photo_path);
                 }
             @endphp
             <div class="mt-2">

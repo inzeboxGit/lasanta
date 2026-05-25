@@ -70,7 +70,7 @@
                 ? 'col-xl-6 col-lg-12 col-md-12 col-sm-12'
                 : 'col-xl-3 col-lg-6 col-md-6 col-sm-6';
             $imageSrc = !empty($room->main_image)
-                ? asset('storage/' . $room->main_image)
+                ? media_url($room->main_image)
                 : asset('img/rooms/' . min($loop->iteration, 3) . '.jpg');
             $roomTitle = method_exists($room, 't') ? $room->t('title') : $room->title;
             $roomPrice = $room->price_per_night

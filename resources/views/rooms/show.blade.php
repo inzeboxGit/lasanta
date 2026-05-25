@@ -31,7 +31,7 @@
 
         <div class="hero full-height jarallax" data-jarallax data-speed="0.2">
             <img class="jarallax-img kenburns"
-                src="{{ $room->main_image ? asset('storage/' . $room->main_image) : asset('img/rooms/1.jpg') }}" alt="">
+                src="{{ media_url($room->main_image ?? null, 'img/rooms/1.jpg') }}" alt="">
             <div class="wrapper opacity-mask d-flex align-items-center text-center animate_hero"
                 data-opacity-mask="rgba(0, 0, 0, 0.5)">
                 <div class="container">
@@ -153,7 +153,7 @@
                         <div class="owl-carousel owl-theme carousel_item_centered kenburns rounded-img">
                             @foreach($room->gallery as $img)
                                 <div class="item">
-                                    <img src="{{ asset('storage/' . $img) }}" alt="">
+                                    <img src="{{ media_url($img) }}" alt="">
                                 </div>
                             @endforeach
                         </div>
@@ -162,9 +162,9 @@
                         @foreach($room->gallery as $i => $img)
                             @if($i === 0)
                                 <a class="btn_1 outline" data-fslightbox="gallery_1" data-type="image"
-                                    href="{{ asset('storage/' . $img) }}">{{ $ui['gallery'] }}</a>
+                                    href="{{ media_url($img) }}">{{ $ui['gallery'] }}</a>
                             @else
-                                <a data-fslightbox="gallery_1" data-type="image" href="{{ asset('storage/' . $img) }}"></a>
+                                <a data-fslightbox="gallery_1" data-type="image" href="{{ media_url($img) }}"></a>
                             @endif
                         @endforeach
                     </div>

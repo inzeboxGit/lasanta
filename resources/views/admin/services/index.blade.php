@@ -50,7 +50,7 @@
                                 } elseif (str_starts_with($_simg, 'themes/')) {
                                     $_sthumb = asset($_simg);
                                 } elseif (!empty($_simg)) {
-                                    $_sthumb = asset('storage/' . $_simg);
+                                    $_sthumb = media_url($_simg);
                                 } else {
                                     $_sthumb = null;
                                 }
@@ -105,7 +105,7 @@
     if (!empty($s?->image)) {
         $imageSrc = str_starts_with($s->image, 'img/')
             ? asset('themes/lasanta/' . $s->image)
-            : asset('storage/' . $s->image);
+            : media_url($s->image);
     }
 @endphp
 

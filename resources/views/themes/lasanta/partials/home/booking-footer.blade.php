@@ -5,7 +5,7 @@
     $bfTitle    = method_exists($bfSetting ?? '', 't') ? ($bfSetting->t('title') ?: ($bfSetting->title ?? 'Booking Form')) : ($bfSetting->title ?? 'Booking Form');
     $bfBgUrl    = str_starts_with($bfImage, 'img/')
         ? asset('themes/lasanta/' . $bfImage)
-        : (str_starts_with($bfImage, 'booking-footer/') ? asset('storage/' . $bfImage) : media_url($bfImage, 'img/rooms/01.jpg'));
+        : media_url($bfImage, 'img/rooms/01.jpg');
 
     $locale = app()->getLocale();
     $bfDefaults = [

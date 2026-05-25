@@ -68,7 +68,7 @@
                         if (!empty($testimonial->photo_path)) {
                             $photoSrc = str_starts_with($testimonial->photo_path, 'img/')
                                 ? asset($testimonial->photo_path)
-                                : asset('storage/' . $testimonial->photo_path);
+                                : media_url($testimonial->photo_path);
                         }
                     @endphp
                     <tr>

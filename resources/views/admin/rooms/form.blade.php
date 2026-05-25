@@ -181,7 +181,7 @@
                 <div id="gallery-sortable" class="d-flex flex-wrap gap-2 mb-3">
                     @foreach($room->gallery as $img)
                         <div class="gallery-item position-relative" data-path="{{ $img }}">
-                            <img src="{{ asset('storage/' . $img) }}" alt="" class="rounded shadow-sm"
+                            <img src="{{ media_url($img) }}" alt="" class="rounded shadow-sm"
                                 style="height:100px;width:auto;object-fit:cover;cursor:grab;">
                             <input type="hidden" name="gallery_order[]" value="{{ $img }}">
                             <button type="button"

@@ -57,7 +57,7 @@
                     <tr>
                         <td>
                             @if($installation->image_path)
-                                <img src="{{ asset('storage/' . $installation->image_path) }}" alt="{{ $installation->title }}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;">
+                                <img src="{{ media_url($installation->image_path) }}" alt="{{ $installation->title }}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;">
                             @else
                                 <span class="text-muted">-</span>
                             @endif

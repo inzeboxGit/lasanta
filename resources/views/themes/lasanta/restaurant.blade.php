@@ -203,9 +203,9 @@
                     <div class="owl-carousel owl-theme">
                         @foreach($galleryImages as $galleryImage)
                         <div class="item">
-                            <a href="{{ asset('storage/' . $galleryImage) }}" title=""
+                            <a href="{{ media_url($galleryImage) }}" title=""
                                 class="gallery-masonry-item-img-link img-zoom">
-                                <div class="img"><img src="{{ asset('storage/' . $galleryImage) }}"
+                                <div class="img"><img src="{{ media_url($galleryImage) }}"
                                         class="img-fluid mx-auto d-block" alt="{{ $galleryTitle }}"></div>
                             </a>
                         </div>

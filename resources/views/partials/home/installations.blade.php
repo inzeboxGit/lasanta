@@ -31,7 +31,7 @@
             <div class="box_facilities {{ $loop->first ? 'no-border' : '' }}" data-cue="slideInUp">
                 @if($installation->image_path)
                     <div class="mb-3">
-                        <img src="{{ asset('storage/' . $installation->image_path) }}" alt="{{ method_exists($installation, 't') ? $installation->t('title') : $installation->title }}" class="img-fluid rounded-img">
+                        <img src="{{ media_url($installation->image_path) }}" alt="{{ method_exists($installation, 't') ? $installation->t('title') : $installation->title }}" class="img-fluid rounded-img">
                     </div>
                 @endif
                 @if($installation->icon)

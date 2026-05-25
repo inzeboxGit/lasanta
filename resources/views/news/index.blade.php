@@ -33,7 +33,7 @@
                     <div class="item col-xl-4 col-lg-6">
                         <a href="{{ route('news.show', $item->slug) }}" class="box_contents" data-cue="slideInUp">
                             <figure>
-                                <img src="{{ $item->cover_image ? asset('storage/' . $item->cover_image) : asset('img/blog-1.jpg') }}" alt="" class="img-fluid">
+                                <img src="{{ media_url($item->cover_image ?? null, 'img/blog-1.jpg') }}" alt="" class="img-fluid">
                                 @if($item->published_at)
                                     <em>{{ $item->published_at->format('d M') }}</em>
                                 @endif

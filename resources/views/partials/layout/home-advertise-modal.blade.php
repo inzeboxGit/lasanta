@@ -4,7 +4,7 @@
         ? asset('img/home_2.jpg')
         : (str_starts_with($promoImage, 'img/')
             ? asset($promoImage)
-            : asset('storage/' . $promoImage));
+            : media_url($promoImage));
 
     $locale = app()->getLocale();
     $buttonLabels = [

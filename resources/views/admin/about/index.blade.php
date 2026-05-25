@@ -61,14 +61,14 @@
                 if (!empty($aboutSetting->main_image ?? null)) {
                     $mainSrc = str_starts_with($aboutSetting->main_image, 'img/')
                         ? asset($aboutSetting->main_image)
-                        : asset('storage/' . $aboutSetting->main_image);
+                        : media_url($aboutSetting->main_image);
                 }
 
                 $overlaySrc = null;
                 if (!empty($aboutSetting->overlay_image ?? null)) {
                     $overlaySrc = str_starts_with($aboutSetting->overlay_image, 'img/')
                         ? asset($aboutSetting->overlay_image)
-                        : asset('storage/' . $aboutSetting->overlay_image);
+                        : media_url($aboutSetting->overlay_image);
                 }
             @endphp
 

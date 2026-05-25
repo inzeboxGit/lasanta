@@ -27,7 +27,7 @@
             if (!empty($appartmentPageSetting->header_image ?? null)) {
                 $headerSrc = str_starts_with($appartmentPageSetting->header_image, 'img/')
                     ? asset($appartmentPageSetting->header_image)
-                    : asset('storage/' . $appartmentPageSetting->header_image);
+                    : media_url($appartmentPageSetting->header_image);
             }
         @endphp
         <div class="row g-3">

@@ -55,12 +55,12 @@
     $heroBackground = $heroSetting->background_image ?? '';
     $heroBackgroundSrc = str_starts_with($heroBackground, 'img/')
         ? asset($heroBackground)
-        : asset('storage/' . $heroBackground);
+        : media_url($heroBackground);
     $heroVideo = $heroSetting->background_video ?? '';
     $heroVideoSrc = !empty($heroVideo)
         ? (str_starts_with($heroVideo, 'video/')
             ? asset($heroVideo)
-            : asset('storage/' . $heroVideo))
+            : media_url($heroVideo))
         : '';
     $heroYoutubeUrl = $heroSetting->youtube_video_url ?? null;
     $heroYoutubeId = null;

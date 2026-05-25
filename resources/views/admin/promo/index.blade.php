@@ -35,7 +35,7 @@
         if (!empty($phImg)) {
             $phSrc = str_starts_with($phImg, 'img/')
                 ? asset('themes/lasanta/' . $phImg)
-                : asset('storage/' . $phImg);
+                : media_url($phImg);
         }
     @endphp
     <!-- <div class="d-flex align-items-center justify-content-between mb-3">
@@ -96,7 +96,7 @@
                                 if (str_starts_with($_pimg, 'img/')) {
                                     $_pthumb = asset('themes/lasanta/' . $_pimg);
                                 } elseif (!empty($_pimg)) {
-                                    $_pthumb = asset('storage/' . $_pimg);
+                                    $_pthumb = media_url($_pimg);
                                 } else {
                                     $_pthumb = null;
                                 }
@@ -156,7 +156,7 @@
         if (!empty($promoSetting->image ?? null)) {
             $imageSrc = str_starts_with($promoSetting->image, 'img/')
                 ? asset('themes/lasanta/' . $promoSetting->image)
-                : asset('storage/' . $promoSetting->image);
+                : media_url($promoSetting->image);
         }
         $isEditing = $editingPromo !== null;
     @endphp

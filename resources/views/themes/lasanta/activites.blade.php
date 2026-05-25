@@ -45,7 +45,7 @@
             <div class="row justify-content-center">
                 @foreach($aboutImages as $img)
                 <div class="col-lg-4 col-md-12 mb-15">
-                    <img src="{{ asset('storage/' . $img) }}" class="img-fluid rounded-2" alt="Activités">
+                    <img src="{{ media_url($img) }}" class="img-fluid rounded-2" alt="Activités">
                 </div>
                 @endforeach
             </div>
@@ -71,8 +71,8 @@
                         @if($galleryImages->isNotEmpty())
                             @foreach($galleryImages as $gItem)
                             <div class="item">
-                                <a href="{{ asset('storage/' . $gItem->image_path) }}" title="" class="gallery-masonry-item-img-link img-zoom">
-                                    <div class="img"><img src="{{ asset('storage/' . $gItem->image_path) }}" class="img-fluid mx-auto d-block" alt="{{ $gItem->title }}"></div>
+                                <a href="{{ media_url($gItem->image_path) }}" title="" class="gallery-masonry-item-img-link img-zoom">
+                                    <div class="img"><img src="{{ media_url($gItem->image_path) }}" class="img-fluid mx-auto d-block" alt="{{ $gItem->title }}"></div>
                                 </a>
                             </div>
                             @endforeach

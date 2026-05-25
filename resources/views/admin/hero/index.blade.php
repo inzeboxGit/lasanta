@@ -25,12 +25,12 @@
                 $backgroundVideo = old('background_video', $heroSetting->background_video ?? 'video/sunset.mp4');
                 $backgroundVideoSrc = str_starts_with($backgroundVideo, 'video/')
                     ? asset($backgroundVideo)
-                    : asset('storage/' . $backgroundVideo);
+                    : media_url($backgroundVideo);
                 $youtubeVideoUrl = old('youtube_video_url', $heroSetting->youtube_video_url ?? '');
                 if (!empty($heroSetting->background_image ?? null)) {
                     $backgroundSrc = str_starts_with($heroSetting->background_image, 'img/')
                         ? asset($heroSetting->background_image)
-                        : asset('storage/' . $heroSetting->background_image);
+                        : media_url($heroSetting->background_image);
                 }
             @endphp
 
@@ -320,7 +320,7 @@
                 $bfImg = $bookingFooterSetting->header_image ?? 'img/rooms/01.jpg';
                 $bfSrc = str_starts_with($bfImg, 'img/')
                     ? asset('themes/lasanta/' . $bfImg)
-                    : asset('storage/' . $bfImg);
+                    : media_url($bfImg);
             @endphp
             <div class="row g-3">
                 <div class="col-md-4">

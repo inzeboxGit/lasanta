@@ -415,7 +415,7 @@
             <div class="row g-2 sortable-gallery" id="restaurant-gallery-grid" data-reorder-url="{{ route($pageMeta['restaurant_gallery_section']['reorder_route'] ?? 'admin.dashboard') }}">
                 @foreach($currentGallery as $galleryImg)
                 <div class="col-6 col-md-3 col-lg-2 position-relative gallery-item" data-path="{{ $galleryImg }}">
-                    <img src="{{ asset('storage/' . $galleryImg) }}" alt=""
+                    <img src="{{ media_url($galleryImg) }}" alt=""
                         class="img-fluid rounded" style="height:120px;width:100%;object-fit:cover;">
                     <form action="{{ route($pageMeta['restaurant_gallery_section']['remove_route']) }}" method="post"
                         class="position-absolute top-0 end-0 m-1"
@@ -467,7 +467,7 @@
             <div class="row g-2 sortable-gallery" id="pool-gallery-grid" data-reorder-url="{{ route($pageMeta['pool_gallery_section']['reorder_route'] ?? 'admin.dashboard') }}">
                 @foreach($currentPoolGallery as $galleryImg)
                 <div class="col-6 col-md-3 col-lg-2 position-relative gallery-item" data-path="{{ $galleryImg }}">
-                    <img src="{{ asset('storage/' . $galleryImg) }}" alt=""
+                    <img src="{{ media_url($galleryImg) }}" alt=""
                         class="img-fluid rounded" style="height:120px;width:100%;object-fit:cover;">
                     <form action="{{ route($pageMeta['pool_gallery_section']['remove_route']) }}" method="post"
                         class="position-absolute top-0 end-0 m-1"

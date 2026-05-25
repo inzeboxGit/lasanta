@@ -70,7 +70,7 @@
             if (!empty($appartmentPageSetting->header_image ?? null)) {
                 $heroSrc = str_starts_with($appartmentPageSetting->header_image, 'img/')
                     ? asset($appartmentPageSetting->header_image)
-                    : asset('storage/' . $appartmentPageSetting->header_image);
+                    : media_url($appartmentPageSetting->header_image);
             } else {
                 $heroSrc = asset('img/rooms/4.jpg');
             }
@@ -96,7 +96,7 @@
                     $isEven = $loop->iteration % 2 === 0;
                     $rowClass = $isEven ? 'row justify-content-end' : 'row justify-content-start';
                     $infoClass = $isEven ? 'box_item_info float-lg-end' : 'box_item_info';
-                    $imageSrc = $room->main_image ? asset('storage/' . $room->main_image) : asset('img/rooms/1.jpg');
+                    $imageSrc = media_url($room->main_image ?? null, 'img/rooms/1.jpg');
                     $roomDescription = method_exists($room, 't')
                         ? ($room->t('description') ?: $ui['room_desc_fallback'])
                         : ($room->description ?: $ui['room_desc_fallback']);
