@@ -2,8 +2,7 @@
 
 @section('content')
 @php
-    $heroSource = $news->hero_image ?: ($news->cover_image ?: null);
-    $heroImage = $heroSource ? media_url($heroSource, '') : '';
+    $heroImage = !empty($news->cover_image) ? media_url($news->cover_image, '') : '';
     $coverImage = !empty($news->cover_image) ? media_url($news->cover_image, '') : '';
     $heroHeightClass = $heroImage ? 'full-height' : 'middle-height';
 @endphp
@@ -29,7 +28,7 @@
                 @if(method_exists($news, 't') ? $news->t('body') : $news->body)
                     <p class="mb-30">{!! nl2br(e(method_exists($news, 't') ? $news->t('body') : $news->body)) !!}</p>
                 @endif
-                @if($coverImage)
+                @if($coverImage && $news->show_cover_image_in_body)
                     <img src="{{ $coverImage }}" class="rounded-2 img-fluid" alt="">
                 @endif
             </div>

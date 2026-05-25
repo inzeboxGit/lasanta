@@ -40,7 +40,7 @@
             <label class="form-label">Contenu</label>
             <textarea name="body" class="form-control" rows="10">{{ old('body', $item->body ?? '') }}</textarea>
         </div>
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <label class="form-label">Image hero</label>
             <div class="form-text mb-2">
                 Image utilisée en priorité dans le hero de la page détail. Si elle est vide, le site utilise l'image contenu de l'actualité. Si aucune image n'est envoyée, aucun visuel n'est affiché et le hero devient plus petit.
@@ -58,7 +58,7 @@
                     </div>
                 @endif
             @endif
-        </div>
+        </div> -->
         <div class="col-md-6">
             <label class="form-label">Image contenu</label>
             <div class="form-text mb-2">
@@ -77,6 +77,22 @@
                     </div>
                 @endif
             @endif
+        </div>
+        <div class="col-12">
+            <input type="hidden" name="show_cover_image_in_body" value="0">
+            <div class="form-check">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="show_cover_image_in_body"
+                    id="show_cover_image_in_body"
+                    value="1"
+                    {{ old('show_cover_image_in_body', $item->show_cover_image_in_body ?? true) ? 'checked' : '' }}
+                >
+                <label class="form-check-label" for="show_cover_image_in_body">
+                    Afficher l'image de presentation dans le corps de l'actualite
+                </label>
+            </div>
         </div>
     </div>
 </div>

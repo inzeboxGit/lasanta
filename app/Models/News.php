@@ -18,6 +18,7 @@ class News extends Model
         'published_at',
         'hero_image',
         'cover_image',
+        'show_cover_image_in_body',
         'excerpt',
         'body',
         'status',
@@ -25,5 +26,6 @@ class News extends Model
 
     protected $casts = [
         'published_at' => 'date',
+        'show_cover_image_in_body' => 'boolean',
     ];
 }

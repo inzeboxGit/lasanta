@@ -54,13 +54,19 @@ $(function () {
         var bodyScroll = wind.scrollTop()
             , navbar = $(".navbar")
             , logo = $(".navbar .logo> img");
+        var lightLogo = logo.data('logo-light');
+        var darkLogo = logo.data('logo-dark');
         if (bodyScroll > 100) {
             navbar.addClass("nav-scroll");
-            logo.attr('src', 'themes/lasanta/img/logo-dark.png');
+            if (darkLogo) {
+                logo.attr('src', darkLogo);
+            }
         }
         else {
             navbar.removeClass("nav-scroll");
-            logo.attr('src', 'themes/lasanta/img/logo.png');
+            if (lightLogo) {
+                logo.attr('src', lightLogo);
+            }
         }
     });
     
@@ -625,5 +631,4 @@ $(function () {
         }
     
 }());
-
 

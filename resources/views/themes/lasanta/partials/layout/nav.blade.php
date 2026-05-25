@@ -60,6 +60,8 @@
             <a class="logo" href="{{ url('/') }}">
                 <img src="{{ theme_asset('img/logo.png') }}" class="logo-img" width="121" height="119" decoding="async"
                     fetchpriority="high"
+                    data-logo-light="{{ theme_asset('img/logo.png') }}"
+                    data-logo-dark="{{ theme_asset('img/logo-dark.png') }}"
                     alt="{{ method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Lasanta') }}">
             </a>
         </div>

@@ -223,6 +223,7 @@ class NewsController extends Controller
             'body' => ['nullable', 'string'],
             'hero_image' => ['nullable', 'image', 'max:5120'],
             'cover_image' => ['nullable', 'image', 'max:5120'],
+            'show_cover_image_in_body' => ['nullable', 'boolean'],
             'remove_hero_image' => ['nullable', 'boolean'],
             'remove_cover_image' => ['nullable', 'boolean'],
             'status' => ['required', 'in:draft,published'],

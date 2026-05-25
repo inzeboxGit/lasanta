@@ -62,7 +62,9 @@
                             $coverSrc = asset('img/blog_in.jpg');
                         }
                     @endphp
-                    <!-- <figure><img src="{{ $coverSrc }}" alt="" class="img-fluid"></figure> -->
+                    @if(!empty($news->cover_image) && $news->show_cover_image_in_body)
+                        <figure><img src="{{ $coverSrc }}" alt="" class="img-fluid"></figure>
+                    @endif
                 </div>
                 <div class="col-lg-8">
                     <div class="box_contents_in"><small><span></span></small></div>
