@@ -112,7 +112,6 @@ Route::get('/', function () {
             fn ($query) => $query->orderBy('sort_order')->orderBy('id'),
             fn ($query) => $query->latest()
         )
-        ->limit(3)
         ->get();
 
     $appartmentPageSetting = (object) [
