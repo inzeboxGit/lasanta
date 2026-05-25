@@ -114,6 +114,9 @@
                 <div class="mt-2">
                     <img id="contact_header_preview" src="{{ $headerSrc }}" alt="" class="rounded" style="max-height:90px;">
                 </div>
+                @if(!empty($contactPageSetting->header_image ?? null) && !str_starts_with($contactPageSetting->header_image, 'img/'))
+                    @include('admin.partials.remove-media-toggle', ['name' => 'remove_header_image', 'label' => 'Supprimer l’image header'])
+                @endif
             </div>
             <div class="col-12">
                 <button class="btn btn-primary" type="submit">Mettre à jour</button>

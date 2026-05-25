@@ -35,6 +35,9 @@
             <div class="mt-2">
                 <img id="testimonial_photo_preview" src="{{ $existingSrc ?? '' }}" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:50%;{{ empty($existingSrc) ? 'display:none;' : '' }}">
             </div>
+            @if(!empty($testimonial->photo_path ?? null))
+                @include('admin.partials.remove-media-toggle', ['name' => 'remove_photo', 'label' => 'Supprimer la photo'])
+            @endif
         </div>
         <div class="col-md-3 d-flex align-items-end">
             <div class="form-check mb-2">

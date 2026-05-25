@@ -60,6 +60,9 @@
                 <div class="mt-2">
                     <img id="contact_header_preview" src="{{ $contactHeaderSrc }}" alt="" class="rounded" style="max-height:90px;">
                 </div>
+                @if(!empty($contactPageSetting->header_image ?? null) && !str_starts_with($contactPageSetting->header_image, 'img/'))
+                    @include('admin.partials.remove-media-toggle', ['name' => 'remove_header_image', 'label' => 'Supprimer l’image header'])
+                @endif
             </div>
             <div class="col-12">
                 <button class="btn btn-primary" type="submit">Mettre à jour</button>
@@ -176,7 +179,7 @@
                 <textarea name="custom_head_scripts" class="form-control" rows="5" placeholder="&lt;script&gt;...&lt;/script&gt;">{{ old('custom_head_scripts', $siteSetting->custom_head_scripts ?? '') }}</textarea>
                 <div class="form-text">Ces scripts seront ajoutés dans la balise &lt;head&gt; de toutes les pages (Google Analytics, Facebook Pixel, etc.).</div>
             </div>
-            <!-- @if($supportsFooterBackgroundImage ?? false)
+            @if($supportsFooterBackgroundImage ?? false)
                 <div class="col-12">
                     <label class="form-label">Image de fond du footer</label>
                     <input type="file" name="footer_background_image" id="footer_background_image" class="form-control" accept="image/*">
@@ -184,8 +187,11 @@
                     <div class="mt-2">
                         <img id="footer_background_image_preview" src="{{ $footerBackgroundSrc }}" alt="" class="rounded" style="max-height:120px;">
                     </div>
+                    @if(!empty($siteSetting->footer_background_image ?? null) && !str_starts_with($siteSetting->footer_background_image, 'img/'))
+                        @include('admin.partials.remove-media-toggle', ['name' => 'remove_footer_background_image', 'label' => 'Supprimer l’image du footer'])
+                    @endif
                 </div>
-            @endif -->
+            @endif
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </div>

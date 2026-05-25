@@ -60,7 +60,7 @@
                     </div>
                     <div class="row mb-30">
                         <div class="col-md-12">
-                            <p>{{ method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('lead') : ($aboutSectionSetting->lead ?? '') }}</p>
+                            <!-- <p>{{ method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('lead') : ($aboutSectionSetting->lead ?? '') }}</p> -->
                             <p>{!! method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('description') : ($aboutSectionSetting->description ?? '') !!}</p>
                         </div>
                     </div>

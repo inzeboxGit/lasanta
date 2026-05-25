@@ -47,7 +47,19 @@ class AboutController extends Controller
             'button_target' => ['nullable', 'in:_self,_blank'],
             'main_image' => ['nullable', 'image', 'max:5120'],
             'overlay_image' => ['nullable', 'image', 'max:5120'],
+            'remove_main_image' => ['nullable', 'boolean'],
+            'remove_overlay_image' => ['nullable', 'boolean'],
         ]);
+
+        if ($request->boolean('remove_main_image') && !empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
+            Storage::disk('public')->delete($setting->main_image);
+            $data['main_image'] = '';
+        }
+
+        if ($request->boolean('remove_overlay_image') && !empty($setting->overlay_image) && !str_starts_with($setting->overlay_image, 'img/')) {
+            Storage::disk('public')->delete($setting->overlay_image);
+            $data['overlay_image'] = '';
+        }
 
         if ($request->hasFile('main_image')) {
             if (!empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
@@ -74,8 +86,8 @@ class AboutController extends Controller
             'button_text' => $data['button_text'] ?? $setting->button_text,
             'button_link' => $data['button_link'] ?? $setting->button_link,
             'button_target' => $data['button_target'] ?? $setting->button_target,
-            'main_image' => $data['main_image'] ?? $setting->main_image,
-            'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
+            'main_image' => array_key_exists('main_image', $data) ? $data['main_image'] : $setting->main_image,
+            'overlay_image' => array_key_exists('overlay_image', $data) ? $data['overlay_image'] : $setting->overlay_image,
         ]);
 
         return redirect()->route('admin.about.index')->with('success', 'Section À propos mise à jour.');

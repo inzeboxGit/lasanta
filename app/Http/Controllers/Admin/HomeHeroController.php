@@ -69,6 +69,7 @@ class HomeHeroController extends Controller
             'background_video' => ['nullable', 'file', 'mimetypes:video/mp4,video/webm,video/ogg,video/quicktime', 'max:51200'],
             'youtube_video_url' => ['nullable', 'url', 'max:2048'],
             'background_image' => ['nullable', 'image', 'max:5120'],
+            'remove_background_image' => ['nullable', 'boolean'],
         ]);
 
         $data['show_booking_form'] = $request->boolean('show_booking_form');
@@ -106,7 +107,7 @@ class HomeHeroController extends Controller
             'background_type' => $data['background_type'] ?? ($setting->background_type ?? 'video'),
             'background_video' => $data['background_video'] ?? ($setting->background_video ?? 'video/sunset.mp4'),
             'youtube_video_url' => array_key_exists('youtube_video_url', $data) ? $data['youtube_video_url'] : $setting->youtube_video_url,
-            'background_image' => $data['background_image'] ?? $setting->background_image,
+            'background_image' => array_key_exists('background_image', $data) ? $data['background_image'] : $setting->background_image,
         ]);
 
         $translatedFields = ['dates_label', 'check_in_label', 'check_out_label', 'adults_label', 'children_label', 'rooms_label', 'search_label'];
@@ -141,7 +142,13 @@ class HomeHeroController extends Controller
             'subtitle' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
             'header_image' => ['nullable', 'image', 'max:5120'],
+            'remove_header_image' => ['nullable', 'boolean'],
         ]);
+
+        if ($request->boolean('remove_header_image') && ! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }
 
         if ($request->hasFile('header_image')) {
             if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
@@ -154,7 +161,7 @@ class HomeHeroController extends Controller
         $setting->update([
             'subtitle' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
             'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
-            'header_image' => $data['header_image'] ?? $setting->header_image,
+            'header_image' => array_key_exists('header_image', $data) ? $data['header_image'] : $setting->header_image,
         ]);
 
         return redirect()->route('admin.hero.index')->with('success', 'Section image accueil mise à jour.');
@@ -175,7 +182,13 @@ class HomeHeroController extends Controller
             'subtitle'     => ['nullable', 'string', 'max:255'],
             'title'        => ['nullable', 'string', 'max:255'],
             'header_image' => ['nullable', 'image', 'max:5120'],
+            'remove_header_image' => ['nullable', 'boolean'],
         ]);
+
+        if ($request->boolean('remove_header_image') && ! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }
 
         if ($request->hasFile('header_image')) {
             if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
@@ -187,7 +200,7 @@ class HomeHeroController extends Controller
         $setting->update([
             'subtitle'     => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
             'title'        => array_key_exists('title', $data) ? $data['title'] : $setting->title,
-            'header_image' => $data['header_image'] ?? $setting->header_image,
+            'header_image' => array_key_exists('header_image', $data) ? $data['header_image'] : $setting->header_image,
         ]);
 
         return redirect()->route('admin.hero.index')->with('success', 'Section Booking Footer mise à jour.');
@@ -249,3 +262,7 @@ class HomeHeroController extends Controller
         return (object) $this->defaultVideoSetting();
     }
 }
+        if ($request->boolean('remove_background_image') && !empty($setting->background_image) && !str_starts_with($setting->background_image, 'img/')) {
+            Storage::disk('public')->delete($setting->background_image);
+            $data['background_image'] = '';
+        }

@@ -65,6 +65,7 @@ class SiteSettingController extends Controller
 
         if ($supportsFooterBackgroundImage) {
             $rules['footer_background_image'] = ['nullable', 'image', 'max:5120'];
+            $rules['remove_footer_background_image'] = ['nullable', 'boolean'];
         }
 
         $data = $request->validate($rules);
@@ -87,6 +88,11 @@ class SiteSettingController extends Controller
             $this->databaseDefaults()
         );
 
+        if ($supportsFooterBackgroundImage && $request->boolean('remove_footer_background_image') && ! empty($setting->footer_background_image) && ! str_starts_with($setting->footer_background_image, 'img/')) {
+            Storage::disk('public')->delete($setting->footer_background_image);
+            $data['footer_background_image'] = '';
+        }
+
         if ($supportsFooterBackgroundImage && $request->hasFile('footer_background_image')) {
             if (! empty($setting->footer_background_image) && ! str_starts_with($setting->footer_background_image, 'img/')) {
                 Storage::disk('public')->delete($setting->footer_background_image);
@@ -94,6 +100,8 @@ class SiteSettingController extends Controller
 
             $data['footer_background_image'] = $request->file('footer_background_image')->store('site-settings', 'public');
         }
+
+        unset($data['remove_footer_background_image']);
 
         $setting->update($data);
 

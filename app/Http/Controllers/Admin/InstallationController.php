@@ -102,6 +102,11 @@ class InstallationController extends Controller
         $installation = Amenity::whereIn('scope', ['home', 'both'])->findOrFail($id);
         $data = $this->validatedData($request);
 
+        if ($request->boolean('remove_image') && !empty($installation->image_path)) {
+            Storage::disk('public')->delete($installation->image_path);
+            $data['image_path'] = null;
+        }
+
         if ($request->hasFile('image')) {
             if (!empty($installation->image_path)) {
                 Storage::disk('public')->delete($installation->image_path);
@@ -110,6 +115,7 @@ class InstallationController extends Controller
         }
 
         unset($data['image']);
+        unset($data['remove_image']);
 
         $installation->update($data);
 
@@ -136,6 +142,7 @@ class InstallationController extends Controller
             'icon' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:5120'],
+            'remove_image' => ['nullable', 'boolean'],
             'scope' => ['required', 'in:home,both'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_published' => ['nullable', 'boolean'],

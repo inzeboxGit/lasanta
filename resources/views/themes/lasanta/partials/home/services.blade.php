@@ -3,12 +3,12 @@
 <section class="facilities2 bg-lightbrown">
     <div class="border-bottom">
         <div class="container">
-            <ul class="tab-buttons justify-content-center" style="gap: 24px;">
+            <ul class="tab-buttons justify-content-center" style="--services-tabs-count: {{ max($homeServices->count(), 1) }}; width: 100%; gap: 0;">
                 @foreach($homeServices as $svc)
                 <li
                     data-tab="#{{ $svc->tab_key }}"
                     class="tab-btn {{ $loop->first ? 'active-btn' : '' }}"
-                    style="flex: 0 0 auto; max-width: none; width: auto; border-left: 0;"
+                    style="flex: 0 0 calc(100% / var(--services-tabs-count)); max-width: calc(100% / var(--services-tabs-count)); width: calc(100% / var(--services-tabs-count)); border-left: {{ $loop->first ? '0' : '1px solid rgba(203, 157, 85, 0.2)' }};"
                 >
                     <span>{{ method_exists($svc, 't') ? ($svc->t('title') ?: $svc->title) : $svc->title }}</span>
                 </li>
@@ -32,6 +32,9 @@
                 $svcSubtitle    = method_exists($svc, 't') ? ($svc->t('subtitle') ?: $svc->subtitle) : $svc->subtitle;
                 $svcDescription = method_exists($svc, 't') ? ($svc->t('description') ?: $svc->description) : $svc->description;
                 $svcButtonText  = method_exists($svc, 't') ? ($svc->t('button_text') ?: $svc->button_text) : $svc->button_text;
+                $svcButtonLink  = !empty($svc->pdf_file)
+                    ? asset('storage/' . ltrim($svc->pdf_file, '/'))
+                    : ($svc->button_link ?? '');
             @endphp
             <div class="tab {{ $loop->first ? 'active-tab' : '' }}" id="{{ $svc->tab_key }}">
                 <div class="row justify-content-center align-items-center">
@@ -70,9 +73,9 @@
                                 </ul>
                             @endif
                         @endif
-                        @if($svc->button_link && $svcButtonText)
+                        @if($svcButtonLink && $svcButtonText)
                         <div class="mb-25"></div>
-                        <a href="{{ $svc->button_link }}" class="button-3">
+                        <a href="{{ $svcButtonLink }}" class="button-3">
                             @if($svc->icon)<i class="{{ $svc->icon }}"></i> @endif{{ $svcButtonText }}
                         </a>
                         @endif

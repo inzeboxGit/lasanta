@@ -83,6 +83,7 @@ class RoomController extends Controller
             'title' => ['nullable', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'header_image' => ['nullable', 'image', 'max:5120'],
+            'remove_header_image' => ['nullable', 'boolean'],
         ];
 
         if (Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
@@ -107,7 +108,7 @@ class RoomController extends Controller
         $payload = [
             'title' => $data['title'] ?? $setting->title,
             'subtitle' => $data['subtitle'] ?? $setting->subtitle,
-            'header_image' => $data['header_image'] ?? $setting->header_image,
+            'header_image' => array_key_exists('header_image', $data) ? $data['header_image'] : $setting->header_image,
         ];
 
         if (Schema::hasColumns('appartment_page_settings', ['home_title', 'home_subtitle'])) {
@@ -243,7 +244,16 @@ class RoomController extends Controller
         $data = $this->validatedData($request, $room->id);
         $data['slug'] = $data['slug'] ?: Str::slug($data['title']);
 
+        if ($request->boolean('remove_main_image') && !empty($room->main_image)) {
+            Storage::disk('public')->delete($room->main_image);
+            $data['main_image'] = null;
+        }
+        unset($data['remove_main_image']);
+
         if ($request->hasFile('main_image')) {
+            if (!empty($room->main_image)) {
+                Storage::disk('public')->delete($room->main_image);
+            }
             $file = $request->file('main_image');
             $filename = 'rooms/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
             $manager = new ImageManager(new Driver());
@@ -353,6 +363,7 @@ class RoomController extends Controller
             'gallery.*' => ['nullable', 'image', 'max:5120'],
             'gallery_order' => ['nullable', 'array'],
             'gallery_order.*' => ['string'],
+            'remove_main_image' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'status' => ['required', 'in:draft,published'],
         ]);
@@ -413,3 +424,7 @@ class RoomController extends Controller
         return $requestedOrder;
     }
 }
+        if ($request->boolean('remove_header_image') && !empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }

@@ -72,12 +72,18 @@ abstract class AbstractLocalAmenityController extends Controller
 
         $data = $request->validate([
             'header_image' => ['nullable', 'image', 'max:5120'],
+            'remove_header_image' => ['nullable', 'boolean'],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
             'hero_text' => $this->supportsHeroText() ? ['nullable', 'string'] : ['nullable'],
         ]);
 
         $setting = $this->resolveSectionSetting();
+
+        if ($request->boolean('remove_header_image') && !empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }
 
         if ($request->hasFile('header_image')) {
             if (!empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
@@ -88,7 +94,7 @@ abstract class AbstractLocalAmenityController extends Controller
         }
 
         $setting->update([
-            'header_image' => $data['header_image'] ?? $setting->header_image,
+            'header_image' => array_key_exists('header_image', $data) ? $data['header_image'] : $setting->header_image,
             'subtitle' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
             'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
             'hero_text' => $this->supportsHeroText()
@@ -130,7 +136,19 @@ abstract class AbstractLocalAmenityController extends Controller
                 'max:5120',
                 "dimensions:width={$overlayImageDimensions['width']},height={$overlayImageDimensions['height']}",
             ],
+            'remove_main_image' => ['nullable', 'boolean'],
+            'remove_overlay_image' => ['nullable', 'boolean'],
         ]);
+
+        if ($request->boolean('remove_main_image') && !empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
+            Storage::disk('public')->delete($setting->main_image);
+            $data['main_image'] = '';
+        }
+
+        if ($request->boolean('remove_overlay_image') && !empty($setting->overlay_image) && !str_starts_with($setting->overlay_image, 'img/')) {
+            Storage::disk('public')->delete($setting->overlay_image);
+            $data['overlay_image'] = '';
+        }
 
         if ($request->hasFile('main_image')) {
             if (!empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
@@ -164,8 +182,8 @@ abstract class AbstractLocalAmenityController extends Controller
             'lead' => array_key_exists('lead', $data) ? $data['lead'] : $setting->lead,
             'description' => array_key_exists('description', $data) ? $data['description'] : $setting->description,
             'signature' => array_key_exists('signature', $data) ? $data['signature'] : $setting->signature,
-            'main_image' => $data['main_image'] ?? $setting->main_image,
-            'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
+            'main_image' => array_key_exists('main_image', $data) ? $data['main_image'] : $setting->main_image,
+            'overlay_image' => array_key_exists('overlay_image', $data) ? $data['overlay_image'] : $setting->overlay_image,
         ]);
 
         return redirect()->to(route($this->indexRouteName()) . '#about-section')
@@ -196,10 +214,28 @@ abstract class AbstractLocalAmenityController extends Controller
             'image_three' => $this->supportsExtraTextSectionImages()
                 ? ['nullable', 'image', 'max:5120', "dimensions:width={$extraImageDimensions['width']},height={$extraImageDimensions['height']}"]
                 : ['nullable'],
+            'remove_image_one' => ['nullable', 'boolean'],
+            'remove_image_two' => ['nullable', 'boolean'],
+            'remove_image_three' => ['nullable', 'boolean'],
         ]);
 
         if ($this->supportsExtraTextSectionImages()) {
             $imageDirectory = $this->extraTextSectionConfig['image_directory'] ?? 'extra-text';
+
+            if ($request->boolean('remove_image_one') && !empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
+                Storage::disk('public')->delete($setting->main_image);
+                $data['main_image'] = '';
+            }
+
+            if ($request->boolean('remove_image_two') && !empty($setting->overlay_image) && !str_starts_with($setting->overlay_image, 'img/')) {
+                Storage::disk('public')->delete($setting->overlay_image);
+                $data['overlay_image'] = '';
+            }
+
+            if ($request->boolean('remove_image_three') && !empty($setting->third_image) && !str_starts_with($setting->third_image, 'img/')) {
+                Storage::disk('public')->delete($setting->third_image);
+                $data['third_image'] = '';
+            }
 
             if ($request->hasFile('image_one')) {
                 if (!empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
@@ -245,9 +281,9 @@ abstract class AbstractLocalAmenityController extends Controller
             'small_title' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->small_title,
             'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
             'description' => array_key_exists('description', $data) ? $data['description'] : $setting->description,
-            'main_image' => $data['main_image'] ?? $setting->main_image,
-            'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
-            'third_image' => $data['third_image'] ?? $setting->third_image,
+            'main_image' => array_key_exists('main_image', $data) ? $data['main_image'] : $setting->main_image,
+            'overlay_image' => array_key_exists('overlay_image', $data) ? $data['overlay_image'] : $setting->overlay_image,
+            'third_image' => array_key_exists('third_image', $data) ? $data['third_image'] : $setting->third_image,
         ]);
 
         return redirect()->to(route($this->indexRouteName()) . '#extra-text-section')
@@ -287,9 +323,21 @@ abstract class AbstractLocalAmenityController extends Controller
                 'max:5120',
                 "dimensions:width={$overlayImageDimensions['width']},height={$overlayImageDimensions['height']}",
             ],
+            'remove_main_image' => ['nullable', 'boolean'],
+            'remove_overlay_image' => ['nullable', 'boolean'],
         ]);
 
         $imageDirectory = $this->secondaryExtraSectionConfig['image_directory'] ?? 'secondary-extra';
+
+        if ($request->boolean('remove_main_image') && !empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
+            Storage::disk('public')->delete($setting->main_image);
+            $data['main_image'] = '';
+        }
+
+        if ($request->boolean('remove_overlay_image') && !empty($setting->overlay_image) && !str_starts_with($setting->overlay_image, 'img/')) {
+            Storage::disk('public')->delete($setting->overlay_image);
+            $data['overlay_image'] = '';
+        }
 
         if ($request->hasFile('main_image')) {
             if (!empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
@@ -320,8 +368,8 @@ abstract class AbstractLocalAmenityController extends Controller
         $setting->update([
             'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
             'description' => array_key_exists('description', $data) ? $data['description'] : $setting->description,
-            'main_image' => $data['main_image'] ?? $setting->main_image,
-            'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
+            'main_image' => array_key_exists('main_image', $data) ? $data['main_image'] : $setting->main_image,
+            'overlay_image' => array_key_exists('overlay_image', $data) ? $data['overlay_image'] : $setting->overlay_image,
         ]);
 
         return redirect()->to(route($this->indexRouteName()) . '#secondary-extra-section')
@@ -364,6 +412,11 @@ abstract class AbstractLocalAmenityController extends Controller
         $comodite = $this->findItemOrFail($id);
         $data = $this->validatedData($request);
 
+        if ($request->boolean('remove_image') && !empty($comodite->image_path) && !str_starts_with($comodite->image_path, 'img/')) {
+            Storage::disk('public')->delete($comodite->image_path);
+            $data['image_path'] = null;
+        }
+
         if ($request->hasFile('image')) {
             if (!empty($comodite->image_path) && !str_starts_with($comodite->image_path, 'img/')) {
                 Storage::disk('public')->delete($comodite->image_path);
@@ -373,6 +426,7 @@ abstract class AbstractLocalAmenityController extends Controller
         }
 
         unset($data['image']);
+        unset($data['remove_image']);
 
         $comodite->update($data);
 
@@ -635,6 +689,7 @@ abstract class AbstractLocalAmenityController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'max:5120'],
+            'remove_image' => ['nullable', 'boolean'],
             'link_url' => ['nullable', 'string', 'max:255'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_published' => ['nullable', 'boolean'],

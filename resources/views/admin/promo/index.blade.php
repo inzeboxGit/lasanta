@@ -221,6 +221,9 @@
                 <div class="mt-2">
                     <img id="promo_image_preview" src="{{ $imageSrc ?? '' }}" alt="" class="rounded" style="max-height:100px;{{ empty($imageSrc) ? 'display:none;' : '' }}">
                 </div>
+                @if($isEditing && !empty($promoSetting->image ?? null) && !str_starts_with($promoSetting->image, 'img/'))
+                    @include('admin.partials.remove-media-toggle', ['name' => 'remove_image', 'label' => 'Supprimer l’image'])
+                @endif
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">{{ $isEditing ? 'Mettre à jour' : 'Créer la promo' }}</button>

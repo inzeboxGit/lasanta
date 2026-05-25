@@ -146,6 +146,9 @@
                         <img id="about_main_preview" src="{{ $mainSrc ?? '' }}" alt="" class="rounded"
                             style="max-height:100px;{{ empty($mainSrc) ? 'display:none;' : '' }}">
                     </div>
+                    @if(!empty($aboutSetting->main_image ?? null) && !str_starts_with($aboutSetting->main_image, 'img/'))
+                        @include('admin.partials.remove-media-toggle', ['name' => 'remove_main_image', 'label' => 'Supprimer l’image principale'])
+                    @endif
                 </div>
                 <!-- <div class="col-md-6">
                     <label class="form-label">Image superposée</label>

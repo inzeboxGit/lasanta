@@ -40,6 +40,9 @@
             <div class="mt-2">
                 <img id="comodite_image_preview" src="{{ $existingSrc ?? '' }}" alt="" class="rounded" style="max-height:120px;{{ empty($existingSrc) ? 'display:none;' : '' }}">
             </div>
+            @if(!empty($comodite->image_path ?? null))
+                @include('admin.partials.remove-media-toggle', ['name' => 'remove_image', 'label' => 'Supprimer l’image'])
+            @endif
         </div>
     </div>
 </div>

@@ -193,6 +193,9 @@
                         <img id="hero_background_preview" src="{{ $backgroundSrc ?? '' }}" alt="" class="rounded"
                             style="max-height:120px;{{ empty($backgroundSrc) ? 'display:none;' : '' }}">
                     </div>
+                    @if(!empty($heroSetting->background_image ?? null) && !str_starts_with($heroSetting->background_image, 'img/'))
+                        @include('admin.partials.remove-media-toggle', ['name' => 'remove_background_image', 'label' => 'Supprimer l’image de fond'])
+                    @endif
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Enregistrer</button>
@@ -341,6 +344,9 @@
                         <img id="booking_footer_header_preview" src="{{ $bfSrc }}" alt="" class="rounded"
                             style="max-height:140px;">
                     </div>
+                    @if(!empty($bookingFooterSetting->header_image ?? null) && !str_starts_with($bookingFooterSetting->header_image, 'img/'))
+                        @include('admin.partials.remove-media-toggle', ['name' => 'remove_header_image', 'id' => 'remove_booking_footer_header_image', 'label' => 'Supprimer l’image du footer'])
+                    @endif
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Mettre à jour</button>

@@ -56,6 +56,9 @@
                     class="rounded"
                 >
             </div>
+            @if(!empty($installation->image_path ?? null))
+                @include('admin.partials.remove-media-toggle', ['name' => 'remove_image', 'label' => 'Supprimer l’image'])
+            @endif
         </div>
         <div class="col-md-3">
             <label class="form-label">Ordre</label>

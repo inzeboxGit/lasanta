@@ -101,6 +101,7 @@ class PromoController extends Controller
             'subtitle'     => ['nullable', 'string', 'max:255'],
             'title'        => ['nullable', 'string', 'max:255'],
             'header_image' => ['nullable', 'image', 'max:5120'],
+            'remove_header_image' => ['nullable', 'boolean'],
         ]);
 
         $setting = PageHeaderSetting::firstOrCreate(
@@ -123,7 +124,7 @@ class PromoController extends Controller
         $setting->update([
             'subtitle'     => $data['subtitle'] ?? $setting->subtitle,
             'title'        => $data['title'] ?? $setting->title,
-            'header_image' => $data['header_image'] ?? $setting->header_image,
+            'header_image' => array_key_exists('header_image', $data) ? $data['header_image'] : $setting->header_image,
         ]);
 
         return redirect()->route('admin.promo.index')->with('success', 'En-tête de section Offres mis à jour.');
@@ -140,6 +141,7 @@ class PromoController extends Controller
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'image' => ['nullable', 'image', 'max:5120'],
+            'remove_image' => ['nullable', 'boolean'],
         ]);
 
         $data['is_enabled'] = $request->boolean('is_enabled');
@@ -150,6 +152,12 @@ class PromoController extends Controller
     private function fillPromo(PromoSectionSetting $setting, array $data, Request $request): void
     {
         $previousImage = $setting->image;
+
+        if ($request->boolean('remove_image') && !empty($previousImage) && !str_starts_with($previousImage, 'img/')) {
+            Storage::disk('public')->delete($previousImage);
+            $data['image'] = '';
+            $previousImage = '';
+        }
 
         if ($request->hasFile('image')) {
             if (!empty($previousImage) && !str_starts_with($previousImage, 'img/')) {
@@ -176,7 +184,7 @@ class PromoController extends Controller
                 'text' => $data['text'] ?? '',
                 'button_link' => $data['button_link'] ?? '',
                 'button_text' => $data['button_text'] ?? '',
-                'image' => $data['image'] ?? ($setting->image ?? ''),
+                'image' => array_key_exists('image', $data) ? $data['image'] : ($setting->image ?? ''),
             ]);
             $setting->save();
 
@@ -206,3 +214,7 @@ class PromoController extends Controller
         ];
     }
 }
+        if ($request->boolean('remove_header_image') && !empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }

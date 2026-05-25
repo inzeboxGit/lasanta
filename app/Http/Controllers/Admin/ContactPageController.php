@@ -42,7 +42,13 @@ class ContactPageController extends Controller
             'map_latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'map_longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'header_image' => ['nullable', 'image', 'max:5120'],
+            'remove_header_image' => ['nullable', 'boolean'],
         ]);
+
+        if ($request->boolean('remove_header_image') && ! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }
 
         if ($request->hasFile('header_image')) {
             if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
@@ -65,7 +71,7 @@ class ContactPageController extends Controller
             'book_now_label' => array_key_exists('book_now_label', $data) ? $data['book_now_label'] : $setting->book_now_label,
             'map_latitude' => array_key_exists('map_latitude', $data) ? $data['map_latitude'] : $setting->map_latitude,
             'map_longitude' => array_key_exists('map_longitude', $data) ? $data['map_longitude'] : $setting->map_longitude,
-            'header_image' => $data['header_image'] ?? $setting->header_image,
+            'header_image' => array_key_exists('header_image', $data) ? $data['header_image'] : $setting->header_image,
         ]);
 
         $translatedFields = [

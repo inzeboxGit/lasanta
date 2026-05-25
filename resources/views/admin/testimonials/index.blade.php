@@ -40,6 +40,9 @@
                 <div class="mt-2">
                     <img id="testimonials_background_preview" src="{{ $backgroundSrc }}" alt="" class="rounded" style="max-height:120px;">
                 </div>
+                @if(!empty($testimonialSectionSetting->header_image ?? null) && !str_starts_with($testimonialSectionSetting->header_image, 'img/'))
+                    @include('admin.partials.remove-media-toggle', ['name' => 'remove_header_image', 'label' => 'Supprimer l’image de fond'])
+                @endif
             </div>
             <div class="col-12">
                 <button class="btn btn-primary" type="submit">Mettre à jour</button>

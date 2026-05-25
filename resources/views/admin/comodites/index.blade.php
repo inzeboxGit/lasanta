@@ -84,6 +84,9 @@
                             <img id="restaurant_header_preview" src="{{ $headerSrc ?? '' }}" alt="" class="rounded"
                                 style="max-height:120px;{{ empty($headerSrc) ? 'display:none;' : '' }}">
                         </div>
+                        @if(!empty($sectionSetting->header_image ?? null) && !str_starts_with($sectionSetting->header_image, 'img/'))
+                            @include('admin.partials.remove-media-toggle', ['name' => 'remove_header_image', 'label' => 'Supprimer l’image header'])
+                        @endif
                     </div>
                     <!-- @if($pageMeta['section_settings']['show_hero_text'])
                         <div class="col-12">
@@ -273,6 +276,9 @@
                             <img id="secondary_extra_main_preview" src="{{ $secondaryExtraMainSrc ?? '' }}" alt="" class="rounded"
                                 style="max-height:120px;{{ empty($secondaryExtraMainSrc) ? 'display:none;' : '' }}">
                         </div>
+                        @if(!empty($secondaryExtraSectionSetting->main_image ?? null))
+                            @include('admin.partials.remove-media-toggle', ['name' => 'remove_main_image', 'label' => 'Supprimer la photo 1'])
+                        @endif
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Photo 2</label>
@@ -282,6 +288,9 @@
                             <img id="secondary_extra_overlay_preview" src="{{ $secondaryExtraOverlaySrc ?? '' }}" alt="" class="rounded"
                                 style="max-height:120px;{{ empty($secondaryExtraOverlaySrc) ? 'display:none;' : '' }}">
                         </div>
+                        @if(!empty($secondaryExtraSectionSetting->overlay_image ?? null))
+                            @include('admin.partials.remove-media-toggle', ['name' => 'remove_overlay_image', 'label' => 'Supprimer la photo 2'])
+                        @endif
                     </div>
                     <div class="col-12">
                         <button class="btn btn-primary" type="submit">Mettre à jour</button>

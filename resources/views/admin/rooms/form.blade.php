@@ -160,6 +160,7 @@
                                 style="width:100%;max-height:160px;object-fit:cover;" class="rounded shadow-sm">
                             <div class="text-success small mt-1"><i class="bi bi-check-circle-fill"></i> Image actuelle
                             </div>
+                            @include('admin.partials.remove-media-toggle', ['name' => 'remove_main_image', 'label' => 'Supprimer l’image principale'])
                         </div>
                     @else
                         <div id="main-image-saved-wrap" class="d-none"></div>

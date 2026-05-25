@@ -30,7 +30,13 @@ class TestimonialController extends Controller
             'subtitle' => ['nullable', 'string', 'max:255'],
             'title' => ['nullable', 'string', 'max:255'],
             'header_image' => ['nullable', 'image', 'max:5120'],
+            'remove_header_image' => ['nullable', 'boolean'],
         ]);
+
+        if ($request->boolean('remove_header_image') && ! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }
 
         if ($request->hasFile('header_image')) {
             if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
@@ -43,7 +49,7 @@ class TestimonialController extends Controller
         $setting->update([
             'subtitle' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
             'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
-            'header_image' => $data['header_image'] ?? $setting->header_image,
+            'header_image' => array_key_exists('header_image', $data) ? $data['header_image'] : $setting->header_image,
         ]);
 
         return redirect()->route('admin.testimonials.index')->with('success', 'Image de fond des témoignages mise à jour.');
@@ -86,6 +92,11 @@ class TestimonialController extends Controller
         $testimonial = Testimonial::findOrFail($id);
         $data = $this->validatedData($request);
 
+        if ($request->boolean('remove_photo') && !empty($testimonial->photo_path) && !str_starts_with($testimonial->photo_path, 'img/')) {
+            Storage::disk('public')->delete($testimonial->photo_path);
+            $data['photo_path'] = null;
+        }
+
         if ($request->hasFile('photo')) {
             if (!empty($testimonial->photo_path) && !str_starts_with($testimonial->photo_path, 'img/')) {
                 Storage::disk('public')->delete($testimonial->photo_path);
@@ -95,6 +106,7 @@ class TestimonialController extends Controller
         }
 
         unset($data['photo']);
+        unset($data['remove_photo']);
 
         $testimonial->update($data);
 
@@ -121,6 +133,7 @@ class TestimonialController extends Controller
             'content' => ['required', 'string'],
             'source' => ['nullable', 'string', 'max:255'],
             'photo' => ['nullable', 'image', 'max:5120'],
+            'remove_photo' => ['nullable', 'boolean'],
             'published_at' => ['nullable', 'date'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_published' => ['nullable', 'boolean'],

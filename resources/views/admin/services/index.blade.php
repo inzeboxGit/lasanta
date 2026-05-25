@@ -176,7 +176,7 @@
 
             {{-- Bouton : texte + lien --}}
             <div class="col-md-6">
-                <label class="form-label">Texte du bouton</label>
+                <label class="form-label">Texte du bouton <span class="text-secondary text-sm">(Si vide le button ne s'affiche pas)</span></label>
                 <input type="text" name="button_text" class="form-control"
                        value="{{ old('button_text', $s?->button_text ?? '') }}"
                        placeholder="View menu">
@@ -198,6 +198,7 @@
                         <a href="{{ Storage::disk('public')->url($s->pdf_file) }}" download
                            class="text-decoration-none small">Télécharger le PDF actuel</a>
                     </div>
+                    @include('admin.partials.remove-media-toggle', ['name' => 'remove_pdf_file', 'label' => 'Supprimer le PDF'])
                 @endif
             </div>
 
@@ -269,6 +270,9 @@
                         <img id="svc_image_preview" src="{{ $imageSrc }}" alt=""
                              class="rounded" style="max-height:120px;">
                     </div>
+                    @if(!str_starts_with($s->image, 'img/') && !str_starts_with($s->image, 'themes/'))
+                        @include('admin.partials.remove-media-toggle', ['name' => 'remove_image', 'label' => 'Supprimer l’image'])
+                    @endif
                 @else
                     <div class="mt-2">
                         <img id="svc_image_preview" src="" alt="" class="rounded d-none" style="max-height:120px;">

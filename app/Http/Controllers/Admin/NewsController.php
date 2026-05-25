@@ -65,7 +65,13 @@ class NewsController extends Controller
             'title' => ['nullable', 'string', 'max:255'],
             'hero_text' => ['nullable', 'string'],
             'header_image' => ['nullable', 'image', 'max:5120'],
+            'remove_header_image' => ['nullable', 'boolean'],
         ]);
+
+        if ($request->boolean('remove_header_image') && ! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }
 
         if ($request->hasFile('header_image')) {
             if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
@@ -79,7 +85,7 @@ class NewsController extends Controller
             'subtitle' => $data['subtitle'] ?? $setting->subtitle,
             'title' => $data['title'] ?? $setting->title,
             'hero_text' => $data['hero_text'] ?? $setting->hero_text,
-            'header_image' => $data['header_image'] ?? $setting->header_image,
+            'header_image' => array_key_exists('header_image', $data) ? $data['header_image'] : $setting->header_image,
         ]);
 
         return redirect()->route('admin.news.index')->with('success', 'En-tête de la page actualités mise à jour.');

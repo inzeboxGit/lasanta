@@ -77,11 +77,18 @@ class ServiceController extends Controller
             'is_published'=> ['nullable'],
             'image'       => ['nullable', 'image', 'max:5120'],
             'pdf_file'    => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
+            'remove_image' => ['nullable', 'boolean'],
+            'remove_pdf_file' => ['nullable', 'boolean'],
         ]);
     }
 
     private function fillService(Service $service, array $data, Request $request): void
     {
+        if ($request->boolean('remove_image') && !empty($service->image) && !str_starts_with($service->image, 'img/')) {
+            Storage::disk('public')->delete($service->image);
+            $data['image'] = '';
+        }
+
         if ($request->hasFile('image')) {
             if (!empty($service->image) && !str_starts_with($service->image, 'img/')) {
                 Storage::disk('public')->delete($service->image);
@@ -96,14 +103,20 @@ class ServiceController extends Controller
             $data['image'] = $filename;
         }
 
+        if ($request->boolean('remove_pdf_file') && !empty($service->pdf_file)) {
+            Storage::disk('public')->delete($service->pdf_file);
+            $data['pdf_file'] = '';
+            $data['button_link'] = '';
+        }
+
         if ($request->hasFile('pdf_file')) {
             if (!empty($service->pdf_file)) {
                 Storage::disk('public')->delete($service->pdf_file);
             }
             $pdfPath = $request->file('pdf_file')->store('services/pdf', 'public');
             $data['pdf_file'] = $pdfPath;
-            // Auto-set button_link to the PDF download URL
-            $data['button_link'] = Storage::disk('public')->url($pdfPath);
+            // Store a relative public path so the link works across local/MAMP/production hosts.
+            $data['button_link'] = '/storage/' . ltrim($pdfPath, '/');
         }
 
         $service->fill([
@@ -111,13 +124,13 @@ class ServiceController extends Controller
             'subtitle'    => $data['subtitle'] ?? '',
             'title'       => $data['title'],
             'description' => $data['description'] ?? '',
-            'button_link' => $data['button_link'] ?? ($service->button_link ?? ''),
+            'button_link' => array_key_exists('button_link', $data) ? $data['button_link'] : ($service->button_link ?? ''),
             'button_text' => $data['button_text'] ?? '',
-            'pdf_file'    => $data['pdf_file'] ?? ($service->pdf_file ?? ''),
+            'pdf_file'    => array_key_exists('pdf_file', $data) ? $data['pdf_file'] : ($service->pdf_file ?? ''),
             'icon'        => $data['icon'] ?? '',
             'sort_order'  => $data['sort_order'] ?? 0,
             'is_published'=> !empty($data['is_published']),
-            'image'       => $data['image'] ?? ($service->image ?? ''),
+            'image'       => array_key_exists('image', $data) ? $data['image'] : ($service->image ?? ''),
         ]);
 
         $service->save();
