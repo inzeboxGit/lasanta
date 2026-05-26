@@ -195,7 +195,7 @@
                 @if($isEditing && !empty($s->pdf_file))
                     <div class="mt-2 d-flex align-items-center gap-2">
                         <i class="fa-solid fa-file-pdf text-danger"></i>
-                        <a href="{{ Storage::disk('public')->url($s->pdf_file) }}" download
+                        <a href="{{ media_url($s->pdf_file) }}" download
                            class="text-decoration-none small">Télécharger le PDF actuel</a>
                     </div>
                     @include('admin.partials.remove-media-toggle', ['name' => 'remove_pdf_file', 'label' => 'Supprimer le PDF'])

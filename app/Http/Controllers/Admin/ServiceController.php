@@ -115,8 +115,8 @@ class ServiceController extends Controller
             }
             $pdfPath = $request->file('pdf_file')->store('services/pdf', 'public');
             $data['pdf_file'] = $pdfPath;
-            // Store a relative public path so the link works across local/MAMP/production hosts.
-            $data['button_link'] = '/storage/' . ltrim($pdfPath, '/');
+            // Use the media route strategy, same idea as images, to avoid OVH 403 on direct /storage links.
+            $data['button_link'] = '/media/' . ltrim($pdfPath, '/');
         }
 
         $service->fill([

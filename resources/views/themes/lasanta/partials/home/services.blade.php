@@ -33,7 +33,7 @@
                 $svcDescription = method_exists($svc, 't') ? ($svc->t('description') ?: $svc->description) : $svc->description;
                 $svcButtonText  = method_exists($svc, 't') ? ($svc->t('button_text') ?: $svc->button_text) : $svc->button_text;
                 $svcButtonLink  = !empty($svc->pdf_file)
-                    ? asset('storage/' . ltrim($svc->pdf_file, '/'))
+                    ? media_url($svc->pdf_file)
                     : ($svc->button_link ?? '');
             @endphp
             <div class="tab {{ $loop->first ? 'active-tab' : '' }}" id="{{ $svc->tab_key }}">
