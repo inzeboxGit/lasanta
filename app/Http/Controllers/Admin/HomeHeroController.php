@@ -74,6 +74,11 @@ class HomeHeroController extends Controller
 
         $data['show_booking_form'] = $request->boolean('show_booking_form');
 
+        if ($request->boolean('remove_background_image') && !empty($setting->background_image) && !str_starts_with($setting->background_image, 'img/')) {
+            Storage::disk('public')->delete($setting->background_image);
+            $data['background_image'] = '';
+        }
+
         if ($request->hasFile('background_image')) {
             if (!empty($setting->background_image) && !str_starts_with($setting->background_image, 'img/')) {
                 Storage::disk('public')->delete($setting->background_image);
@@ -262,7 +267,3 @@ class HomeHeroController extends Controller
         return (object) $this->defaultVideoSetting();
     }
 }
-        if ($request->boolean('remove_background_image') && !empty($setting->background_image) && !str_starts_with($setting->background_image, 'img/')) {
-            Storage::disk('public')->delete($setting->background_image);
-            $data['background_image'] = '';
-        }
