@@ -3,6 +3,10 @@
 @php
     $locale = app()->getLocale();
     $heroImage = media_url($heroSetting->background_image ?? null, 'themes/lasanta/img/banner/11.jpg');
+    $heroBackgroundType = $heroSetting->background_type ?? 'video';
+    $heroVideo = media_url($heroSetting->background_video ?? null, 'video/sunset.mp4');
+    $heroYoutubeUrl = $heroSetting->youtube_video_url ?? null;
+    $heroYoutubeId = null;
     $heroButtonLink = !empty($heroSetting->button_link ?? null) ? $heroSetting->button_link : route('appartements.index');
     $heroButtonTarget = $heroSetting->button_target ?? '_self';
     $heroButtonLabels = [
@@ -60,15 +64,71 @@
                 $ui[$_f] = $heroSetting->{$_f};
         }
     }
+
+    if (
+        !empty($heroYoutubeUrl) && preg_match(
+            '~(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/)([^&?/]+)~',
+            $heroYoutubeUrl,
+            $matches
+        )
+    ) {
+        $heroYoutubeId = $matches[1];
+    }
+
+    $heroYoutubeEmbedSrc = $heroYoutubeId
+        ? 'https://www.youtube.com/embed/' . $heroYoutubeId . '?autoplay=1&mute=1&controls=0&loop=1&playlist=' . $heroYoutubeId . '&playsinline=1&rel=0&modestbranding=1&enablejsapi=1'
+        : null;
+
+    $useHeroVideo = $heroBackgroundType === 'video' && ($heroYoutubeEmbedSrc || !empty($heroVideo));
 @endphp
 
 @push('styles')
-    <link rel="preload" as="image" href="{{ $heroImage }}" fetchpriority="high">
+    @if($useHeroVideo)
+        <style>
+            .banner-header.banner-header-video {
+                position: relative;
+                overflow: hidden;
+                background: #000;
+            }
+
+            .banner-header.banner-header-video .hero-background-video,
+            .banner-header.banner-header-video .hero-background-embed {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                pointer-events: none;
+            }
+
+            .banner-header.banner-header-video .hero-background-embed {
+                border: 0;
+            }
+
+            .banner-header.banner-header-video .container {
+                position: relative;
+                z-index: 2;
+            }
+        </style>
+    @else
+        <link rel="preload" as="image" href="{{ $heroImage }}" fetchpriority="high">
+    @endif
 @endpush
 
 @section('content')
-    <section class="banner-header full-height valign bg-img" data-overlay-dark="5" data-background="{{ $heroImage }}"
-        style="background-image: url('{{ $heroImage }}');">
+    <section class="banner-header full-height valign {{ $useHeroVideo ? 'banner-header-video' : 'bg-img' }}"
+        data-overlay-dark="5"
+        @if(!$useHeroVideo) data-background="{{ $heroImage }}" style="background-image: url('{{ $heroImage }}');" @endif>
+        @if($useHeroVideo)
+            @if($heroYoutubeEmbedSrc)
+                <iframe class="hero-background-embed" src="{{ $heroYoutubeEmbedSrc }}" title="Hero background video"
+                    allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" tabindex="-1"></iframe>
+            @else
+                <video class="hero-background-video" autoplay loop muted playsinline preload="auto">
+                    <source src="{{ $heroVideo }}">
+                </video>
+            @endif
+        @endif
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-md-12 text-center">

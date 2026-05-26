@@ -109,6 +109,11 @@ class PromoController extends Controller
             ['subtitle' => 'NOS OFFRES', 'title' => 'OFFRES SPÉCIALES', 'header_image' => '', 'hero_text' => '']
         );
 
+        if ($request->boolean('remove_header_image') && !empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }
+
         if ($request->hasFile('header_image')) {
             if (!empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
                 Storage::disk('public')->delete($setting->header_image);
@@ -214,7 +219,3 @@ class PromoController extends Controller
         ];
     }
 }
-        if ($request->boolean('remove_header_image') && !empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
-            Storage::disk('public')->delete($setting->header_image);
-            $data['header_image'] = '';
-        }

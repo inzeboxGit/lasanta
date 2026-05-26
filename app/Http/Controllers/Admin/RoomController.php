@@ -97,6 +97,11 @@ class RoomController extends Controller
 
         $data = $request->validate($rules);
 
+        if ($request->boolean('remove_header_image') && !empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
+            Storage::disk('public')->delete($setting->header_image);
+            $data['header_image'] = '';
+        }
+
         if ($request->hasFile('header_image')) {
             if (!empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
                 Storage::disk('public')->delete($setting->header_image);
@@ -424,7 +429,3 @@ class RoomController extends Controller
         return $requestedOrder;
     }
 }
-        if ($request->boolean('remove_header_image') && !empty($setting->header_image) && !str_starts_with($setting->header_image, 'img/')) {
-            Storage::disk('public')->delete($setting->header_image);
-            $data['header_image'] = '';
-        }
