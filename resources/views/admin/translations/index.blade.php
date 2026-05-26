@@ -3,6 +3,52 @@
 @section('title', 'Traductions')
 
 @section('content')
+@php
+    $fieldLabels = [
+        'small_title' => 'Petit titre',
+        'title' => 'Titre',
+        'dates_label' => 'Libellé des dates',
+        'check_in_label' => 'Libellé arrivée',
+        'check_out_label' => 'Libellé départ',
+        'adults_label' => 'Libellé adultes',
+        'children_label' => 'Libellé enfants',
+        'rooms_label' => 'Libellé chambres',
+        'search_label' => 'Libellé recherche',
+        'button_text' => 'Texte du bouton',
+        'lead' => 'Texte d’introduction',
+        'description' => 'Description',
+        'signature' => 'Signature',
+        'subtitle' => 'Sous-titre',
+        'text' => 'Texte',
+        'button_label' => 'Libellé du bouton',
+        'question' => 'Question',
+        'answer' => 'Réponse',
+        'home_subtitle' => 'Sous-titre accueil',
+        'home_title' => 'Titre accueil',
+        'excerpt' => 'Extrait',
+        'body' => 'Contenu',
+        'category' => 'Catégorie',
+        'hero_text' => 'Texte d’introduction',
+        'availability_small' => 'Petit titre disponibilités',
+        'availability_title' => 'Titre disponibilités',
+        'availability_text' => 'Texte disponibilités',
+        'info_booking_label' => 'Libellé infos réservation',
+        'select_room_label' => 'Libellé sélection chambre',
+        'book_now_label' => 'Libellé réserver',
+        'calendar_night_label' => 'Libellé nuit',
+        'calendar_nights_label' => 'Libellé nuits',
+        'header_subtitle' => 'Sous-titre de l’en-tête',
+        'header_title' => 'Titre de l’en-tête',
+        'name' => 'Nom',
+        'content' => 'Contenu',
+        'site_name' => 'Nom du site',
+        'address' => 'Adresse',
+        'maintenance_message' => 'Message de maintenance',
+        'page' => 'Page',
+        'section' => 'Section',
+        'setting_key' => 'Clé du paramètre',
+    ];
+@endphp
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
         <h1 class="h3 mb-1">Traductions du site</h1>
@@ -72,7 +118,7 @@
                         $useWysiwyg = in_array($field, ($typeConfig['wysiwyg_fields'] ?? []), true);
                     @endphp
                     <div class="col-12">
-                        <label class="form-label text-capitalize">{{ str_replace('_', ' ', $field) }}</label>
+                        <label class="form-label">{{ $fieldLabels[$field] ?? str_replace('_', ' ', $field) }}</label>
                         @if($isLong)
                             <textarea name="fields[{{ $field }}]" class="form-control {{ $useWysiwyg ? 'js-tinymce-translation' : '' }}" rows="{{ $useWysiwyg ? 18 : 5 }}">{{ old('fields.' . $field, $current) }}</textarea>
                         @else

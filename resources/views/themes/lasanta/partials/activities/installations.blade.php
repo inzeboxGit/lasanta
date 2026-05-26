@@ -64,7 +64,7 @@
                 <div class="section-subtitle brown">{{ $subtitle }}</div>
                 <div class="section-title black">{{ $title }}</div>
                 <p class="mb-25">{{ $description }}</p>
-                <a href="{{ route('appartements.index') }}" class="button-3">{{ $buttonLabel }}</a>
+                <!-- <a href="{{ route('appartements.index') }}" class="button-3">{{ $buttonLabel }}</a> -->
             </div>
 
             <div class="col-lg-8 col-md-12">

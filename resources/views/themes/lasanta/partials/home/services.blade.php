@@ -20,6 +20,7 @@
         <div class="tabs-content">
             @foreach($homeServices as $svc)
             @php
+                $locale = app()->getLocale();
                 $_img = $svc->image ?? '';
                 if (str_starts_with($_img, 'img/')) {
                     $svcImage = asset('themes/lasanta/' . $_img);
@@ -31,7 +32,6 @@
                 $svcTitle       = method_exists($svc, 't') ? ($svc->t('title') ?: $svc->title) : $svc->title;
                 $svcSubtitle    = method_exists($svc, 't') ? ($svc->t('subtitle') ?: $svc->subtitle) : $svc->subtitle;
                 $svcDescription = method_exists($svc, 't') ? ($svc->t('description') ?: $svc->description) : $svc->description;
-                $svcButtonText  = method_exists($svc, 't') ? ($svc->t('button_text') ?: $svc->button_text) : $svc->button_text;
                 $svcButtonLink  = !empty($svc->pdf_file)
                     ? media_url($svc->pdf_file)
                     : ($svc->button_link ?? '');
@@ -73,10 +73,16 @@
                                 </ul>
                             @endif
                         @endif
-                        @if($svcButtonLink && $svcButtonText)
+                        @if($svcButtonLink)
                         <div class="mb-25"></div>
                         <a href="{{ $svcButtonLink }}" class="button-3">
-                            @if($svc->icon)<i class="{{ $svc->icon }}"></i> @endif{{ $svcButtonText }}
+                            @if($svc->icon)<i class="{{ $svc->icon }}"></i> @endif{{
+                                [
+                                    'en' => 'View the menu',
+                                    'it' => 'Visualizza il menu',
+                                    'de' => 'Menü ansehen',
+                                ][$locale] ?? 'Voir le menu'
+                            }}
                         </a>
                         @endif
                     </div>

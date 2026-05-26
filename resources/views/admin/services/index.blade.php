@@ -179,7 +179,7 @@
                 <label class="form-label">Texte du bouton <span class="text-secondary text-sm">(Si vide le button ne s'affiche pas)</span></label>
                 <input type="text" name="button_text" class="form-control"
                        value="{{ old('button_text', $s?->button_text ?? '') }}"
-                       placeholder="View menu">
+                       placeholder="">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Lien du bouton</label>

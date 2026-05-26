@@ -20,9 +20,9 @@
                         <div class="item mt-10">
                             <div class="img">
                                 <img src="{{ $coverSrc }}" class="img-fluid" alt="{{ method_exists($item, 't') ? $item->t('title') : $item->title }}">
-                                @if($item->published_at)
+                                <!-- @if($item->published_at)
                                     <div class="cat">{{ $item->published_at->format('d M Y') }}</div>
-                                @endif
+                                @endif -->
                             </div>
                             <div class="cont">
                                 <h4><a href="{{ route('news.show', $item->slug) }}">{{ method_exists($item, 't') ? $item->t('title') : $item->title }}</a></h4>
