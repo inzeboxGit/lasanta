@@ -75,7 +75,7 @@
                         @endif
                         @if($svcButtonLink)
                         <div class="mb-25"></div>
-                        <a href="{{ $svcButtonLink }}" class="button-3">
+                        <a target="_blank" href="{{ $svcButtonLink }}" class="button-3">
                             @if($svc->icon)<i class="{{ $svc->icon }}"></i> @endif{{
                                 [
                                     'en' => 'View the menu',

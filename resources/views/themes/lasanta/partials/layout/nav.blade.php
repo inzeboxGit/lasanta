@@ -11,7 +11,7 @@
         'fr' => [
             'home' => 'Accueil',
             'appartement' => 'Nos chambres',
-            'auberge' => "Restaurant",
+            'auberge' => "La Table",
             'piscine' => 'Piscine',
             'news' => 'Actualités',
             'contact' => 'Contact',
@@ -20,7 +20,7 @@
         'en' => [
             'home' => 'Home',
             'appartement' => 'Our Rooms',
-            'auberge' => 'Restaurant',
+            'auberge' => 'The table',
             'piscine' => 'Pool',
             'news' => 'News',
             'contact' => 'Contact',
@@ -29,7 +29,7 @@
         'de' => [
             'home' => 'Startseite',
             'appartement' => 'Unsere Zimmer',
-            'auberge' => 'Restaurant',
+            'auberge' => 'Die Tafel',
             'piscine' => 'Pool',
             'news' => 'Neuigkeiten',
             'contact' => 'Kontakt',
@@ -38,7 +38,7 @@
         'it' => [
             'home' => 'Home',
             'appartement' => 'Le nostre camere',
-            'auberge' => "Ristorante",
+            'auberge' => "La Tavola",
             'piscine' => 'Piscina',
             'news' => 'News',
             'contact' => 'Contatti',
