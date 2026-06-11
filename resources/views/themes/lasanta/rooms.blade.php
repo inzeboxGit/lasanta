@@ -94,8 +94,6 @@
                         <div>
                             @if($room->price_per_night)
                                 <div class="price">{{ number_format($room->price_per_night, 0) }} € <span>/ nuit</span></div>
-                            @else
-                                <div class="price">Tarif <span>sur demande</span></div>
                             @endif
                         </div>
                         <div>
